@@ -1,5 +1,9 @@
 # README
 
+Setlist
+A tool for garage bands to manage list of songs, with transition notes for each band member
+
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
