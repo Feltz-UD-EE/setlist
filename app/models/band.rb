@@ -1,29 +1,29 @@
 #
 # Copyright 2025 John C. Feltz, github: Feltz-UD-EE/setlist
 #
-# Instrument: All instruments/vocal roles
-#
+# Band: a garage band with songs and set lists
   # t.string :name
   # t.timestamps
 ##
 
-class Instrument < ApplicationRecord
+class Band < ApplicationRecord
   # Statics & enums
 
   # Relations
-  has_many :preparations
-  has_and_belongs_to_many :players
-  
+  # has_many :preparations...  complicated join
+  has_many :players
+  has_many :lists
+  has_many :songs
+
   # Validations
   validates :name, presence: true
 
   # Scopes
-  scope :alpha, -> { order(name: :asc) }
+  scope :alpha, -> { order(last_name: :asc) }
 
   # Class methods
 
   # Instance methods
 
   # Callbacks
-
 end
