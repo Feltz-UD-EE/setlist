@@ -4,5 +4,6 @@ class LoadMoreInstruments < ActiveRecord::Migration[8.0]
     Instrument.create(name: "Saxophone")
     Instrument.create(name: "Trumpet")
     Instrument.create(name: "Trombone")
-  end
+    Instrument.create(name: "Drums 2")
+    Instrument.create(name: "Engineer")
 end
