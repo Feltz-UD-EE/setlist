@@ -1,2 +1,23 @@
 <div id="<%= dom_id band %>">
+<h1><%= @band.name %></h1>
+<p><%= @songs.length %> songs in <%= @lists.length %> set lists.</p>
+<h2>Set Lists</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Songs</th>
+      <th>Run Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @lists.each do |list| %>
+      <tr>
+        <td><%= link_to list.name, list_path(list) %></td>
+        <td><%= list.songs.length %></td>
+        <td><%= list.runtime_pretty %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 </div>

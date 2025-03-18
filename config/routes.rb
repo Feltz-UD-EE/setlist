@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+
+  # authentication and user status routes are automatically defined and are not configured here
+
+  # public static & home routes
+  root to: 'static#public_home'
+  get 'public_home', to: 'static#public_home'
+  get 'about', to: 'static#about'
+  get 'credits', to: 'static#credits'
+  get 'legal', to: 'static#legal'
+
   resources :bands
   resources :players
   resources :lists

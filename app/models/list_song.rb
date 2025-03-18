@@ -11,6 +11,8 @@ class ListSong < ApplicationRecord
   # Statics & enums
 
   # Relations
+  belongs_to :list
+  belongs_to :song
 
   # Validations
   validates :position, presence: true

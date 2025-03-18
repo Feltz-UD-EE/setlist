@@ -19,7 +19,7 @@ class Band < ApplicationRecord
   validates :name, presence: true
 
   # Scopes
-  scope :alpha, -> { order(last_name: :asc) }
+  scope :alpha, -> { order(name: :asc) }
 
   # Class methods
 

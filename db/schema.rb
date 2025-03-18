@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_28_225524) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_02_174728) do
   create_table "bands", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -53,7 +53,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_28_225524) do
     t.bigint "band_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email", null: false
+    t.string "encrypted_password", limit: 128, null: false
+    t.string "confirmation_token", limit: 128
+    t.string "remember_token", limit: 128, null: false
     t.index ["band_id"], name: "index_players_on_band_id"
+    t.index ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_players_on_email"
+    t.index ["remember_token"], name: "index_players_on_remember_token", unique: true
   end
 
   create_table "preparations", charset: "utf8mb3", force: :cascade do |t|

@@ -14,7 +14,8 @@ class List < ApplicationRecord
 
   # Relations
   belongs_to :band
-  has_many :songs, through: :list_songs
+  has_many :list_songs
+  has_many :songs, -> { order('list_songs.position') }, through: :list_songs
 
   # Validations
   validates :name, presence: true
@@ -26,6 +27,15 @@ class List < ApplicationRecord
   # Class methods
 
   # Instance methods
+  def runtime
+    self.songs.sum(:duration)
+  end
 
+  def runtime_pretty
+    seconds = runtime % 60
+    minutes = (runtime / 60) % 60
+    hours = runtime / 3600
+    return format("%2d:%02d:%02d", hours, minutes, seconds)
+  end
   # Callbacks
 end
