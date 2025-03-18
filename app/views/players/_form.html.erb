@@ -11,6 +11,24 @@
     </div>
   <% end %>
 
+  <table>
+    <tr>
+      <td>First Name</td>
+      <td><%= form.text_field :first_name %></td>
+    </tr>
+    <tr>
+      <td>Last Name</td>
+      <td><%= form.text_field :last_name %></td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td><%= form.text_field :email %></td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><%= form.password_field :password %></td>
+    </tr>
+  </table>
   <div>
     <%= form.submit %>
   </div>

@@ -9,6 +9,7 @@
 ##
 
 class Player < ApplicationRecord
+  include Clearance::User
   # Statics & enums
 
   # Relations
