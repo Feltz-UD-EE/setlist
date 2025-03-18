@@ -8,6 +8,7 @@ class ListsController < ApplicationController
 
   # GET /lists/1 or /lists/1.json
   def show
+    @songs = @list.songs
   end
 
   # GET /lists/new

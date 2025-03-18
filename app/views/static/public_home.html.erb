@@ -1,0 +1,17 @@
+<div>
+  <h1>Setlist</h1>
+  <h2>Current time: <%= Time.now.strftime("%A, %-d %b %Y %l:%M %p") %></h2>
+  <h2>Bands (<%= @bands.length %>)</h2>
+  <% @bands.each do |band| %>
+    <p><%= link_to band.name, band_path(band) %></p>
+  <% end %>
+</div>
+
+<div>
+  <%= link_to "About", about_path %>
+  <%= link_to "Credits", credits_path %>
+  <%= link_to "Legal", legal_path %>
+</div>
+<div>
+  <p>login & account creation stuff goes here</p>
+</div>
