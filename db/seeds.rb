@@ -8,29 +8,26 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Instrument.create(name: "Drums")
-Instrument.create(name: "Drums 2")
-Instrument.create(name: "Bass")
-Instrument.create(name: "Guitar")
-Instrument.create(name: "Guitar 2")
-Instrument.create(name: "Keyboards")
-Instrument.create(name: "Keyboards 2")
-Instrument.create(name: "Vocals")
-Instrument.create(name: "Vocals 2")
-Instrument.create(name: "Harmonica")
-Instrument.create(name: "Saxophone")
-Instrument.create(name: "Trumpet")
-Instrument.create(name: "Trombone")
-Instrument.create(name: "Engineer")
+drums = Instrument.create(name: "Drums")
+drums2 = Instrument.create(name: "Drums 2")
+bass = Instrument.create(name: "Bass")
+guitar = Instrument.create(name: "Guitar")
+guitar2 = Instrument.create(name: "Guitar 2")
+keyboards = Instrument.create(name: "Keyboards")
+keyboards2 = Instrument.create(name: "Keyboards 2")
+vocals = Instrument.create(name: "Vocals")
+vocals2 = Instrument.create(name: "Vocals 2")
+harmonica = Instrument.create(name: "Harmonica")
+saxophone = Instrument.create(name: "Saxophone")
+trumpet = Instrument.create(name: "Trumpet")
+trombone = Instrument.create(name: "Trombone")
+engineer = Instrument.create(name: "Engineer")
 
 b = Band.create(name: "Silver Lake Band")
 
-l1 = b.lists.create(name: "Rocking 1")
-l2 = b.lists.create(name: "Rocking 2")
-
 s01 = b.songs.create(band_id: b.id, title: "Down by the Water", performer: "The Decembrists", duration: 180, intro: "Drums 2 measures")
 s02 = b.songs.create(band_id: b.id, title: "Breakfast in America", performer: "Supertramp", duration: 200, intro: "Bass and keyboard 4 measures")
-s03 = b.songs.create(band_id: b.id, title: "Like a Hurrican", performer: "Neal Young", duration: 180, intro: "Slow keyboard then harmonica")
+s03 = b.songs.create(band_id: b.id, title: "Like a Hurricane", performer: "Neal Young", duration: 180, intro: "Slow keyboard then harmonica")
 s04 = b.songs.create(band_id: b.id, title: "Manic Monday", performer: "The Bangles", duration: 180, intro: "Drum count, all start")
 s05 = b.songs.create(band_id: b.id, title: "Californication", performer: "Red Hot Chili Peppers", duration: 240, intro: "Bass and Casio")
 s06 = b.songs.create(band_id: b.id, title: "Dead Flowers", performer: "The Rolling Stones", duration: 180, intro: "Drum count, all start")
@@ -58,6 +55,48 @@ s27 = b.songs.create(band_id: b.id, title: "Gimme Some Lovin", performer: "Spenc
 
 l1 = List.create(band_id: 1, name: "Rocking 1")
 l2 = List.create(band_id: 1, name: "Rocking 2", notes: "In Progress")
+
+Preparation.create(song_id: s01.id, instrument_id: harmonica.id, instruction: "G harmonica")
+
+Preparation.create(song_id: s02.id, instrument_id: bass.id, instruction: "Capo 3")
+Preparation.create(song_id: s02.id, instrument_id: guitar.id, instruction: "Capo 3")
+Preparation.create(song_id: s02.id, instrument_id: keyboards.id, instruction: "Tune up 3")
+Preparation.create(song_id: s02.id, instrument_id: harmonica.id, instruction: "C harmonica")
+
+Preparation.create(song_id: s04.id, instrument_id: keyboards.id, instruction: "Casio mode X")
+
+Preparation.create(song_id: s07.id, instrument_id: keyboards.id, instruction: "Casio mode X")
+
+Preparation.create(song_id: s11.id, instrument_id: harmonica.id, instruction: "C harmonica")
+
+Preparation.create(song_id: s14.id, instrument_id: harmonica.id, instruction: "G harmonica")
+
+Preparation.create(song_id: s19.id, instrument_id: harmonica.id, instruction: "D harmonica")
+
+Preparation.create(song_id: s20.id, instrument_id: harmonica.id, instruction: "C harmonica")
+Preparation.create(song_id: s20.id, instrument_id: bass.id, instruction: "Capo 3")
+Preparation.create(song_id: s20.id, instrument_id: guitar.id, instruction: "Capo 3")
+Preparation.create(song_id: s20.id, instrument_id: keyboards.id, instruction: "Tune up 3")
+
+Preparation.create(song_id: s21.id, instrument_id: harmonica.id, instruction: "G harmonica")
+
+Preparation.create(song_id: s23.id, instrument_id: bass.id, instruction: "Capo 2")
+Preparation.create(song_id: s23.id, instrument_id: guitar.id, instruction: "Capo 2")
+Preparation.create(song_id: s23.id, instrument_id: keyboards.id, instruction: "Tune up 2")
+
+Preparation.create(song_id: s24.id, instrument_id: bass.id, instruction: "Capo 2")
+Preparation.create(song_id: s24.id, instrument_id: guitar.id, instruction: "Capo 2")
+Preparation.create(song_id: s24.id, instrument_id: keyboards.id, instruction: "Tune up 2")
+
+Preparation.create(song_id: s25.id, instrument_id: bass.id, instruction: "Capo 1")
+Preparation.create(song_id: s25.id, instrument_id: guitar.id, instruction: "Capo 1")
+Preparation.create(song_id: s25.id, instrument_id: keyboards.id, instruction: "Tune up 1")
+
+Preparation.create(song_id: s26.id, instrument_id: bass.id, instruction: "Capo 2")
+Preparation.create(song_id: s26.id, instrument_id: guitar.id, instruction: "Capo 2")
+Preparation.create(song_id: s26.id, instrument_id: keyboards.id, instruction: "Tune up 2")
+
+Preparation.create(song_id: s27.id, instrument_id: keyboards.id, instruction: "Casio mode X")
 
 ls01 = ListSong.create(list_id: l1.id, song_id: s01.id, position: 1)
 ls02 = ListSong.create(list_id: l1.id, song_id: s02.id, position: 2)
