@@ -8,11 +8,14 @@ Rails.application.routes.draw do
   get 'about', to: 'static#about'
   get 'credits', to: 'static#credits'
   get 'legal', to: 'static#legal'
+  get 'lists/start', to: 'lists#start'
+  post 'lists/play', to: 'lists#play'
 
   resources :bands
   resources :players
   resources :lists
   resources :songs
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

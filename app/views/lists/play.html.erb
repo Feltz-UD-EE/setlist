@@ -1,0 +1,21 @@
+<% content_for :title, "Playing " + @list.name %>
+
+<h1><%= "Playing " + @list.name %></h1>
+
+<p>Run time: <%= @list.runtime_pretty %></p>
+<% if @instrument_ids.length == 0 %>
+  <p>All instruments</p>
+<% else %>
+  <p>Instruments: <%= @instrument_list %></p>
+<% end %>
+<h2>Songs</h2>
+<% @list.songs.each do |song| %>
+  <p><%= song.title %></p>p>
+<% end %>
+<p>Song 1: <%= @song.title %></p>
+<p><%= @song.intro %></p>
+<% @preps.each do |prep| %>
+  <p><%= prep.instrument.name + ": " + prep.instruction %></p>
+<% end %>
+
+<p>Start button - links to play/?song_sequence=0</p>
