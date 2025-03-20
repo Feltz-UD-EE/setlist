@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # authentication and user status routes are automatically defined and are not configured here
 
   # public static & home routes
@@ -8,11 +7,16 @@ Rails.application.routes.draw do
   get 'about', to: 'static#about'
   get 'credits', to: 'static#credits'
   get 'legal', to: 'static#legal'
+  get 'play/choose', to: 'play#choose'
+  post 'play/cue', to: 'play#cue'
+  get 'play/play', to: 'play#play'
+  get 'play/play_song', to: 'play#play_song'
 
   resources :bands
   resources :players
   resources :lists
   resources :songs
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

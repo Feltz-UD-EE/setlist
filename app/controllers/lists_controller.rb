@@ -66,6 +66,6 @@ class ListsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def list_params
-      params.fetch(:list, {})
+      params.require(:player).permit(:name, :band_id, :song_sequence, instrument_ids: [])
     end
 end
