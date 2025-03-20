@@ -1,0 +1,17 @@
+<%= form_with(model: play) do |form| %>
+  <% if play.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(play.errors.count, "error") %> prohibited this play from being saved:</h2>
+
+      <ul>
+        <% play.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

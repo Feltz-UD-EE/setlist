@@ -1,24 +1,29 @@
 <p style="color: green"><%= notice %></p>
 
 <% content_for :title, "Playing " + [@list.name, @song.title].join(" ") %>
-
-<p><%= @song.intro %></p>
+<p><%= @song.title %></p>
+<p>Intro: <%= @song.intro %></p>
 <% @preps.each do |prep| %>
   <p><%= prep.instrument.name + ": " + prep.instruction %></p>
 <% end %>
-
+<br/>
+<br/>
 <p>Show Song image(s)</p>
-
+<br/>
+<br/>
 <% if @next_song.present? %>
-  <p><%= @next_song.intro %></p>
+  <p>Next: <%= @next_song.title %></p>
+  <p>Intro: <%= @next_song.intro %></p>
   <% @next_preps.each do |prep| %>
     <p><%= prep.instrument.name + ": " + prep.instruction %></p>
   <% end %>
+<% else %>
+  <h2>End of Set List</h2>
 <% end %>
 
 <% if @sequence > 0 %>
-  <p>Back button (sequence = @sequence-1) </p>
+  <p><%= link_to "BACK", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: @sequence-1) %></p>
 <% end %>
 <% if @next_song.present? %>
-  <p>Forward button (sequence = @sequence+1)</p>
+  <p><%= link_to "NEXT", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: @sequence+1) %></p>
 <% end %>

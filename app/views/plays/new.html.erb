@@ -1,0 +1,11 @@
+<% content_for :title, "New play" %>
+
+<h1>New play</h1>
+
+<%= render "form", play: @play %>
+
+<br>
+
+<div>
+  <%= link_to "Back to plays", plays_path %>
+</div>

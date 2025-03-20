@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # authentication and user status routes are automatically defined and are not configured here
 
   # public static & home routes
@@ -8,8 +7,10 @@ Rails.application.routes.draw do
   get 'about', to: 'static#about'
   get 'credits', to: 'static#credits'
   get 'legal', to: 'static#legal'
-  get 'lists/start', to: 'lists#start'
-  post 'lists/play', to: 'lists#play'
+  get 'play/choose', to: 'play#choose'
+  post 'play/cue', to: 'play#cue'
+  get 'play/play', to: 'play#play'
+  get 'play/play_song', to: 'play#play_song'
 
   resources :bands
   resources :players
