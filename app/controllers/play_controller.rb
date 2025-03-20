@@ -11,13 +11,9 @@ class PlayController < ApplicationController
   # POST from non-model form in #start
   # Just processes instrument_ids and redirects to #play
   def cue
-    print ("in play#cue")
     list = List.find(params[:list_id])
-    print(list)
-    print(params[:instrument_ids])
     instrument_ids = params[:instrument_ids]
     instrument_ids.delete("")
-    print(instrument_ids)
     redirect_to controller: 'play', action: 'play', list_id: list.id, instrument_ids: instrument_ids
   end
 
@@ -26,12 +22,8 @@ class PlayController < ApplicationController
   # TODO figure out paradigm for no instruments vs some instruments vs all instruments
   # TODO refactor instrument & prep stuff into model methods
   def play
-    print ("in play#play")
     @list = List.find(params[:list_id])
-    print(@list)
-    print(params[:instrument_ids])
     @instrument_ids = (params[:instrument_ids])
-    print(@instrument_ids)
     @preps = []
     @song = @list.songs.first
     if @instrument_ids.present?
@@ -45,21 +37,14 @@ class PlayController < ApplicationController
   # TODO figure out paradigm for no instruments vs some instruments vs all instruments
   # TODO refactor instrument & prep stuff into model methods
   def play_song
-    print ("in play#play_song")
     @list = List.find(params[:list_id])
-    print(@list)
-    print(params[:instrument_ids])
     @instrument_ids = (params[:instrument_ids])
-    print(@instrument_ids)
     @preps = []
     @next_preps = []
     @sequence=params[:song_sequence].to_i
-    print(@sequence)
     @song = @list.songs[@sequence]
-    print(@song)
     if @sequence < @list.songs.length - 1
       @next_song = @list.songs[@sequence+1]
-      print(@next_song)
     end
     if @instrument_ids.present?
       @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
