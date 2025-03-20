@@ -12,6 +12,17 @@
   <% end %>
 
   <div>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td><%= form.text_field :name %></td>
+      </tr>
+      <tr>
+        <td>Notes</td>
+        <td><%= form.text_area :notes %></td>
+      </tr>
+    </table>
+    <p>Drag-and-drop songs here...</p>
     <%= form.submit %>
   </div>
 <% end %>

@@ -12,6 +12,36 @@
   <% end %>
 
   <div>
+    <table>
+      <% if @song.band_id.present? %>
+        <%= form.hidden_field :band_id, value: @song.band_id %>
+    <% else %>
+        <tr>
+          <td>Band</td>
+          <td><%= form.select :band_id, (["-- Please select a band --"] + Band.all.collect {|t| [ t.name, t.id ] }) %></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>Title</td>
+        <td><%= form.text_field :title %></td>
+      </tr>
+      <tr>
+        <td>Performer</td>
+        <td><%= form.text_field :performer %></td>
+      </tr>
+      <tr>
+        <td>Version</td>
+        <td><%= form.text_field :version %></td>
+      </tr>
+      <tr>
+        <td>Intro</td>
+        <td><%= form.text_field :intro %></td>
+      </tr>
+      <tr>
+        <td>Duration (seconds)</td>
+        <td><%= form.text_field :duration %></td>
+      </tr>
+    </table>
     <%= form.submit %>
   </div>
 <% end %>
