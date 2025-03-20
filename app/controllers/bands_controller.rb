@@ -9,6 +9,7 @@ class BandsController < ApplicationController
   # GET /bands/1 or /bands/1.json
   def show
     @lists = @band.lists.alpha
+    @players = @band.players
     @songs = @band.songs.alpha
   end
 

@@ -1,6 +1,25 @@
 <div id="<%= dom_id band %>">
 <h1><%= @band.name %></h1>
+<h2>Players</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @players.each do |player| %>
+      <tr>
+        <td><%= player.first_name + " " + player.last_name %></td>
+        <td><%= player.email %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<h2>Songs</h2>
 <p><%= @songs.length %> songs in <%= @lists.length %> set lists.</p>
+<p><%= link_to "Song Details", songs_path(:band_id => @band.id) %></p>
 <h2>Set Lists</h2>
 <table>
   <thead>
