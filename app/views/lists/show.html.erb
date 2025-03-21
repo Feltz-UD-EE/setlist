@@ -2,6 +2,7 @@
 
 <%= render @list %>
 <br/>
+<p><%= link_to "Play this list", play_choose_path(list_id: @list.id) %>
 <div>
   <%= link_to "Edit this list", edit_list_path(@list) %> |
   <%= link_to "Back to lists", lists_path %>
