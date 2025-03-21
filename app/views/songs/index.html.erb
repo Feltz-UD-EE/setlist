@@ -10,6 +10,7 @@
     <th>Version</th>
     <th>Duration</th>
     <th>Intro</th>
+    <th>Finish</th>
     <th>Set Lists</th>
   </tr>
   </thead>
@@ -21,6 +22,7 @@
         <td><%= song.version %></td>
         <td><%= song.duration_pretty %></td>
         <td><%= song.intro %></td>
+        <td><%= song.finish %></td>
         <td><%= song.lists.any? ? song.lists.pluck(:name).join(', ') : "None" %></td>
       </tr>
     <% end %>

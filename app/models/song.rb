@@ -9,6 +9,7 @@
   # t.integer :tempo
   # t.string :intro
   # t.references :band
+  # t.string :finish
   # t.timestamps
 ##
 
