@@ -4,6 +4,7 @@
   <p>Performer: <%= @song.performer %></p>
   <p>Version: <%= @song.version %></p>
   <p>Intro: <%= @song.intro %></p>
+  <p>Finish: <%= @song.finish %></p>
   <h2>Set Lists</h2>
   <% @song.lists.each do |list| %>
     <p><%= link_to list.name, list_path(list) %></p>

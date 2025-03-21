@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_02_174728) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_21_124945) do
   create_table "bands", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -83,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_02_174728) do
     t.bigint "band_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "finish"
     t.index ["band_id"], name: "index_songs_on_band_id"
   end
 end
