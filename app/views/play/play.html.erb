@@ -1,6 +1,6 @@
 <% content_for :title, "Playing " + @list.name %>
 
-<h1><%= "Playing " + @list.name %></h1>
+<h1><%= "Playing " + @list.band.name + " " + @list.name %></h1>
 
 <p>Run time: <%= @list.runtime_pretty %></p>
 <% if @instrument_list.present? %>

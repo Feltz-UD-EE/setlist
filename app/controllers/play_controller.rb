@@ -1,11 +1,13 @@
 class PlayController < ApplicationController
   # Select a list to play through (w/ 0-n instruments): renders the #play action after submitting fo
   def choose
-    print "Top of play#start"
-    @lists =  List.all.alpha    # TODO add current_user/current_band logic here
+    if params[:list_id].present?
+      @list_id = params[:list_id]
+      @list_name = List.find(params[:list_id]).name
+    else
+      @lists =  List.all.alpha    # TODO add current_user/current_band logic here
+    end
     @instruments = Instrument.all.alpha
-    print(@lists)
-    print(@instruments)
   end
 
   # POST from non-model form in #start
