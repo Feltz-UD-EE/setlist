@@ -3,16 +3,31 @@ class SongsController < ApplicationController
 
   # GET /songs or /songs.json
   def index
-    @songs = Song.all
+    if params['band_id'].present?
+      @band = Band.find(params['band_id'])
+      @songs = @band.songs.alpha
+      @title = @band.name + " Songs"
+    else
+      @songs = Song.all.alpha
+      @title = "All Songs"
+    end
   end
 
   # GET /songs/1 or /songs/1.json
   def show
+    @preparations = @song.preparations
   end
 
   # GET /songs/new
   def new
-    @song = Song.new
+    if params['band_id'].present?
+      @band = Band.find(params['band_id'])
+      @song = Song.new(band_id: params['band_id'])
+      @title = "New song for " + @band.name
+    else
+      @song = Song.new
+      @title = "New song"
+    end
   end
 
   # GET /songs/1/edit
@@ -65,6 +80,6 @@ class SongsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def song_params
-      params.fetch(:song, {})
+      params.require(:song).permit(:title, :performer, :version, :duration, :intro, :finish, :band_id)
     end
 end

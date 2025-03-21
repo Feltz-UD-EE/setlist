@@ -1,16 +1,36 @@
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Songs" %>
+<h1><%= @title %></h1>
 
-<h1>Songs</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Performer</th>
+    <th>Version</th>
+    <th>Duration</th>
+    <th>Intro</th>
+    <th>Finish</th>
+    <th>Set Lists</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @songs.each do |song| %>
+      <tr>
+        <td><%= link_to song.title, song_path(song) %></td>
+        <td><%= song.performer %></td>
+        <td><%= song.version %></td>
+        <td><%= song.duration_pretty %></td>
+        <td><%= song.intro %></td>
+        <td><%= song.finish %></td>
+        <td><%= song.lists.any? ? song.lists.pluck(:name).join(', ') : "None" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<div id="songs">
-  <% @songs.each do |song| %>
-    <%= render song %>
-    <p>
-      <%= link_to "Show this song", song %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New song", new_song_path %>
+<% if @band.present? %>
+  <%= link_to "New song", new_song_path(:band_id => @band.id) %>
+<% else %>
+  <%= link_to "New song", new_song_path %>
+<% end %>

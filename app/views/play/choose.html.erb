@@ -1,0 +1,18 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Start Playing" %>
+
+<h1>Get Ready!</h1>
+<%= form_with url:'/play/cue' do |form| %>
+  <% if @list_name.present? %>
+    <p>Setlist: <%= @list_name %></p>
+    <%= form.hidden_field :list_id, :value => @list_id %>
+  <% else %>
+    <p>Setlist: <%= form.collection_select :list_id, @lists, :id, :name, { include_blank: 'Select one' } %></p>
+  <% end %>
+  <p>Instruments:</p>
+  <%= form.collection_checkboxes(:instrument_ids, @instruments, :id, :name) do |b| %>
+    <p><%= b.label { b.check_box + b.text} %></p>
+  <% end %>
+  <%= form.submit "Start" %>
+<% end %>

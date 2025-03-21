@@ -1,5 +1,5 @@
 <div id="<%= dom_id list %>">
-  <h1><%= @list.band.name %> Set List <%= @list.name %></h1>
+  <h1><%= @list.band.name %>: <%= @list.name %></h1>
   <p>Songs: <%= @songs.length %></p>
   <p>Run Time: <%= @list.runtime_pretty %></p>
   <h2>Songs</h2>
@@ -10,6 +10,7 @@
       <th>Performer</th>
       <th>Duration</th>
       <th>Intro</th>
+      <th>Finish</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
         <td><%= song.performer %></td>
         <td><%= song.duration_pretty %></td>
         <td><%= song.intro %></td>
+        <td><%= song.finish %></td>
       </tr>
     <% end %>
     </tbody>
