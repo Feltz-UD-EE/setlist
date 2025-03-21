@@ -16,6 +16,7 @@ class SongsController < ApplicationController
   # GET /songs/1 or /songs/1.json
   def show
     @preparations = @song.preparations
+    @pages = @song.pages.without_instrument.order + @song.pages.with_instrument.order
   end
 
   # GET /songs/new

@@ -44,6 +44,9 @@ gem "thruster", require: false
 # Authentication gem - https://github.com/thoughtbot/clearance
 gem "clearance"
 
+# File upload gem - https://github.com/carrierwaveuploader/carrierwave
+gem 'carrierwave', '~> 3.0'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

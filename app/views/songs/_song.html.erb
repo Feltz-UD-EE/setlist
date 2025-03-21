@@ -26,4 +26,22 @@
     <% end %>
     </tbody>
   </table>
+  <h2>Pages</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Order</th>
+      <th>Preview</th>
+      <th>Instrument</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @pagrs.each do |page| %>
+      <tr>
+        <td><%= page.so %></td>
+        <td><%= prep.instruction %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 </div>
