@@ -21,6 +21,7 @@ class Song < ApplicationRecord
   belongs_to :band
   has_many :list_songs
   has_many :lists, through: :list_songs
+  has_many :pages
 
   # Validations
   validates :title, presence: true

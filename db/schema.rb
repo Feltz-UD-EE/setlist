@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_21_124945) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_21_145052) do
   create_table "bands", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -45,6 +45,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_124945) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["band_id"], name: "index_lists_on_band_id"
+  end
+
+  create_table "pages", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "sort_order", null: false
+    t.bigint "song_id", null: false
+    t.bigint "instrument_id"
+    t.string "img"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instrument_id"], name: "index_pages_on_instrument_id"
+    t.index ["song_id"], name: "index_pages_on_song_id"
   end
 
   create_table "players", charset: "utf8mb3", force: :cascade do |t|

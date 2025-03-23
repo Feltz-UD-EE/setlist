@@ -38,6 +38,7 @@ class PlayController < ApplicationController
   # TODO check for off-by-one errors
   # TODO figure out paradigm for no instruments vs some instruments vs all instruments
   # TODO refactor instrument & prep stuff into model methods
+  # TODO handle instrument-specific pages
   def play_song
     @list = List.find(params[:list_id])
     @instrument_ids = (params[:instrument_ids])
