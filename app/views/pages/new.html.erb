@@ -1,0 +1,11 @@
+<% content_for :title, @title %>
+
+<h1><%= @title %></h1>
+
+<%= render "form", page: @page %>
+
+<br>
+
+<div>
+  <%= link_to "Back to pages", pages_path %>
+</div>

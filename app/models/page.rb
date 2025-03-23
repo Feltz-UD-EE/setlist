@@ -20,7 +20,7 @@ class Page < ApplicationRecord
 
   # Validations
   # 2-attribute validation of instrument_id and sort_order - need to make instrument_id == nil condition works
-  validates :sort_order, uniqueness: {scope: :instrument_id}
+  validates :sort_order, uniqueness: {scope: [:song_id, :instrument_id]}
 
   # Scopes
   scope :by_sort_order, -> { order(sort_order: :asc) }

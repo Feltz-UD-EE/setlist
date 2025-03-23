@@ -1,0 +1,5 @@
+<div id="<%= dom_id song %>">
+  <h1><%= @page.song.title %>: <%= @page.sort_order %></h1>
+  <p>Instrument <%= @page.instrument.present? ? @page.instrument.name : "" %></p>
+  <p><%= image_tag page.img.url %></p>
+</div>
