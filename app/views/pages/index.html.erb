@@ -1,0 +1,24 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= @title %></h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Song</th>
+    <th>Order</th>
+    <th>Image</th>
+    <th>Instrument</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @pages.each do |page| %>
+      <tr>
+        <td><%= link_to page.song.title, song_path(path.song) %></td>
+        <td><%= page.sort_orderr %></td>
+        <td><%= image_tag page.img.url %></td>
+        <td><%= page.instrument.present? ? page.instrument.name : "" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

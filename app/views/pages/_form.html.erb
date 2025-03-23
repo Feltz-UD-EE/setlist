@@ -1,0 +1,34 @@
+<%= form_with(model: page) do |form| %>
+  <% if page.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+        <% page.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <table>
+      <% if @song_id.present? %>
+        <%= form.hidden_field :song_id, value: @song_id %>
+      <% end %>
+      <tr>
+        <td>Sort Order</td>
+        <td><%= form.text_field :sort_order %></td>
+      </tr>
+      <tr>
+        <td>Image file</td>
+        <td><%= form.file_field :img %></td>
+      </tr>
+      <tr>
+        <td>Instrument</td>
+        <td><%= form.collection_select :instrument_id, Instrument.all, :id, :name, { include_blank: '(optional)' } %></p></td>
+      </tr>
+    </table>
+    <%= form.submit %>
+  </div>
+<% end %>
