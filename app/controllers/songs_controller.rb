@@ -16,6 +16,8 @@ class SongsController < ApplicationController
   # GET /songs/1 or /songs/1.json
   def show
     @preparations = @song.preparations
+    # TODO figure out how to manage generic pages vs. pages tied to an instrument
+    @pages = @song.pages
   end
 
   # GET /songs/new

@@ -26,4 +26,24 @@
     <% end %>
     </tbody>
   </table>
+  <h2>Pages</h2>
+  <p>Preview goes here - need to figure out stuff with image processing gems</p>
+  <table>
+    <thead>
+    <tr>
+      <th>Order</th>
+      <th>Preview</th>
+      <th>Instrument</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @pages.each do |page| %>
+      <tr>
+        <td><%= page.sort_order %></td>
+        <td><%= image_tag page.img.url %></td>
+        <td><%= page.instrument.present? ? prep.instrument.name : ""%></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 </div>

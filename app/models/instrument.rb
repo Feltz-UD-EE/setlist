@@ -13,7 +13,8 @@ class Instrument < ApplicationRecord
   # Relations
   has_many :preparations
   has_and_belongs_to_many :players
-  
+  has_many :pages
+
   # Validations
   validates :name, presence: true
 

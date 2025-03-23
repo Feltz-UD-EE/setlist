@@ -14,7 +14,9 @@
 <% end %>
 <br/>
 <br/>
-<p>Show Song image(s)</p>
+<% @song.pages.each do |page| %>
+  <%= image_tag page.img.url %>
+<% end %>
 <br/>
 <br/>
 <p>Finish: <%= @song.finish %>
