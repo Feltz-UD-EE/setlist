@@ -8,6 +8,7 @@ class PlayController < ApplicationController
       @lists =  List.all.alpha    # TODO add current_user/current_band logic here
     end
     @instruments = Instrument.all.alpha
+    @display_types = [["Song by Song"], ["One Screen"]]
   end
 
   # POST from non-model form in #start
@@ -16,7 +17,11 @@ class PlayController < ApplicationController
     list = List.find(params[:list_id])
     instrument_ids = params[:instrument_ids]
     instrument_ids.delete("")
-    redirect_to controller: 'play', action: 'play', list_id: list.id, instrument_ids: instrument_ids
+    if params[:display_type] == 'Song by Song'
+      redirect_to controller: 'play', action: 'play', list_id: list.id, instrument_ids: instrument_ids
+    elsif params[:display_type] == 'One Screen'
+      redirect_to controller: 'play', action: 'play_all', list_id: list.id, instrument_ids: instrument_ids
+    end
   end
 
   # Shows the list of songs with prep for selected instruments
@@ -53,6 +58,26 @@ class PlayController < ApplicationController
       @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
       @preps = @song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
       @next_preps = @next_song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})") if @next_song.present?
+    end
+  end
+
+# Shows entire setlist on one page, suggested by Chip.
+# TODO: restructure the return data into a big JSON instead of 3 arrays?
+# TODO handle instrument-specific pages
+  def play_all
+    @list = List.find(params[:list_id])
+    @instrument_ids = (params[:instrument_ids])
+    @songs = @list.songs
+    @preps = []
+    @pages = []
+    if @instrument_ids.present?
+      @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
+      @songs.each do |song|
+        preps = song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
+        pages = song.pages
+        @preps << preps
+        @pages << pages
+      end
     end
   end
 end
