@@ -10,6 +10,7 @@
   <% else %>
     <p>Setlist: <%= form.collection_select :list_id, @lists, :id, :name, { include_blank: 'Select one' } %></p>
   <% end %>
+  <p>Display Style: <%= form.select :display_type, options_for_select(@display_types) %></p>
   <p>Instruments:</p>
   <%= form.collection_checkboxes(:instrument_ids, @instruments, :id, :name) do |b| %>
     <p><%= b.label { b.check_box + b.text} %></p>

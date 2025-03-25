@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Playing " + @list.name %>
+<p><%= link_to "BACK", play_play_path(list_id: @list.id, instrument_ids: @instrument_ids) %></p>
+
+<% @songs.each_with_index do |song, i| %>
+
+  <p><%= song.title %></p>
+  <p>Intro: <%= song.intro %></p>
+  <% @preps[i].each do |prep| %>
+    <p><%= prep.instrument.name + ": " + prep.instruction %></p>
+  <% end %>
+  <% @pages[i].each do |page| %>
+    <%= image_tag page.img.url %>
+  <% end %>
+  <p>Finish: <%= song.finish %>
+<% end %>
+
+<h2>End of Set List</h2>
+<%= link_to "Home", public_home_path %>

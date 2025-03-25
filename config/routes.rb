@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'play/cue', to: 'play#cue'
   get 'play/play', to: 'play#play'
   get 'play/play_song', to: 'play#play_song'
+  get 'play/play_all', to: 'play#play_all'
 
   resources :bands
   resources :players
