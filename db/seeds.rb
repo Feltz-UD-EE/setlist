@@ -53,9 +53,25 @@ s25 = b.songs.create(band_id: b.id, title: "Rebel Yell", performer: "Billy Idol"
 s26 = b.songs.create(band_id: b.id, title: "Twilight Zone", performer: "Golden Earring", duration: 300, intro: "Keyboard and guitar, then spoken word vocals", finish: "A minor")
 s27 = b.songs.create(band_id: b.id, title: "Gimme Some Lovin", performer: "Spencer Davis Group", duration: 220, intro: "Drum count, keyboard and bass", finish: "G")
 s28 = b.songs.create(band_id: b.id, title: "Melt With You", performer: "Modern English", duration: 220, intro: "Drum count, all start", finish: "C")
+s29 = b.songs.create(band_id: b.id, title: "Changes in Latitude", performer: "Jimmy Buffet", duration: 180, intro: "", finish: "")
+s30 = b.songs.create(band_id: b.id, title: "868-5309 Jenny", performer: "Tommy Twotone", duration: 200, intro: "", finish: "")
+s31 = b.songs.create(band_id: b.id, title: "Bad Moon Rising", performer: "Credence Clearwater Revival", duration: 180, intro: "", finish: "")
+s32 = b.songs.create(band_id: b.id, title: "Boulevard of Broken Dreams", performer: "Green Day", duration: 240, intro: "", finish: "")
+s33 = b.songs.create(band_id: b.id, title: "Come Monday", performer: "Jimmy Buffet", duration: 240, intro: "", finish: "")
+s34 = b.songs.create(band_id: b.id, title: "Come to my Window", performer: "Melissa Ethridge", duration: 200, intro: "", finish: "")
+s35 = b.songs.create(band_id: b.id, title: "Daydream Believer", performer: "The Monkees", duration: 180, intro: "", finish: "")
+s36 = b.songs.create(band_id: b.id, title: "Don't Look Back in Anger", performer: "Dobie Gray", duration: 220, intro: "", finish: "")
+s37 = b.songs.create(band_id: b.id, title: "Down Under", performer: "Men at Work", duration: 220, intro: "", finish: "")
+s38 = b.songs.create(band_id: b.id, title: "Drift Away", performer: "Dobie Gray", duration: 220, intro: "", finish: "")
+s39 = b.songs.create(band_id: b.id, title: "Dust in the Wind", performer: "Kansas", duration: 180, intro: "", finish: "")
+s40 = b.songs.create(band_id: b.id, title: "Faithfully", performer: "Journey", duration: 200, intro: "", finish: "")
+
+
 
 l1 = List.create(band_id: 1, name: "Rocking 1")
 l2 = List.create(band_id: 1, name: "Rocking 2", notes: "In Progress")
+l3 = List.create(band_id: 1, name: "Acoustic 1", notes: "In Progress")
+l4 = List.create(band_id: 1, name: "Acoustic 2", notes: "In Progress")
 
 Preparation.create(song_id: s01.id, instrument_id: harmonica.id, instruction: "G harmonica")
 
