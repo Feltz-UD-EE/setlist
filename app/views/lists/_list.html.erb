@@ -19,8 +19,8 @@
         <td><%= link_to song.title, song_path(song) %></td>
         <td><%= song.performer %></td>
         <td><%= song.duration_pretty %></td>
-        <td><%= song.intro %></td>
-        <td><%= song.finish %></td>
+        <td><span class="song-note song-note--intro song-note--inline"><%= song.intro %></span></td>
+        <td><span class="song-note song-note--finish song-note--inline"><%= song.finish %></span></td>
       </tr>
     <% end %>
     </tbody>

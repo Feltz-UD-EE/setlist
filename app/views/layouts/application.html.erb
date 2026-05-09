@@ -18,12 +18,19 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= link_to "Home", public_home_path %>
-    <%= yield %>
+    <header class="site-header">
+      <nav class="main-menu" aria-label="Main menu">
+        <%= link_to image_tag("/icon.svg", alt: "", class: "home-logo") + tag.span("Setlist"), public_home_path, class: "home-link", aria: { label: "Home" } %>
+      </nav>
+    </header>
+
+    <main class="page-shell">
+      <%= yield %>
+    </main>
   </body>
 </html>

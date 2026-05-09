@@ -1,3 +1,16 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Setlist instruments logo" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="72" fill="#fff"/>
+  <g fill="#000">
+    <path d="M64 356h384v36H64z"/>
+    <path d="M122 190a68 68 0 1 0 0 136 68 68 0 0 0 0-136Zm0 38a30 30 0 1 1 0 60 30 30 0 0 1 0-60Z"/>
+    <path d="M76 150h34v62H76zM135 150h34v62h-34z"/>
+    <path d="M57 132h132v28H57z"/>
+    <path d="M218 170h126c18 0 32 14 32 32v86H186v-86c0-18 14-32 32-32Zm-1 36v46h128v-46H217Z"/>
+    <path d="M205 252h154v28H205zM220 285h124v18H220z"/>
+    <path d="M374 128c11-9 27-8 37 2 11 11 11 28 0 39l-45 45 28 28 45-45 25 25-45 45c-11 11-28 11-39 0-10-10-11-26-2-37l-26-26c-11 9-27 8-37-2-11-11-11-28 0-39l45-45 25 25-45 45 26 26 45-45-37-41Z"/>
+    <path d="M420 81h18v275h-18z"/>
+    <path d="M386 81h68v24h-68z"/>
+    <path d="M376 358h106v34H376z"/>
+    <path d="M392 54h42c17 0 31 14 31 31v8h-73z"/>
+  </g>
 </svg>

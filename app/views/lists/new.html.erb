@@ -1,11 +1,15 @@
-<% content_for :title, "New list" %>
+<% content_for :title, "New set list" %>
 
-<h1>New list</h1>
+<h1>New set list<%= ": #{@band.name}" if @band.present? %></h1>
 
 <%= render "form", list: @list %>
 
 <br>
 
 <div>
-  <%= link_to "Back to lists", lists_path %>
+  <% if @band.present? %>
+    <%= link_to "Back to #{@band.name}", band_path(@band) %>
+  <% else %>
+    <%= link_to "Back to lists", lists_path %>
+  <% end %>
 </div>

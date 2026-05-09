@@ -2,19 +2,19 @@
 
 <h1><%= "Playing " + @list.band.name + " " + @list.name %></h1>
 
-<p>Run time: <%= @list.runtime_pretty %></p>
+<p class="meta-line">Run time: <%= @list.runtime_pretty %></p>
 <% if @instrument_list.present? %>
-  <p>Instruments: <%= @instrument_list %></p>
+  <p class="meta-line">Instruments: <%= @instrument_list %></p>
 <% end %>
 <h2>Songs</h2>
-<% @list.songs.each do |song| %>
-  <p><%= song.title %></p>
-<% end %>
-<br/>
+<ol class="song-list">
+  <% @list.songs.each do |song| %>
+    <li><%= song.title %></li>
+  <% end %>
+</ol>
 <h2>Song 1: <%= @song.title %></h2>
-<p>Intro: <%= @song.intro %></p>
+<p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
 <% @preps.each do |prep| %>
-  <p><%= prep.instrument.name + ": " + prep.instruction %></p>
+  <p class="song-note song-note--prep"><strong><%= prep.instrument.name %>:</strong> <%= prep.instruction %></p>
 <% end %>
-<br/>
-<p><%= link_to "START PLAYING", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: 0) %></p>
+<p class="action-row"><%= link_to "Start playing", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: 0), class: "button button--primary" %></p>
