@@ -1,6 +1,6 @@
-<% content_for :title, "Editing list" %>
+<% content_for :title, "Editing set list" %>
 
-<h1>Editing list</h1>
+<h1>Editing set list</h1>
 
 <%= render "form", list: @list %>
 
@@ -8,5 +8,5 @@
 
 <div>
   <%= link_to "Show this list", @list %> |
-  <%= link_to "Back to lists", lists_path %>
+  <%= link_to "Back to #{@list.band.name}", band_path(@list.band) %>
 </div>

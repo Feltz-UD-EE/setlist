@@ -12,7 +12,15 @@
   <% end %>
 
   <div>
+    <%= form.hidden_field :band_id if list.band_id.present? %>
+
     <table>
+      <% unless list.band_id.present? %>
+        <tr>
+          <td>Band</td>
+          <td><%= form.collection_select :band_id, Band.alpha, :id, :name, { include_blank: "Select one" } %></td>
+        </tr>
+      <% end %>
       <tr>
         <td>Name</td>
         <td><%= form.text_field :name %></td>
@@ -22,7 +30,67 @@
         <td><%= form.text_area :notes %></td>
       </tr>
     </table>
-    <p>Drag-and-drop songs here...</p>
+
+    <section
+      class="setlist-builder"
+      data-controller="setlist-builder"
+      data-setlist-builder-repeat-class="is-repeat">
+      <div class="setlist-panel setlist-panel--selected">
+        <div class="setlist-panel__header">
+          <h2>Set list songs</h2>
+          <p><span data-setlist-builder-target="count"><%= @selected_song_ids.length %></span> songs</p>
+        </div>
+
+        <ol class="selected-song-list" data-setlist-builder-target="selectedList">
+          <% @selected_song_ids.each do |song_id| %>
+            <% song = @band_song_by_id[song_id.to_i] %>
+            <% next if song.blank? %>
+            <li class="selected-song" draggable="true" data-song-id="<%= song.id %>" data-setlist-builder-target="selectedSong">
+              <span class="drag-handle" aria-hidden="true">::</span>
+              <span class="selected-song__title"><%= song.title %></span>
+              <span class="selected-song__meta"><%= song.performer %></span>
+              <button type="button" class="remove-song-button" aria-label="Remove <%= song.title %>" data-action="setlist-builder#remove">X</button>
+              <input type="hidden" name="list_song_ids[]" value="<%= song.id %>">
+            </li>
+          <% end %>
+        </ol>
+      </div>
+
+      <div class="setlist-panel setlist-panel--library">
+        <div class="setlist-panel__header">
+          <h2>Band songs</h2>
+          <p><span data-setlist-builder-target="libraryCount"><%= @band_songs.length %></span> available</p>
+        </div>
+
+        <div class="song-search">
+          <%= label_tag :song_search, "Search songs" %>
+          <input
+            type="search"
+            id="song_search"
+            placeholder="Type 3+ characters"
+            autocomplete="off"
+            data-setlist-builder-target="search"
+            data-action="input->setlist-builder#search">
+        </div>
+
+        <div class="song-library">
+          <% @band_songs.each do |song| %>
+            <button
+              type="button"
+              class="library-song"
+              data-setlist-builder-target="librarySong"
+              data-action="setlist-builder#add"
+              data-song-id="<%= song.id %>"
+              data-song-title="<%= song.title %>"
+              data-song-performer="<%= song.performer %>">
+              <span><%= song.title %></span>
+              <small><%= song.performer.presence || "No performer" %></small>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
     <%= form.submit %>
   </div>
 <% end %>

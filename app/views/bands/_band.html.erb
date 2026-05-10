@@ -39,4 +39,7 @@
     <% end %>
   </tbody>
 </table>
+<p class="action-row">
+  <%= link_to "Create new set list", new_list_path(band_id: @band.id), class: "button button--primary" %>
+</p>
 </div>
