@@ -3,17 +3,35 @@
 <% content_for :title, "Start Playing" %>
 
 <h1>Get Ready!</h1>
-<%= form_with url:'/play/cue' do |form| %>
-  <% if @list_name.present? %>
-    <p>Setlist: <%= @list_name %></p>
-    <%= form.hidden_field :list_id, :value => @list_id %>
-  <% else %>
-    <p>Setlist: <%= form.collection_select :list_id, @lists, :id, :name, { include_blank: 'Select one' } %></p>
-  <% end %>
-  <p>Display Style: <%= form.select :display_type, options_for_select(@display_types) %></p>
-  <p>Instruments:</p>
-  <%= form.collection_checkboxes(:instrument_ids, @instruments, :id, :name) do |b| %>
-    <p><%= b.label { b.check_box + b.text} %></p>
-  <% end %>
-  <%= form.submit "Start" %>
+<%= form_with url: '/play/cue', class: "play-setup-form" do |form| %>
+  <div class="play-setup-grid">
+    <p class="form-field">
+      <strong>Setlist</strong>
+      <% if @list_name.present? %>
+        <span><%= @list_name %></span>
+        <%= form.hidden_field :list_id, :value => @list_id %>
+      <% else %>
+        <%= form.collection_select :list_id, @lists, :id, :name, { include_blank: 'Select one' } %>
+      <% end %>
+    </p>
+
+    <p class="form-field">
+      <strong>Display Style</strong>
+      <%= form.select :display_type, options_for_select(@display_types), {}, class: "display-style-select" %>
+    </p>
+  </div>
+
+  <fieldset class="instrument-picker">
+    <legend>Instruments</legend>
+    <div class="instrument-grid">
+      <%= form.collection_checkboxes(:instrument_ids, @instruments, :id, :name) do |b| %>
+        <%= b.label class: "checkbox-row" do %>
+          <%= b.check_box %>
+          <span><%= b.text %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <p class="action-row"><%= form.submit "Start", class: "button button--play" %></p>
 <% end %>

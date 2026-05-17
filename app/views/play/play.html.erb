@@ -13,8 +13,8 @@
   <% end %>
 </ol>
 <h2>Song 1: <%= @song.title %></h2>
-<p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
 <% @preps.each do |prep| %>
   <p class="song-note song-note--prep"><strong><%= prep.instrument.name %>:</strong> <%= prep.instruction %></p>
 <% end %>
-<p class="action-row"><%= link_to "Start playing", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: 0), class: "button button--primary" %></p>
+<p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
+<p class="action-row"><%= link_to "Start playing", play_play_song_path(list_id: @list.id, instrument_ids: @instrument_ids, song_sequence: 0), class: "button button--play" %></p>

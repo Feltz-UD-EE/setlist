@@ -12,7 +12,7 @@
     <% @players.each do |player| %>
       <tr>
         <td><%= player.first_name + " " + player.last_name %></td>
-        <td><%= player.email %></td>
+        <td><%= mail_to player.email %></td>
       </tr>
     <% end %>
     </tbody>
@@ -21,25 +21,34 @@
 <p><%= @songs.length %> songs in <%= @lists.length %> set lists.</p>
 <p><%= link_to "Song Details", songs_path(:band_id => @band.id) %></p>
 <h2>Set Lists</h2>
-<table>
+<table data-controller="sortable-table">
   <thead>
     <tr>
-      <th>Name</th>
+      <th><button type="button" class="table-sort-button" data-action="sortable-table#sort" data-sortable-table-key-param="name">Name</button></th>
       <th>Songs</th>
       <th>Run Time</th>
+      <th><button type="button" class="table-sort-button" data-action="sortable-table#sort" data-sortable-table-key-param="created">Created</button></th>
+      <th>Actions</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody data-sortable-table-target="body">
     <% @lists.each do |list| %>
-      <tr>
+      <tr data-name="<%= list.name.downcase %>" data-created="<%= list.created_at.to_i %>">
         <td><%= link_to list.name, list_path(list) %></td>
         <td><%= list.songs.length %></td>
         <td><%= list.runtime_pretty %></td>
+        <td><%= list.created_at.strftime("%b %-d, %Y") %></td>
+        <td>
+          <div class="table-actions">
+            <%= link_to "Edit", edit_list_path(list), class: "button button--small" %>
+            <%= button_to "Delete", list, method: :delete, class: "button button--small button--danger" %>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 <p class="action-row">
-  <%= link_to "Create new set list", new_list_path(band_id: @band.id), class: "button button--primary" %>
+  <%= link_to "Create new set list", new_list_path(band_id: @band.id), class: "button button--play" %>
 </p>
 </div>

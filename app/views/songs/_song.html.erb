@@ -1,10 +1,21 @@
 <div id="<%= dom_id song %>">
   <h1><%= @song.band.name %>: <%= @song.title %></h1>
-  <p>Duration: <%= @song.duration_pretty %></p>
-  <p>Performer: <%= @song.performer %></p>
-  <p>Version: <%= @song.version %></p>
-  <p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
-  <p class="song-note song-note--finish"><strong>Finish:</strong> <%= @song.finish %></p>
+  <dl class="song-detail-list">
+    <div>
+      <dt>Duration</dt>
+      <dd><%= @song.duration_pretty %></dd>
+    </div>
+    <div>
+      <dt>Performer</dt>
+      <dd><%= @song.performer %></dd>
+    </div>
+    <div>
+      <dt>Version</dt>
+      <dd><%= @song.version %></dd>
+    </div>
+  </dl>
+  <p class="song-note song-note--intro"><strong>Intro:</strong> <span><%= @song.intro %></span></p>
+  <p class="song-note song-note--finish"><strong>Finish:</strong> <span><%= @song.finish %></span></p>
   <h2>Set Lists</h2>
   <% @song.lists.each do |list| %>
     <p><%= link_to list.name, list_path(list) %></p>
@@ -40,8 +51,8 @@
     <% @pages.each do |page| %>
       <tr>
         <td><%= page.sort_order %></td>
-        <td><%= image_tag page.img.url %></td>
-        <td><%= page.instrument.present? ? prep.instrument.name : ""%></td>
+        <td><%= image_tag page.img.url, class: "song-page-thumb" %></td>
+        <td><%= page.instrument.present? ? page.instrument.name : "" %></td>
       </tr>
     <% end %>
     </tbody>

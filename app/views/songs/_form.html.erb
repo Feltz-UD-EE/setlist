@@ -45,7 +45,21 @@
         <td>Finish</td>
         <td><%= form.text_field :finish %></td>
       </tr>
+      <tr>
+        <td>Song image</td>
+        <td><%= form.file_field :page_img, accept: "image/*" %></td>
+      </tr>
     </table>
+
+    <% if @pages.present? %>
+      <h2>Uploaded images</h2>
+      <div class="song-pages song-pages--thumbs">
+        <% @pages.each do |page| %>
+          <%= image_tag page.img.url, class: "song-page-thumb" if page.img.present? %>
+        <% end %>
+      </div>
+    <% end %>
+
     <%= form.submit %>
   </div>
 <% end %>

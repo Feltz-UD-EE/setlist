@@ -1,9 +1,13 @@
 
 <%= render @song %>
 
-<div>
-  <%= link_to "Edit this song", edit_song_path(@song) %> |
-  <%= link_to "Back to songs", songs_path %>
+<div class="setlist-footer-actions">
+  <div class="setlist-actions">
+    <%= link_to "All Songs", songs_path, class: "button" %>
+  </div>
 
-  <%= button_to "Destroy this song", @song, method: :delete %>
+  <div class="setlist-actions setlist-actions--secondary">
+    <%= link_to "Edit this song", edit_song_path(@song), class: "button button--small" %>
+    <%= button_to "Destroy this song", @song, method: :delete, class: "button button--small button--danger" %>
+  </div>
 </div>

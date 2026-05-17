@@ -32,5 +32,13 @@
     <main class="page-shell">
       <%= yield %>
     </main>
+
+    <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer navigation">
+        <%= link_to "About", about_path %>
+        <%= link_to "Credits", credits_path %>
+        <%= link_to "Legal", legal_path %>
+      </nav>
+    </footer>
   </body>
 </html>

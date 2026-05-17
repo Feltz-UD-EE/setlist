@@ -74,10 +74,11 @@ class PlayController < ApplicationController
       @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
       @songs.each do |song|
         preps = song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
-        pages = song.pages
         @preps << preps
-        @pages << pages
       end
+    else
+      @songs.each { @preps << [] }
     end
+    @songs.each { |song| @pages << song.pages }
   end
 end
