@@ -26,6 +26,18 @@
     <header class="site-header">
       <nav class="main-menu" aria-label="Main menu">
         <%= link_to image_tag("/icon.svg", alt: "", class: "home-logo") + tag.span("Setlist"), public_home_path, class: "home-link", aria: { label: "Home" } %>
+        <div class="session-links">
+          <% if signed_in? %>
+            <span><%= current_user.email %></span>
+            <% if current_band.present? %>
+              <%= link_to "My Band", band_path(current_band) %>
+            <% end %>
+            <%= button_to "Sign out", sign_out_path, method: :delete, class: "button button--small" %>
+          <% else %>
+            <%= link_to "Log in", sign_in_path, class: "button button--small button--play" %>
+            <%= link_to "Create an account", sign_up_path, class: "button button--small" %>
+          <% end %>
+        </div>
       </nav>
     </header>
 

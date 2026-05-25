@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_21_145052) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
+  create_table "band_invitations", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "band_id", null: false
+    t.string "token_digest"
+    t.datetime "expires_at"
+    t.datetime "used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["band_id"], name: "index_band_invitations_on_band_id"
+    t.index ["token_digest"], name: "index_band_invitations_on_token_digest", unique: true
+  end
+
   create_table "bands", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -68,6 +79,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_145052) do
     t.string "encrypted_password", limit: 128, null: false
     t.string "confirmation_token", limit: 128
     t.string "remember_token", limit: 128, null: false
+    t.boolean "admin", default: false, null: false
+    t.datetime "invitation_accepted_at"
     t.index ["band_id"], name: "index_players_on_band_id"
     t.index ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
     t.index ["email"], name: "index_players_on_email"
@@ -97,4 +110,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_145052) do
     t.string "finish"
     t.index ["band_id"], name: "index_songs_on_band_id"
   end
+
+  add_foreign_key "band_invitations", "bands"
 end

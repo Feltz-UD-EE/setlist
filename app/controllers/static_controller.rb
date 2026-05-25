@@ -4,9 +4,8 @@
 # Static routes
 #
 class StaticController < ApplicationController
-
     def public_home
-        @bands = Band.all.alpha
+        @bands = signed_in? ? accessible_bands.alpha : Band.none
     end
 
     def about

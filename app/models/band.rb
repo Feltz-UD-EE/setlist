@@ -12,6 +12,7 @@ class Band < ApplicationRecord
   # Relations
   # has_many :preparations...  complicated join
   has_many :players
+  has_many :band_invitations
   has_many :lists
   has_many :songs
 

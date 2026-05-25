@@ -3,11 +3,12 @@ class PlayersController < ApplicationController
 
   # GET /players or /players.json
   def index
-    @players = Player.all
+    @players = Player.where(band_id: accessible_bands.select(:id))
   end
 
   # GET /players/1 or /players/1.json
   def show
+    authorize_band!(@player.band)
   end
 
   # GET /players/new
@@ -17,11 +18,13 @@ class PlayersController < ApplicationController
 
   # GET /players/1/edit
   def edit
+    authorize_band!(@player.band)
   end
 
   # POST /players or /players.json
   def create
     @player = Player.new(player_params)
+    authorize_band!(@player.band)
 
     respond_to do |format|
       if @player.save
@@ -36,6 +39,7 @@ class PlayersController < ApplicationController
 
   # PATCH/PUT /players/1 or /players/1.json
   def update
+    authorize_band!(@player.band)
     respond_to do |format|
       if @player.update(player_params)
         format.html { redirect_to @player, notice: "Player was successfully updated." }
@@ -49,6 +53,7 @@ class PlayersController < ApplicationController
 
   # DELETE /players/1 or /players/1.json
   def destroy
+    authorize_band!(@player.band)
     @player.destroy!
 
     respond_to do |format|
@@ -65,7 +70,7 @@ class PlayersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_params
-      params.require(:player).permit(:first_name, :last_name, :email, :password)
+      params.require(:player).permit(:first_name, :last_name, :email, :password, :band_id)
       # params.fetch(:player, {})
     end
 end

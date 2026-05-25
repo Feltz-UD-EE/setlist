@@ -7,13 +7,24 @@ Rails.application.routes.draw do
   get 'about', to: 'static#about'
   get 'credits', to: 'static#credits'
   get 'legal', to: 'static#legal'
+  resource :session, controller: "clearance/sessions", only: [:create]
+  get 'sign_in', to: 'clearance/sessions#new', as: :sign_in
+  delete 'sign_out', to: 'clearance/sessions#destroy', as: :sign_out
+  get 'sign_up', to: 'registrations#new'
+  post 'users', to: 'registrations#create'
+  resources :passwords, controller: "clearance/passwords", only: [:create, :new]
+  resources :players, only: [] do
+    resource :password, controller: "clearance/passwords", only: [:edit, :update]
+  end
   get 'play/choose', to: 'play#choose'
   post 'play/cue', to: 'play#cue'
   get 'play/play', to: 'play#play'
   get 'play/play_song', to: 'play#play_song'
   get 'play/play_all', to: 'play#play_all'
 
-  resources :bands
+  resources :bands do
+    resource :invitation, only: [:new], controller: "band_invitations"
+  end
   resources :players
   resources :lists
   resources :songs

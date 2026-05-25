@@ -143,7 +143,7 @@ ls25 = ListSong.create(list_id: l2.id, song_id: s24.id, position: 9)
 ls26 = ListSong.create(list_id: l2.id, song_id: s25.id, position: 10)
 ls27 = ListSong.create(list_id: l2.id, song_id: s16.id, position: 11)
 
-Player.create(first_name: "John", last_name: "Feltz", band_id: b.id, email: "john.feltz@gmail.com", password: "password")
+Player.create(first_name: "John", last_name: "Feltz", band_id: b.id, email: "johncfeltz@gmail.com", password: "password", admin: true)
 Player.create(first_name: "Chip", last_name: "DeLong", band_id: b.id, email: "chipdelongmusic@gmail.com", password: "password")
 Player.create(first_name: "Leo", last_name: "Kaske", band_id: b.id, email: "leokaske@gmail.com", password: "password")
 Player.create(first_name: "Char", last_name: "Genger", band_id: b.id, email: "genglerc@aaps.k12.mi.us", password: "password")

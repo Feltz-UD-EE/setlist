@@ -50,5 +50,6 @@
 </table>
 <p class="action-row">
   <%= link_to "Create new set list", new_list_path(band_id: @band.id), class: "button button--play" %>
+  <%= link_to "Invite a new member", new_band_invitation_path(@band), class: "button" %>
 </p>
 </div>

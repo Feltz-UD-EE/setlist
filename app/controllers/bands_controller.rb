@@ -3,11 +3,12 @@ class BandsController < ApplicationController
 
   # GET /bands or /bands.json
   def index
-    @bands = Band.all
+    @bands = accessible_bands.alpha
   end
 
   # GET /bands/1 or /bands/1.json
   def show
+    authorize_band!(@band)
     @lists = @band.lists.alpha
     @players = @band.players
     @songs = @band.songs.alpha

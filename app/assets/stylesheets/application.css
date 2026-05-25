@@ -59,9 +59,30 @@ body {
 }
 
 .main-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
   padding: 12px 0;
+}
+
+.session-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.session-links form {
+  margin: 0;
+}
+
+.landing-copy {
+  max-width: 48rem;
+  font-size: 1.3rem;
 }
 
 .home-link {

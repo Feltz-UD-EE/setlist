@@ -1,0 +1,21 @@
+<% content_for :title, "Invite a new member" %>
+
+<h1>Invite a new member</h1>
+<p class="meta-line">Band: <%= @band.name %></p>
+
+<p>
+  <%= link_to "Open email invitation", @mailto_href, class: "button button--play" %>
+</p>
+
+<dl class="song-detail-list">
+  <div>
+    <dt>Invite link</dt>
+    <dd><%= @invite_url %></dd>
+  </div>
+  <div>
+    <dt>Expires</dt>
+    <dd><%= @invitation.expires_at.strftime("%B %-d, %Y") %></dd>
+  </div>
+</dl>
+
+<p class="action-row"><%= link_to "Back to #{@band.name}", band_path(@band), class: "button" %></p>

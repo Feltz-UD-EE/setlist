@@ -27,6 +27,10 @@ class Player < ApplicationRecord
   # Class methods
 
   # Instance methods
+  def admin?
+    admin
+  end
+
   def formatted_name
     return "#{first_name} #{last_name}"
   end

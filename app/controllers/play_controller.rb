@@ -3,9 +3,11 @@ class PlayController < ApplicationController
   def choose
     if params[:list_id].present?
       @list_id = params[:list_id]
-      @list_name = List.find(params[:list_id]).name
+      list = List.find(params[:list_id])
+      authorize_band!(list.band)
+      @list_name = list.name
     else
-      @lists =  List.all.alpha    # TODO add current_user/current_band logic here
+      @lists =  List.where(band_id: accessible_bands.select(:id)).alpha
     end
     @instruments = Instrument.all.alpha
     @display_types = [["Song by Song"], ["One Screen"]]
@@ -15,6 +17,7 @@ class PlayController < ApplicationController
   # Just processes instrument_ids and redirects to #play
   def cue
     list = List.find(params[:list_id])
+    authorize_band!(list.band)
     instrument_ids = params[:instrument_ids]
     instrument_ids.delete("")
     if params[:display_type] == 'Song by Song'
@@ -30,6 +33,7 @@ class PlayController < ApplicationController
   # TODO refactor instrument & prep stuff into model methods
   def play
     @list = List.find(params[:list_id])
+    authorize_band!(@list.band)
     @instrument_ids = (params[:instrument_ids])
     @preps = []
     @song = @list.songs.first
@@ -46,6 +50,7 @@ class PlayController < ApplicationController
   # TODO handle instrument-specific pages
   def play_song
     @list = List.find(params[:list_id])
+    authorize_band!(@list.band)
     @instrument_ids = (params[:instrument_ids])
     @preps = []
     @next_preps = []
@@ -66,6 +71,7 @@ class PlayController < ApplicationController
 # TODO handle instrument-specific pages
   def play_all
     @list = List.find(params[:list_id])
+    authorize_band!(@list.band)
     @instrument_ids = (params[:instrument_ids])
     @songs = @list.songs
     @preps = []

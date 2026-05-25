@@ -5,10 +5,11 @@ class SongsController < ApplicationController
   def index
     if params['band_id'].present?
       @band = Band.find(params['band_id'])
+      authorize_band!(@band)
       @songs = @band.songs.alpha
       @title = @band.name + " Songs"
     else
-      @songs = Song.all.alpha
+      @songs = Song.where(band_id: accessible_bands.select(:id)).alpha
       @title = "All Songs"
     end
   end
@@ -16,6 +17,7 @@ class SongsController < ApplicationController
   # GET /songs/1 or /songs/1.json
   def show
     @preparations = @song.preparations
+    authorize_band!(@song.band)
     # TODO figure out how to manage generic pages vs. pages tied to an instrument
     @pages = @song.pages
   end
@@ -24,6 +26,7 @@ class SongsController < ApplicationController
   def new
     if params['band_id'].present?
       @band = Band.find(params['band_id'])
+      authorize_band!(@band)
       @song = Song.new(band_id: params['band_id'])
       @title = "New song for " + @band.name
     else
@@ -35,12 +38,14 @@ class SongsController < ApplicationController
 
   # GET /songs/1/edit
   def edit
+    authorize_band!(@song.band)
     prepare_song_form
   end
 
   # POST /songs or /songs.json
   def create
     @song = Song.new(song_params)
+    authorize_band!(@song.band)
     respond_to do |format|
       if save_song_with_page
         format.html { redirect_to @song, notice: "Song was successfully created." }
@@ -56,6 +61,7 @@ class SongsController < ApplicationController
   # PATCH/PUT /songs/1 or /songs/1.json
   def update
     @song.assign_attributes(song_params)
+    authorize_band!(@song.band)
 
     respond_to do |format|
       if save_song_with_page
@@ -71,6 +77,7 @@ class SongsController < ApplicationController
 
   # DELETE /songs/1 or /songs/1.json
   def destroy
+    authorize_band!(@song.band)
     @song.destroy!
 
     respond_to do |format|

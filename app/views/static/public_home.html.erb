@@ -1,14 +1,18 @@
 <div>
   <h1>Setlist</h1>
-  <h2>Current time: <%= Time.now.strftime("%A, %-d %b %Y %l:%M %p") %></h2>
-  <h2>Bands (<%= @bands.length %>)</h2>
-  <div class="link-list">
-  <% @bands.each do |band| %>
-    <p><%= link_to band.name, band_path(band) %></p>
-  <% end %>
-  </div>
-</div>
+  <p class="landing-copy">A private workspace for bands to manage songs, set lists, performance notes, and practice-ready pages.</p>
 
-<div>
-  <p>login & account creation stuff goes here</p>
+  <% if signed_out? %>
+    <p class="action-row">
+      <%= link_to "Log in", sign_in_path, class: "button button--play" %>
+      <%= link_to "Create an account", sign_up_path, class: "button" %>
+    </p>
+  <% else %>
+    <h2>Your Bands</h2>
+    <div class="link-list">
+    <% @bands.each do |band| %>
+      <p><%= link_to band.name, band_path(band) %></p>
+    <% end %>
+    </div>
+  <% end %>
 </div>

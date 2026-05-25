@@ -3,17 +3,19 @@ class ListsController < ApplicationController
 
   # GET /lists or /lists.json
   def index
-    @lists = List.all
+    @lists = List.where(band_id: accessible_bands.select(:id))
   end
 
   # GET /lists/1 or /lists/1.json
   def show
+    authorize_band!(@list.band)
     @songs = @list.songs
   end
 
   # GET /lists/new
   def new
     @band = Band.find(params[:band_id]) if params[:band_id].present?
+    authorize_band!(@band) if @band.present?
     @list = List.new(band: @band)
     prepare_song_builder
   end
@@ -21,12 +23,14 @@ class ListsController < ApplicationController
   # GET /lists/1/edit
   def edit
     @band = @list.band
+    authorize_band!(@band)
     prepare_song_builder
   end
 
   # POST /lists or /lists.json
   def create
     @list = List.new(list_params)
+    authorize_band!(@list.band)
     respond_to do |format|
       if save_list_with_songs
         format.html { redirect_to @list, notice: "List was successfully created." }
@@ -43,6 +47,7 @@ class ListsController < ApplicationController
   # PATCH/PUT /lists/1 or /lists/1.json
   def update
     @list.assign_attributes(list_params)
+    authorize_band!(@list.band)
 
     respond_to do |format|
       if save_list_with_songs
@@ -59,6 +64,7 @@ class ListsController < ApplicationController
 
   # DELETE /lists/1 or /lists/1.json
   def destroy
+    authorize_band!(@list.band)
     @list.destroy!
 
     respond_to do |format|
