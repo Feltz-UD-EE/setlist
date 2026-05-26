@@ -5,11 +5,8 @@ class AddAccountFieldsToPlayers < ActiveRecord::Migration[8.0]
 
     reversible do |dir|
       dir.up do
-        execute <<~SQL.squish
-          UPDATE players
-          SET email = 'johncfeltz@gmail.com', admin = TRUE
-          WHERE first_name = 'John' AND last_name = 'Feltz'
-        SQL
+        Player.reset_column_information
+        Player.where(first_name: "John", last_name: "Feltz").update_all(email: "johncfeltz@gmail.com", admin: true)
       end
     end
   end
