@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'play/play', to: 'play#play'
   get 'play/play_song', to: 'play#play_song'
   get 'play/play_all', to: 'play#play_all'
+  get 'play/download', to: 'play#download'
 
   resources :bands do
     resource :invitation, only: [:new], controller: "band_invitations"

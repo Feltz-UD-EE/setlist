@@ -33,5 +33,12 @@
     </div>
   </fieldset>
 
-  <p class="action-row"><%= form.submit "Start", class: "button button--play" %></p>
+  <div class="play-ready-actions">
+    <%= form.submit "Start", class: "button button--play" %>
+    <div class="offline-download">
+      <%= form.submit "Download", name: "download_setlist", class: "button button--small offline-download__button" %>
+      <p class="offline-download__help">iOS: stored in Files &gt; Downloads</p>
+      <p class="offline-download__help">Android: stored in Downloads</p>
+    </div>
+  </div>
 <% end %>

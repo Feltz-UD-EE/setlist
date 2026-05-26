@@ -1,3 +1,6 @@
+require "base64"
+require "marcel"
+
 class PlayController < ApplicationController
   # Select a list to play through (w/ 0-n instruments): renders the #play action after submitting fo
   def choose
@@ -18,8 +21,11 @@ class PlayController < ApplicationController
   def cue
     list = List.find(params[:list_id])
     authorize_band!(list.band)
-    instrument_ids = params[:instrument_ids]
-    instrument_ids.delete("")
+    instrument_ids = selected_instrument_ids
+    if params[:download_setlist].present?
+      redirect_to controller: 'play', action: 'download', list_id: list.id, instrument_ids: instrument_ids
+      return
+    end
     if params[:display_type] == 'Song by Song'
       redirect_to controller: 'play', action: 'play', list_id: list.id, instrument_ids: instrument_ids
     elsif params[:display_type] == 'One Screen'
@@ -34,12 +40,12 @@ class PlayController < ApplicationController
   def play
     @list = List.find(params[:list_id])
     authorize_band!(@list.band)
-    @instrument_ids = (params[:instrument_ids])
+    @instrument_ids = selected_instrument_ids
     @preps = []
     @song = @list.songs.first
     if @instrument_ids.present?
-      @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
-      @preps = @song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
+      @instrument_list = Instrument.where(id: @instrument_ids).pluck(:name).join(', ')
+      @preps = @song.preparations.where(instrument_id: @instrument_ids)
     end
   end
 
@@ -51,7 +57,7 @@ class PlayController < ApplicationController
   def play_song
     @list = List.find(params[:list_id])
     authorize_band!(@list.band)
-    @instrument_ids = (params[:instrument_ids])
+    @instrument_ids = selected_instrument_ids
     @preps = []
     @next_preps = []
     @sequence=params[:song_sequence].to_i
@@ -60,9 +66,9 @@ class PlayController < ApplicationController
       @next_song = @list.songs[@sequence+1]
     end
     if @instrument_ids.present?
-      @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
-      @preps = @song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
-      @next_preps = @next_song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})") if @next_song.present?
+      @instrument_list = Instrument.where(id: @instrument_ids).pluck(:name).join(', ')
+      @preps = @song.preparations.where(instrument_id: @instrument_ids)
+      @next_preps = @next_song.preparations.where(instrument_id: @instrument_ids) if @next_song.present?
     end
   end
 
@@ -70,21 +76,52 @@ class PlayController < ApplicationController
 # TODO: restructure the return data into a big JSON instead of 3 arrays?
 # TODO handle instrument-specific pages
   def play_all
+    prepare_one_screen_setlist
+  end
+
+  def download
+    prepare_one_screen_setlist(embed_images: true)
+    html = render_to_string(:download, layout: false, formats: [:html])
+    send_data html,
+      filename: "#{@list.name.parameterize}-offline-#{@list.updated_at.strftime('%Y%m%d')}.html",
+      type: "text/html",
+      disposition: "attachment"
+  end
+
+  private
+
+  def selected_instrument_ids
+    Array(params[:instrument_ids]).reject(&:blank?).map(&:to_i)
+  end
+
+  def prepare_one_screen_setlist(embed_images: false)
     @list = List.find(params[:list_id])
     authorize_band!(@list.band)
-    @instrument_ids = (params[:instrument_ids])
+    @instrument_ids = selected_instrument_ids
     @songs = @list.songs
     @preps = []
     @pages = []
     if @instrument_ids.present?
-      @instrument_list = Instrument.where("id in (#{@instrument_ids.join(',')})").pluck(:name).join(', ')
+      @instrument_list = Instrument.where(id: @instrument_ids).pluck(:name).join(', ')
       @songs.each do |song|
-        preps = song.preparations.where("instrument_id in (#{@instrument_ids.join(',')})")
+        preps = song.preparations.where(instrument_id: @instrument_ids)
         @preps << preps
       end
     else
       @songs.each { @preps << [] }
     end
-    @songs.each { |song| @pages << song.pages }
+    @songs.each { |song| @pages << song.pages.by_sort_order }
+    @embedded_page_images = embed_images ? embedded_page_images : {}
+  end
+
+  def embedded_page_images
+    @pages.flatten.index_with { |page| data_uri_for(page) }
+  end
+
+  def data_uri_for(page)
+    return if page.img.blank? || page.img.path.blank? || !File.exist?(page.img.path)
+
+    mime_type = Marcel::MimeType.for(Pathname.new(page.img.path))
+    "data:#{mime_type};base64,#{Base64.strict_encode64(File.binread(page.img.path))}"
   end
 end
