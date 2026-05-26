@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= @list.name %> Offline Setlist</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --text: #171412;
+        --muted: #5f574f;
+        --line: #d8cfc4;
+        --paper: #fffdf8;
+        --intro-bg: #fff4c2;
+        --intro-border: #d8a10f;
+        --finish-bg: #ffe2d4;
+        --finish-border: #cf6f45;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 18px;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.45;
+      }
+
+      main {
+        width: min(100%, 820px);
+        margin: 0 auto;
+        padding: 28px 24px 44px;
+      }
+
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: clamp(2.4rem, 8vw, 4rem);
+        line-height: 1.05;
+      }
+
+      .setlist-meta {
+        margin: 0 0 1.4rem;
+        color: var(--muted);
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .song {
+        padding: 1.4rem 0;
+        border-top: 2px solid var(--line);
+      }
+
+      .song h2 {
+        margin: 0 0 0.75rem;
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        line-height: 1.1;
+      }
+
+      .note {
+        margin: 0.7rem 0;
+        padding: 0.8rem 0.95rem;
+        border-left: 8px solid var(--note-border, #d8a10f);
+        border-radius: 8px;
+        background: var(--note-bg, #fff4c2);
+        font-size: 1.15rem;
+      }
+
+      .note strong {
+        font-weight: 900;
+      }
+
+      .note--prep,
+      .note--intro {
+        --note-bg: var(--intro-bg);
+        --note-border: var(--intro-border);
+      }
+
+      .note--finish {
+        --note-bg: var(--finish-bg);
+        --note-border: var(--finish-border);
+      }
+
+      .song-pages {
+        display: grid;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .song-page-image {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+      }
+
+      .song-media-placeholder {
+        display: grid;
+        min-height: 140px;
+        place-items: center;
+        margin: 1rem 0;
+        border: 2px dashed var(--line);
+        border-radius: 8px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      @page {
+        size: portrait;
+        margin: 0.4in;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1><%= @list.name %></h1>
+      <p class="setlist-meta">
+        One-screen offline setlist
+        <% if @instrument_list.present? %>
+          for <%= @instrument_list %>
+        <% end %>
+      </p>
+      <p class="setlist-meta">Last updated: <%= @list.updated_at.strftime("%b %d, %Y") %></p>
+
+      <% @songs.each_with_index do |song, i| %>
+        <section class="song">
+          <h2><%= song.title %></h2>
+          <% @preps[i].each do |prep| %>
+            <p class="note note--prep"><strong><%= prep.instrument.name %>:</strong> <%= prep.instruction %></p>
+          <% end %>
+          <p class="note note--intro"><strong>Intro:</strong> <%= song.intro %></p>
+
+          <% if @pages[i].any? %>
+            <div class="song-pages">
+              <% @pages[i].each do |page| %>
+                <% if @embedded_page_images[page].present? %>
+                  <img src="<%= @embedded_page_images[page] %>" class="song-page-image" alt="">
+                <% else %>
+                  <p class="song-media-placeholder">Song image unavailable offline</p>
+                <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="song-media-placeholder">No song image</p>
+          <% end %>
+
+          <p class="note note--finish"><strong>Finish:</strong> <%= song.finish %></p>
+        </section>
+      <% end %>
+    </main>
+  </body>
+</html>

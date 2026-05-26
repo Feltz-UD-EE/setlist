@@ -306,10 +306,26 @@ button:hover,
   background: #16a34a;
   color: white;
   font-size: 1.18rem;
+  font-weight: 900;
   box-shadow: 0 10px 24px rgba(22, 163, 74, 0.25);
 }
 
+.button.button--play,
+button.button--play,
+input[type="submit"].button--play {
+  border-color: #0b6b2f;
+  background: #16a34a;
+  color: white;
+}
+
 .button--play:hover {
+  background: #11823c;
+  color: white;
+}
+
+.button.button--play:hover,
+button.button--play:hover,
+input[type="submit"].button--play:hover {
   background: #11823c;
   color: white;
 }
@@ -342,6 +358,48 @@ button:hover,
 .footer-links {
   padding-top: 1rem;
   border-top: 1px solid var(--line);
+}
+
+.play-ready-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: flex-start;
+  margin-top: 1.4rem;
+}
+
+.play-ready-actions .button--play {
+  min-width: 9rem;
+}
+
+.offline-download {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.offline-download__button {
+  border-color: var(--line);
+  background: var(--surface-strong);
+  color: var(--text);
+  box-shadow: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+input[type="submit"].offline-download__button {
+  border-color: var(--line);
+  background: var(--surface-strong);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.offline-download__help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.25;
 }
 
 .site-footer {
