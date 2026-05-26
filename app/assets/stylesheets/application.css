@@ -207,6 +207,57 @@ textarea {
   font: inherit;
 }
 
+#clearance {
+  max-width: 44rem;
+}
+
+#clearance form {
+  display: grid;
+  gap: 1.65rem;
+  width: fit-content;
+  margin-top: 1.8rem;
+}
+
+#clearance .text-field,
+#clearance .password-field {
+  display: grid;
+  grid-template-columns: 8rem 32rem;
+  gap: 1.15rem;
+  align-items: center;
+}
+
+#clearance label {
+  display: block;
+  font-weight: 900;
+  text-align: right;
+}
+
+#clearance input[type="email"],
+#clearance input[type="password"] {
+  width: 32rem;
+  min-height: 48px;
+  justify-self: end;
+}
+
+#clearance .submit-field,
+#clearance .other-links {
+  margin-left: 9.15rem;
+}
+
+#clearance .submit-field {
+  display: flex;
+  margin-top: 0.95rem;
+}
+
+#clearance .submit-field input[type="submit"] {
+  width: 32rem;
+  min-width: 32rem;
+}
+
+#clearance .other-links {
+  margin-top: 0.3rem;
+}
+
 input[type="checkbox"] {
   width: 1.2rem;
   height: 1.2rem;
@@ -727,6 +778,28 @@ button:hover,
 
   .setlist-builder {
     grid-template-columns: 1fr;
+  }
+
+  #clearance .text-field,
+  #clearance .password-field {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  #clearance form,
+  #clearance input[type="email"],
+  #clearance input[type="password"],
+  #clearance .submit-field input[type="submit"] {
+    width: 100%;
+  }
+
+  #clearance label {
+    text-align: left;
+  }
+
+  #clearance .submit-field,
+  #clearance .other-links {
+    margin-left: 0;
   }
 
   .selected-song {
