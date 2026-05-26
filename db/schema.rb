@@ -11,7 +11,10 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
-  create_table "band_invitations", charset: "utf8mb3", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
+  create_table "band_invitations", force: :cascade do |t|
     t.bigint "band_id", null: false
     t.string "token_digest"
     t.datetime "expires_at"
@@ -22,24 +25,24 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["token_digest"], name: "index_band_invitations_on_token_digest", unique: true
   end
 
-  create_table "bands", charset: "utf8mb3", force: :cascade do |t|
+  create_table "bands", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "instruments", charset: "utf8mb3", force: :cascade do |t|
+  create_table "instruments", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "instruments_players", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "instruments_players", id: false, force: :cascade do |t|
     t.bigint "instrument_id", null: false
     t.bigint "player_id", null: false
   end
 
-  create_table "list_songs", charset: "utf8mb3", force: :cascade do |t|
+  create_table "list_songs", force: :cascade do |t|
     t.bigint "list_id"
     t.bigint "song_id"
     t.integer "position"
@@ -49,7 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["song_id"], name: "index_list_songs_on_song_id"
   end
 
-  create_table "lists", charset: "utf8mb3", force: :cascade do |t|
+  create_table "lists", force: :cascade do |t|
     t.string "name"
     t.string "notes"
     t.bigint "band_id"
@@ -58,7 +61,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["band_id"], name: "index_lists_on_band_id"
   end
 
-  create_table "pages", charset: "utf8mb3", force: :cascade do |t|
+  create_table "pages", force: :cascade do |t|
     t.integer "sort_order", null: false
     t.bigint "song_id", null: false
     t.bigint "instrument_id"
@@ -69,7 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["song_id"], name: "index_pages_on_song_id"
   end
 
-  create_table "players", charset: "utf8mb3", force: :cascade do |t|
+  create_table "players", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.bigint "band_id"
@@ -87,7 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["remember_token"], name: "index_players_on_remember_token", unique: true
   end
 
-  create_table "preparations", charset: "utf8mb3", force: :cascade do |t|
+  create_table "preparations", force: :cascade do |t|
     t.string "instruction"
     t.bigint "song_id"
     t.bigint "instrument_id"
@@ -97,7 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["song_id"], name: "index_preparations_on_song_id"
   end
 
-  create_table "songs", charset: "utf8mb3", force: :cascade do |t|
+  create_table "songs", force: :cascade do |t|
     t.string "title"
     t.string "version"
     t.string "performer"
