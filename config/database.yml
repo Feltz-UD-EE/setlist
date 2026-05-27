@@ -29,16 +29,20 @@ test:
 production:
   primary:
     <<: *default
-    database: setlist_production
+    url: <%= ENV["DATABASE_URL"] %>
+  # Railway free-tier deployment uses one PostgreSQL service. These Rails 8
+  # roles point to the same database so installed Solid gems can boot cleanly.
   cache:
     <<: *default
-    database: setlist_production_cache
+    url: <%= ENV["CACHE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: setlist_production_queue
+    url: <%= ENV["QUEUE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: setlist_production_cable
+    url: <%= ENV["CABLE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
+  # To split these later, create additional Railway Postgres services and set:
+  # CACHE_DATABASE_URL, QUEUE_DATABASE_URL, and CABLE_DATABASE_URL.
