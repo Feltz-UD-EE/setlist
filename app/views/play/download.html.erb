@@ -87,13 +87,13 @@
         --note-border: var(--finish-border);
       }
 
-      .song-pages {
+      .song-sheets {
         display: grid;
         gap: 1rem;
         margin: 1rem 0;
       }
 
-      .song-page-image {
+      .song-sheet-image {
         display: block;
         width: 100%;
         max-width: 100%;
@@ -112,6 +112,28 @@
         border-radius: 8px;
         color: var(--muted);
         font-weight: 800;
+      }
+
+      .alternate-image-label {
+        margin: 0.3rem 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+
+      .alternate-image-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2rem;
+        min-height: 1.35rem;
+        padding: 0 0.35rem;
+        border: 1px solid #7a4f00;
+        border-radius: 4px;
+        background: #fff1a8;
+        color: #4f3500;
+        font-size: 0.72rem;
+        font-weight: 900;
       }
 
       @page {
@@ -139,18 +161,21 @@
           <% end %>
           <p class="note note--intro"><strong>Intro:</strong> <%= song.intro %></p>
 
-          <% if @pages[i].any? %>
-            <div class="song-pages">
-              <% @pages[i].each do |page| %>
-                <% if @embedded_page_images[page].present? %>
-                  <img src="<%= @embedded_page_images[page] %>" class="song-page-image" alt="">
+          <% if @sheets[i].any? %>
+            <div class="song-sheets">
+              <% @sheets[i].each do |sheet| %>
+                <% if sheet.alternate? %>
+                  <p class="alternate-image-label"><span class="alternate-image-icon">ALT</span> Alternate sheet for <%= sheet.instrument_names %></p>
+                <% end %>
+                <% if @embedded_sheet_images[sheet].present? %>
+                  <img src="<%= @embedded_sheet_images[sheet] %>" class="song-sheet-image" alt="">
                 <% else %>
-                  <p class="song-media-placeholder">Song image unavailable offline</p>
+                  <p class="song-media-placeholder">Sheet unavailable offline</p>
                 <% end %>
               <% end %>
             </div>
           <% else %>
-            <p class="song-media-placeholder">No song image</p>
+            <p class="song-media-placeholder">No sheets uploaded</p>
           <% end %>
 
           <p class="note note--finish"><strong>Finish:</strong> <%= song.finish %></p>

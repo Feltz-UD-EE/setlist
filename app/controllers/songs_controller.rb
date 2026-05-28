@@ -18,8 +18,8 @@ class SongsController < ApplicationController
   def show
     @preparations = @song.preparations
     authorize_band!(@song.band)
-    # TODO figure out how to manage generic pages vs. pages tied to an instrument
-    @pages = @song.pages
+    @main_sheets = @song.main_sheets
+    @alternate_sheet_groups = @song.alternate_sheet_groups
   end
 
   # GET /songs/new
@@ -47,7 +47,7 @@ class SongsController < ApplicationController
     @song = Song.new(song_params)
     authorize_band!(@song.band)
     respond_to do |format|
-      if save_song_with_page
+      if save_song_with_sheets
         format.html { redirect_to @song, notice: "Song was successfully created." }
         format.json { render :show, status: :created, location: @song }
       else
@@ -64,7 +64,7 @@ class SongsController < ApplicationController
     authorize_band!(@song.band)
 
     respond_to do |format|
-      if save_song_with_page
+      if save_song_with_sheets
         format.html { redirect_to @song, notice: "Song was successfully updated." }
         format.json { render :show, status: :ok, location: @song }
       else
@@ -97,14 +97,12 @@ class SongsController < ApplicationController
       params.require(:song).permit(:title, :performer, :version, :duration, :intro, :finish, :band_id)
     end
 
-    def page_image_param
-      params.dig(:song, :page_img)
-    end
-
-    def save_song_with_page
+    def save_song_with_sheets
       Song.transaction do
         @song.save!
-        attach_page_image if page_image_param.present?
+        update_existing_sheets
+        attach_main_sheet
+        attach_alternate_sheet
       end
       true
     rescue ActiveRecord::RecordInvalid => error
@@ -112,19 +110,64 @@ class SongsController < ApplicationController
       false
     end
 
-    def attach_page_image
-      @song.pages.create!(
-        img: page_image_param,
-        sort_order: next_page_sort_order
+    def attach_main_sheet
+      sheet_upload = params.dig(:song, :sheet_img)
+      return if sheet_upload.blank?
+
+      @song.sheets.create!(
+        img: sheet_upload,
+        sort_order: params.dig(:song, :sheet_sort_order).presence || next_sheet_sort_order,
+        instrument_ids: []
       )
     end
 
-    def next_page_sort_order
-      @song.pages.maximum(:sort_order).to_i + 1
+    def attach_alternate_sheet
+      sheet_upload = params.dig(:song, :alternate_sheet_img)
+      instrument_ids = sheet_instrument_ids(params.dig(:song, :alternate_sheet_instrument_ids))
+      return if sheet_upload.blank?
+
+      if instrument_ids.blank?
+        @song.errors.add(:base, "Choose at least one instrument for an alternate sheet.")
+        raise ActiveRecord::RecordInvalid.new(@song)
+      end
+
+      @song.sheets.create!(
+        img: sheet_upload,
+        sort_order: params.dig(:song, :alternate_sheet_sort_order).presence || next_sheet_sort_order,
+        instrument_ids: instrument_ids
+      )
+    end
+
+    def update_existing_sheets
+      sheet_update_params.each do |sheet_id, sheet_params|
+        sheet = @song.sheets.find(sheet_id)
+        if sheet_params[:delete] == "1"
+          sheet.destroy!
+          next
+        end
+
+        update_attributes = { sort_order: sheet_params[:sort_order].presence || sheet.sort_order }
+        update_attributes[:img] = sheet_params[:img] if sheet_params[:img].present?
+        update_attributes[:instrument_ids] = sheet_instrument_ids(sheet_params[:instrument_ids])
+        sheet.update!(update_attributes)
+      end
+    end
+
+    def sheet_update_params
+      params[:sheets].present? ? params.require(:sheets).permit! : {}
+    end
+
+    def sheet_instrument_ids(raw_ids)
+      Array(raw_ids).reject(&:blank?).map(&:to_i)
+    end
+
+    def next_sheet_sort_order
+      @song.main_sheets.maximum(:sort_order).to_i + 1
     end
 
     def prepare_song_form
-      @pages = @song.persisted? ? @song.pages.by_sort_order : Page.none
+      @sheets = @song.persisted? ? @song.sheets.includes(:instruments).by_sort_order : Sheet.none
+      @instruments = Instrument.alpha
       @title ||= @song.band.present? ? "New song for #{@song.band.name}" : "New song"
     end
 end

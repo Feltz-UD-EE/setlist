@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_28_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,17 +61,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["band_id"], name: "index_lists_on_band_id"
   end
 
-  create_table "pages", force: :cascade do |t|
-    t.integer "sort_order", null: false
-    t.bigint "song_id", null: false
-    t.bigint "instrument_id"
-    t.string "img"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["instrument_id"], name: "index_pages_on_instrument_id"
-    t.index ["song_id"], name: "index_pages_on_song_id"
-  end
-
   create_table "players", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -100,6 +89,27 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
     t.index ["song_id"], name: "index_preparations_on_song_id"
   end
 
+  create_table "sheet_instruments", force: :cascade do |t|
+    t.bigint "sheet_id", null: false
+    t.bigint "instrument_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instrument_id"], name: "index_sheet_instruments_on_instrument_id"
+    t.index ["sheet_id", "instrument_id"], name: "index_sheet_instruments_on_sheet_id_and_instrument_id", unique: true
+    t.index ["sheet_id"], name: "index_sheet_instruments_on_sheet_id"
+  end
+
+  create_table "sheets", force: :cascade do |t|
+    t.integer "sort_order", null: false
+    t.bigint "song_id", null: false
+    t.bigint "instrument_id"
+    t.string "img"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instrument_id"], name: "index_sheets_on_instrument_id"
+    t.index ["song_id"], name: "index_sheets_on_song_id"
+  end
+
   create_table "songs", force: :cascade do |t|
     t.string "title"
     t.string "version"
@@ -115,4 +125,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_25_120515) do
   end
 
   add_foreign_key "band_invitations", "bands"
+  add_foreign_key "sheet_instruments", "instruments"
+  add_foreign_key "sheet_instruments", "sheets"
 end

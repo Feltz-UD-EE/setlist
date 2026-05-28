@@ -22,7 +22,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="delete-confirmation" data-action="submit->delete-confirmation#confirm">
     <header class="site-header">
       <nav class="main-menu" aria-label="Main menu">
         <%= link_to image_tag("/icon.svg", alt: "", class: "home-logo") + tag.span("Setlist"), public_home_path, class: "home-link", aria: { label: "Home" } %>
@@ -52,5 +52,16 @@
         <%= link_to "Legal", legal_path %>
       </nav>
     </footer>
+
+    <dialog class="confirm-dialog" data-delete-confirmation-target="dialog" data-action="close->delete-confirmation#closed">
+      <form method="dialog" class="confirm-dialog__content">
+        <h2>Are you sure?</h2>
+        <p>This cannot be undone.</p>
+        <div class="confirm-dialog__actions">
+          <button type="submit" class="button">Cancel</button>
+          <button type="button" class="button button--danger" data-action="click->delete-confirmation#delete" data-delete-confirmation-target="confirmButton">Yes, delete</button>
+        </div>
+      </form>
+    </dialog>
   </body>
 </html>

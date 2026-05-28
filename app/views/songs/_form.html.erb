@@ -46,18 +46,71 @@
         <td><%= form.text_field :finish %></td>
       </tr>
       <tr>
-        <td>Song image</td>
-        <td><%= form.file_field :page_img, accept: "image/*" %></td>
+        <td>Main sheet</td>
+        <td>
+          <%= form.file_field :sheet_img, accept: "image/*" %>
+          <div class="inline-form-grid inline-form-grid--compact">
+            <label>
+              Order
+              <%= form.number_field :sheet_sort_order, min: 1, value: @song.main_sheets.maximum(:sort_order).to_i + 1 %>
+            </label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Alternate sheet</td>
+        <td>
+          <%= form.file_field :alternate_sheet_img, accept: "image/*" %>
+          <div class="inline-form-grid">
+            <label>
+              Order
+              <%= form.number_field :alternate_sheet_sort_order, min: 1, value: @song.main_sheets.maximum(:sort_order).to_i + 1 %>
+            </label>
+            <label>
+              Instruments
+              <%= form.collection_select :alternate_sheet_instrument_ids, @instruments, :id, :name, {}, multiple: true, class: "multi-select" %>
+            </label>
+          </div>
+        </td>
       </tr>
     </table>
 
-    <% if @pages.present? %>
-      <h2>Uploaded images</h2>
-      <div class="song-pages song-pages--thumbs">
-        <% @pages.each do |page| %>
-          <%= image_tag page.img.url, class: "song-page-thumb" if page.img.present? %>
-        <% end %>
-      </div>
+    <% if @sheets.present? %>
+      <h2>Uploaded sheets</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Preview</th>
+            <th>Order</th>
+            <th>Instruments</th>
+            <th>Replace</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sheets.each do |sheet| %>
+            <tr>
+              <td>
+                <% if sheet.alternate? %>
+                  <span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span>
+                <% end %>
+                <%= image_tag sheet.img.url, class: "song-sheet-thumb" if sheet.img.present? %>
+              </td>
+              <td><%= number_field_tag "sheets[#{sheet.id}][sort_order]", sheet.sort_order, min: 1, class: "compact-input" %></td>
+              <td>
+                <%= collection_select "sheets[#{sheet.id}]", :instrument_ids, @instruments, :id, :name, { selected: sheet.instrument_ids }, multiple: true, class: "multi-select" %>
+              </td>
+              <td><%= file_field_tag "sheets[#{sheet.id}][img]", accept: "image/*" %></td>
+              <td>
+                <label class="checkbox-row">
+                  <%= check_box_tag "sheets[#{sheet.id}][delete]", "1" %>
+                  <span>Delete</span>
+                </label>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
 
     <%= form.submit %>

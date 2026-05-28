@@ -11,6 +11,7 @@
     <th>Duration</th>
     <th>Intro</th>
     <th>Finish</th>
+    <th>Sheets</th>
     <th>Set Lists</th>
   </tr>
   </thead>
@@ -23,6 +24,11 @@
         <td><%= song.duration_pretty %></td>
         <td><%= song.intro %></td>
         <td><%= song.finish %></td>
+        <td>
+          <% if song.alternate_sheets? %>
+            <span class="alternate-image-icon" title="Alternate instrument sheets">ALT</span>
+          <% end %>
+        </td>
         <td><%= song.lists.any? ? song.lists.pluck(:name).join(', ') : "None" %></td>
       </tr>
     <% end %>
