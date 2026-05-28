@@ -163,6 +163,48 @@ end
 ListSong.delete_all
 List.delete_all
 
+setlists = [
+  {
+    name: "Standard 1",
+    notes: "Set list we've been practicing with since 2025, suitable for opening a show.",
+    songs: [
+      "Folsom Prison Blues",
+      "Down by the Water",
+      "Summer of 69",
+      "Like a Hurricane",
+      "Manic Monday",
+      "Californication",
+      "Dead Flowers",
+      "Running on Empty",
+      "Better Man",
+      "Southern Cross",
+      "Have You Ever Seen the Rain",
+      "I'm Eighteen",
+      "Vacation",
+      "Big Empty",
+      "Come to my Window",
+      "Melt With You",
+      "Lonely Boy",
+      "Wagon Wheel",
+      "Twilight Zone"
+    ]
+  }
+]
+
+setlists.each do |setlist_attrs|
+  setlist = band.lists.create!(
+    name: setlist_attrs.fetch(:name),
+    notes: setlist_attrs.fetch(:notes)
+  )
+
+  setlist_attrs.fetch(:songs).each_with_index do |title, index|
+    setlist.list_songs.create!(
+      song: songs.fetch(title),
+      position: index + 1
+    )
+  end
+end
+
 admin = Player.find_or_initialize_by(email: admin_email)
 admin.assign_attributes(
   first_name: "John",
