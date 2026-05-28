@@ -53,7 +53,6 @@ class PlayController < ApplicationController
   # TODO check for off-by-one errors
   # TODO figure out paradigm for no instruments vs some instruments vs all instruments
   # TODO refactor instrument & prep stuff into model methods
-  # TODO handle instrument-specific pages
   def play_song
     @list = List.find(params[:list_id])
     authorize_band!(@list.band)
@@ -70,17 +69,17 @@ class PlayController < ApplicationController
       @preps = @song.preparations.where(instrument_id: @instrument_ids)
       @next_preps = @next_song.preparations.where(instrument_id: @instrument_ids) if @next_song.present?
     end
+    @sheets = @song.sheets_for_instruments(@instrument_ids)
   end
 
 # Shows entire setlist on one page, suggested by Chip.
 # TODO: restructure the return data into a big JSON instead of 3 arrays?
-# TODO handle instrument-specific pages
   def play_all
     prepare_one_screen_setlist
   end
 
   def download
-    prepare_one_screen_setlist(embed_images: true)
+    prepare_one_screen_setlist(embed_sheets: true)
     html = render_to_string(:download, layout: false, formats: [:html])
     send_data html,
       filename: "#{@list.name.parameterize}-offline-#{@list.updated_at.strftime('%Y%m%d')}.html",
@@ -94,13 +93,13 @@ class PlayController < ApplicationController
     Array(params[:instrument_ids]).reject(&:blank?).map(&:to_i)
   end
 
-  def prepare_one_screen_setlist(embed_images: false)
+  def prepare_one_screen_setlist(embed_sheets: false)
     @list = List.find(params[:list_id])
     authorize_band!(@list.band)
     @instrument_ids = selected_instrument_ids
     @songs = @list.songs
     @preps = []
-    @pages = []
+    @sheets = []
     if @instrument_ids.present?
       @instrument_list = Instrument.where(id: @instrument_ids).pluck(:name).join(', ')
       @songs.each do |song|
@@ -110,18 +109,18 @@ class PlayController < ApplicationController
     else
       @songs.each { @preps << [] }
     end
-    @songs.each { |song| @pages << song.pages.by_sort_order }
-    @embedded_page_images = embed_images ? embedded_page_images : {}
+    @songs.each { |song| @sheets << song.sheets_for_instruments(@instrument_ids) }
+    @embedded_sheet_images = embed_sheets ? embedded_sheet_images : {}
   end
 
-  def embedded_page_images
-    @pages.flatten.index_with { |page| data_uri_for(page) }
+  def embedded_sheet_images
+    @sheets.flatten.index_with { |sheet| data_uri_for(sheet) }
   end
 
-  def data_uri_for(page)
-    return if page.img.blank? || page.img.path.blank? || !File.exist?(page.img.path)
+  def data_uri_for(sheet)
+    return if sheet.img.blank? || sheet.img.path.blank? || !File.exist?(sheet.img.path)
 
-    mime_type = Marcel::MimeType.for(Pathname.new(page.img.path))
-    "data:#{mime_type};base64,#{Base64.strict_encode64(File.binread(page.img.path))}"
+    mime_type = Marcel::MimeType.for(Pathname.new(sheet.img.path))
+    "data:#{mime_type};base64,#{Base64.strict_encode64(File.binread(sheet.img.path))}"
   end
 end

@@ -1,5 +1,10 @@
 <div id="<%= dom_id song %>">
-  <h1><%= @song.band.name %>: <%= @song.title %></h1>
+  <h1>
+    <%= @song.band.name %>: <%= @song.title %>
+    <% if @song.alternate_sheets? %>
+      <span class="alternate-image-icon" title="Alternate instrument sheets">ALT</span>
+    <% end %>
+  </h1>
   <dl class="song-detail-list">
     <div>
       <dt>Duration</dt>
@@ -37,25 +42,42 @@
     <% end %>
     </tbody>
   </table>
-  <h2>Pages</h2>
-  <p>Preview goes here - need to figure out stuff with image processing gems</p>
-  <table>
+  <h2>Sheets</h2>
+  <table class="song-sheets-table">
     <thead>
     <tr>
-      <th>Order</th>
-      <th>Preview</th>
       <th>Instrument</th>
+      <th>Sheet</th>
     </tr>
     </thead>
     <tbody>
-    <% @pages.each do |page| %>
-      <tr>
-        <td><%= page.sort_order %></td>
-        <td><%= image_tag page.img.url, class: "song-page-thumb" %></td>
-        <td><%= page.instrument.present? ? page.instrument.name : "" %></td>
+    <% if @main_sheets.any? %>
+      <tr class="sheet-group-separator">
+        <th colspan="2">Main sheets</th>
       </tr>
+    <% end %>
+    <% @main_sheets.each do |sheet| %>
+      <tr>
+        <td>Main</td>
+        <td>
+          <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+        </td>
+      </tr>
+    <% end %>
+    <% @alternate_sheet_groups.each do |instrument, sheets| %>
+      <tr class="sheet-group-separator">
+        <th colspan="2"><%= instrument.name %></th>
+      </tr>
+      <% sheets.each do |sheet| %>
+        <tr>
+          <td><%= instrument.name %></td>
+          <td>
+            <span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span>
+            <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>
-  <p><%= link_to "Add a page", new_page_path(:song_id => @song.id) %></p>
 </div>

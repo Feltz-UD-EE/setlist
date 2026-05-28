@@ -13,7 +13,8 @@ class Instrument < ApplicationRecord
   # Relations
   has_many :preparations
   has_and_belongs_to_many :players
-  has_many :pages
+  has_many :sheet_instruments, dependent: :destroy
+  has_many :sheets, through: :sheet_instruments
 
   # Validations
   validates :name, presence: true

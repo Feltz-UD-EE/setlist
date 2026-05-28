@@ -13,14 +13,17 @@
 <% end %>
 <p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
 
-<% if @song.pages.any? %>
-  <div class="song-pages">
-    <% @song.pages.each do |page| %>
-      <%= image_tag page.img.url, class: "song-page-image" %>
+<% if @sheets.any? %>
+  <div class="song-sheets">
+    <% @sheets.each do |sheet| %>
+      <% if sheet.alternate? %>
+        <p class="alternate-image-label"><span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span> Alternate sheet for <%= sheet.instrument_names %></p>
+      <% end %>
+      <%= image_tag sheet.img.url, class: "song-sheet-image" %>
     <% end %>
   </div>
 <% else %>
-  <p class="song-media-placeholder">Show Song image(s)</p>
+  <p class="song-media-placeholder">No sheets uploaded</p>
 <% end %>
 
 <p class="song-note song-note--finish"><strong>Finish:</strong> <%= @song.finish %></p>
