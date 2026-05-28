@@ -1,151 +1,176 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# This file should ensure the existence of records required to run the
+# application in every environment. It is safe to run more than once.
 
-drums = Instrument.create(name: "Drums")
-drums2 = Instrument.create(name: "Drums 2")
-bass = Instrument.create(name: "Bass")
-guitar = Instrument.create(name: "Guitar")
-guitar2 = Instrument.create(name: "Guitar 2")
-keyboards = Instrument.create(name: "Keyboards")
-keyboards2 = Instrument.create(name: "Keyboards 2")
-vocals = Instrument.create(name: "Vocals")
-vocals2 = Instrument.create(name: "Vocals 2")
-harmonica = Instrument.create(name: "Harmonica")
-saxophone = Instrument.create(name: "Saxophone")
-trumpet = Instrument.create(name: "Trumpet")
-trombone = Instrument.create(name: "Trombone")
-engineer = Instrument.create(name: "Engineer")
+admin_email = "johncfeltz@gmail.com"
 
-b = Band.create(name: "Silver Lake Band")
+instrument_names = [
+  "Drums",
+  "Drums 2",
+  "Bass",
+  "Guitar",
+  "Guitar 2",
+  "Keyboards",
+  "Keyboards 2",
+  "Vocals",
+  "Vocals 2",
+  "Harmonica",
+  "Saxophone",
+  "Trumpet",
+  "Trombone",
+  "Engineer"
+]
 
-s01 = b.songs.create(band_id: b.id, title: "Down by the Water", performer: "The Decembrists", duration: 180, intro: "Drums 2 measures", finish: "E minor")
-s02 = b.songs.create(band_id: b.id, title: "Breakfast in America", performer: "Supertramp", duration: 200, intro: "Bass and keyboard 4 measures", finish: "A")
-s03 = b.songs.create(band_id: b.id, title: "Like a Hurricane", performer: "Neal Young", duration: 180, intro: "Slow keyboard then harmonica", finish: "A")
-s04 = b.songs.create(band_id: b.id, title: "Manic Monday", performer: "The Bangles", duration: 180, intro: "Drum count, all start", finish: "D")
-s05 = b.songs.create(band_id: b.id, title: "Californication", performer: "Red Hot Chili Peppers", duration: 240, intro: "Bass and Casio", finish: "A minor")
-s06 = b.songs.create(band_id: b.id, title: "Dead Flowers", performer: "The Rolling Stones", duration: 180, intro: "Drum count, all start", finish: "a capella")
-s07 = b.songs.create(band_id: b.id, title: "Running on Empty", performer: "Jackson Brown", duration: 220, intro: "Keyboard and bass", finish: "A")
-s08 = b.songs.create(band_id: b.id, title: "Better Man", performer: "Pearl Jam", duration: 200, intro: "Keyboard and plucked guitar", finish: "D")
-s09 = b.songs.create(band_id: b.id, title: "Southern Cross", performer: "Crosby Stills & Nash", duration: 220, intro: "Drum count, all start", finish: "D")
-s10 = b.songs.create(band_id: b.id, title: "Have You Ever Seen the Rain", performer: "Credence Clearwater Revival", duration: 160, intro: "Drum count, all start", finish: "C")
-s11 = b.songs.create(band_id: b.id, title: "I'm Eighteen", performer: "Alice Cooper", duration: 180, intro: "Drum count, keyboard and harmonica", finish: "Extended harmonica C/D/E minor")
-s12 = b.songs.create(band_id: b.id, title: "Vacation", performer: "The Go-Gos", duration: 200, intro: "Drum count, all start", finish: "E")
-s13 = b.songs.create(band_id: b.id, title: "Big Empty", performer: "Stone Temple Pilots", duration: 180, intro: "Keyboard then guitar", finish: "E")
-s14 = b.songs.create(band_id: b.id, title: "Lonely Boy", performer: "The Black Keys", duration: 200, intro: "Drum count, all start", finish: "A")
-s15 = b.songs.create(band_id: b.id, title: "Wagon Wheel", performer: "Old Crow Medicine Show", duration: 180, intro: "Slow keyboard", finish: "a capella")
-s16 = b.songs.create(band_id: b.id, title: "Keep on Rocking in the Free World", performer: "Neil Young", duration: 240, intro: "Drum count, all start", finish: "E")
-s17 = b.songs.create(band_id: b.id, title: "You May be Right", performer: "Billy Joel", duration: 220, intro: "Drum count, all start", finish: "A")
-s18 = b.songs.create(band_id: b.id, title: "Take it Easy", performer: "The Eagles", duration: 240, intro: "Drum count, all start", finish: "E minor")
-s19 = b.songs.create(band_id: b.id, title: "Sunspot Baby", performer: "Bob Seger", duration: 180, intro: "Drum count, all start", finish: "E")
-s20 = b.songs.create(band_id: b.id, title: "Eyes on the Prize", performer: "Bruce Springsteen", duration: 200, intro: "Keyboard", finish: "A minor")
-s21 = b.songs.create(band_id: b.id, title: "The Old Man Down the Road", performer: "John Fogerty", duration: 180, intro: "Drum count, all start", finish: "Very slow vocal + C/D/E")
-s22 = b.songs.create(band_id: b.id, title: "Sympathy for the Devil", performer: "The Rolling Stones", duration: 240, intro: "Keyboard and Vocals", finish: "E")
-s23 = b.songs.create(band_id: b.id, title: "Rain on the Scarecrow", performer: "John Mellencamp", duration: 240, intro: "Keyboard", finish: "E minor")
-s24 = b.songs.create(band_id: b.id, title: "Hold my Hand", performer: "Hootie and the Blowfish", duration: 200, intro: "Drum count, all start", finish: "A")
-s25 = b.songs.create(band_id: b.id, title: "Rebel Yell", performer: "Billy Idol", duration: 180, intro: "Keyboard and plucked guitar", finish: "G (??)")
-s26 = b.songs.create(band_id: b.id, title: "Twilight Zone", performer: "Golden Earring", duration: 300, intro: "Keyboard and guitar, then spoken word vocals", finish: "A minor")
-s27 = b.songs.create(band_id: b.id, title: "Gimme Some Lovin", performer: "Spencer Davis Group", duration: 220, intro: "Drum count, keyboard and bass", finish: "G")
-s28 = b.songs.create(band_id: b.id, title: "Melt With You", performer: "Modern English", duration: 220, intro: "Drum count, all start", finish: "C")
-s29 = b.songs.create(band_id: b.id, title: "Changes in Latitude", performer: "Jimmy Buffet", duration: 180, intro: "", finish: "")
-s30 = b.songs.create(band_id: b.id, title: "868-5309 Jenny", performer: "Tommy Twotone", duration: 200, intro: "", finish: "")
-s31 = b.songs.create(band_id: b.id, title: "Bad Moon Rising", performer: "Credence Clearwater Revival", duration: 180, intro: "", finish: "")
-s32 = b.songs.create(band_id: b.id, title: "Boulevard of Broken Dreams", performer: "Green Day", duration: 240, intro: "", finish: "")
-s33 = b.songs.create(band_id: b.id, title: "Come Monday", performer: "Jimmy Buffet", duration: 240, intro: "", finish: "")
-s34 = b.songs.create(band_id: b.id, title: "Come to my Window", performer: "Melissa Ethridge", duration: 200, intro: "", finish: "")
-s35 = b.songs.create(band_id: b.id, title: "Daydream Believer", performer: "The Monkees", duration: 180, intro: "", finish: "")
-s36 = b.songs.create(band_id: b.id, title: "Don't Look Back in Anger", performer: "Dobie Gray", duration: 220, intro: "", finish: "")
-s37 = b.songs.create(band_id: b.id, title: "Down Under", performer: "Men at Work", duration: 220, intro: "", finish: "")
-s38 = b.songs.create(band_id: b.id, title: "Drift Away", performer: "Dobie Gray", duration: 220, intro: "", finish: "")
-s39 = b.songs.create(band_id: b.id, title: "Dust in the Wind", performer: "Kansas", duration: 180, intro: "", finish: "")
-s40 = b.songs.create(band_id: b.id, title: "Faithfully", performer: "Journey", duration: 200, intro: "", finish: "")
+instruments = instrument_names.index_with do |name|
+  Instrument.find_or_create_by!(name: name)
+end
 
+band = Band.find_or_create_by!(name: "Silver Lake Band")
+Band.where.not(id: band.id).find_each(&:destroy!)
 
+song_rows = [
+  ["867-5309 Jenny", "Tommy Twotone", 200, "", ""],
+  ["Baba O'Reilly", "The Who", 200, "organ", "F"],
+  ["Bad Moon Rising", "Credence Clearwater Revival", 180, "", ""],
+  ["Better Man", "Pearl Jam", 200, "Keyboard and plucked guitar", "D"],
+  ["Big Empty", "Stone Temple Pilots", 180, "Keyboard then guitar", "E"],
+  ["Boulevard of Broken Dreams", "Green Day", 240, "", ""],
+  ["Breakfast in America", "Supertramp", 200, "Bass and keyboard 4 measures", "A"],
+  ["Californication", "Red Hot Chili Peppers", 240, "Bass and Casio", "A minor"],
+  ["Changes in Latitude", "Jimmy Buffet", 180, "", ""],
+  ["Come Monday", "Jimmy Buffet", 240, "", ""],
+  ["Come to my Window", "Melissa Ethridge", 200, "drum count all start", "G"],
+  ["Daydream Believer", "The Monkees", 180, "", ""],
+  ["Dead Flowers", "The Rolling Stones", 180, "Drum count, all start", "a capella"],
+  ["December", "Collective Soul", 200, "organ", "C"],
+  ["Don't Look Back in Anger", "Dobie Gray", 220, "", ""],
+  ["Don't Stop", "Fleetwood Mac", 200, "drum count all start", "A"],
+  ["Down by the Water", "The Decembrists", 180, "Drums 2 measures", "E minor"],
+  ["Down Under", "Men at Work", 220, "", ""],
+  ["Drift Away", "Dobie Gray", 220, "", ""],
+  ["Drops of Jupiter", "Train", 200, "organ", "F"],
+  ["Dust in the Wind", "Kansas", 180, "", ""],
+  ["Eyes on the Prize", "Bruce Springsteen", 200, "Keyboard", "A minor"],
+  ["Faithfully", "Journey", 200, "", ""],
+  ["Folsom Prison Blues", "Johnny Cash", 200, "drum count all start", "F"],
+  ["Gimme Some Lovin", "Spencer Davis Group", 220, "Drum count, keyboard and bass", "G"],
+  ["Have You Ever Seen the Rain", "Credence Clearwater Revival", 160, "Drum count, all start", "C"],
+  ["Hold my Hand", "Hootie and the Blowfish", 200, "Drum count, all start", "A"],
+  ["I'm Eighteen", "Alice Cooper", 180, "Drum count, keyboard and harmonica", "Extended harmonica C/D/E minor"],
+  ["It's a Good Life if You Don't Weaken", "The Tragically Hip", 200, "drum count all start", "Em"],
+  ["It's So Easy", "Linda Ronstadt", 200, "drum count all start", "full a capella"],
+  ["Keep on Rocking in the Free World", "Neil Young", 240, "Drum count, all start", "E"],
+  ["Like a Hurricane", "Neal Young", 180, "Slow keyboard then harmonica", "A"],
+  ["Little Black Submarines", "The Black Keys", 200, "drum count all start", "A"],
+  ["Lonely Boy", "The Black Keys", 200, "Drum count, all start", "A"],
+  ["Long Train Runnin'", "The Doobie Brothers", 200, "drum count all start", "Em"],
+  ["Manic Monday", "The Bangles", 180, "Drum count, all start", "D"],
+  ["Melt With You", "Modern English", 220, "Drum count, all start", "C"],
+  ["Monday Morning", "Fleetwood Mac", 200, "drum count all start", "C"],
+  ["No Time", "The Guess Who", 200, "drum count all start", "D"],
+  ["Rain on the Scarecrow", "John Mellencamp", 240, "Keyboard", "E minor"],
+  ["Rebel Yell", "Billy Idol", 180, "Keyboard and plucked guitar", "G (??)"],
+  ["Running on Empty", "Jackson Brown", 220, "Keyboard and bass", "A"],
+  ["Southern Cross", "Crosby Stills & Nash", 220, "Drum count, all start", "D"],
+  ["Standing Still", "Jewel", 200, "drum count all start", "C"],
+  ["Summer of 69", "Bryan Adams", 200, "guitar and vocal", "D"],
+  ["Sunspot Baby", "Bob Seger", 180, "Drum count, all start", "E"],
+  ["Sympathy for the Devil", "The Rolling Stones", 240, "Keyboard and Vocals", "E"],
+  ["Take it Easy", "The Eagles", 240, "Drum count, all start", "E minor"],
+  ["Take Me Home Country Roads", "John Denver", 200, "drum count then organ", "full a capella"],
+  ["The Funeral", "Yungblud", 200, "drum count all start", "D"],
+  ["The Old Man Down the Road", "John Fogerty", 180, "Drum count, all start", "Very slow vocal + C/D/E"],
+  ["Twilight Zone", "Golden Earring", 300, "Keyboard and guitar, then spoken word vocals", "A minor"],
+  ["Vacation", "The Go-Gos", 200, "Drum count, all start", "E"],
+  ["Wagon Wheel", "Old Crow Medicine Show", 180, "Slow keyboard", "a capella"],
+  ["You May be Right", "Billy Joel", 220, "Drum count, all start", "A"],
+  ["Zombie", "Yungblud", 200, "guitar 2 measures then full band", "C"]
+]
 
-l1 = List.create(band_id: 1, name: "Rocking 1")
-l2 = List.create(band_id: 1, name: "Rocking 2", notes: "In Progress")
-l3 = List.create(band_id: 1, name: "Acoustic 1", notes: "In Progress")
-l4 = List.create(band_id: 1, name: "Acoustic 2", notes: "In Progress")
+songs = song_rows.each_with_object({}) do |(title, performer, duration, intro, finish), catalog|
+  song = band.songs.find_or_initialize_by(title: title)
+  song.update!(
+    performer: performer,
+    duration: duration,
+    intro: intro,
+    finish: finish
+  )
+  catalog[title] = song
+end
 
-Preparation.create(song_id: s01.id, instrument_id: harmonica.id, instruction: "G harmonica")
+band.songs.where.not(title: songs.keys).find_each(&:destroy!)
 
-Preparation.create(song_id: s02.id, instrument_id: bass.id, instruction: "Capo 3")
-Preparation.create(song_id: s02.id, instrument_id: guitar.id, instruction: "Capo 3")
-Preparation.create(song_id: s02.id, instrument_id: keyboards.id, instruction: "Tune up 3")
-Preparation.create(song_id: s02.id, instrument_id: harmonica.id, instruction: "C harmonica")
+preparation_rows = [
+  ["Breakfast in America", "Bass", "Capo 3"],
+  ["Breakfast in America", "Guitar", "Capo 3"],
+  ["Breakfast in America", "Harmonica", "C harmonica"],
+  ["Breakfast in America", "Keyboards", "Tune up 3"],
+  ["Down by the Water", "Harmonica", "G harmonica"],
+  ["Eyes on the Prize", "Bass", "Capo 3"],
+  ["Eyes on the Prize", "Guitar", "Capo 3"],
+  ["Eyes on the Prize", "Harmonica", "C harmonica"],
+  ["Eyes on the Prize", "Keyboards", "Tune up 3"],
+  ["Folsom Prison Blues", "Harmonica", "?? harmonica in rack"],
+  ["Gimme Some Lovin", "Keyboards", "Casio mode X"],
+  ["Hold my Hand", "Bass", "Capo 2"],
+  ["Hold my Hand", "Guitar", "Capo 2"],
+  ["Hold my Hand", "Keyboards", "Tune up 2"],
+  ["I'm Eighteen", "Harmonica", "C harmonica"],
+  ["It's a Good Life if You Don't Weaken", "Bass", "capo 4"],
+  ["It's a Good Life if You Don't Weaken", "Guitar", "capo 4"],
+  ["It's a Good Life if You Don't Weaken", "Keyboards", "tune +4"],
+  ["Lonely Boy", "Harmonica", "G harmonica"],
+  ["Long Train Runnin'", "Bass", "capo 3"],
+  ["Long Train Runnin'", "Guitar", "capo 3"],
+  ["Long Train Runnin'", "Keyboards", "tune +3"],
+  ["Manic Monday", "Keyboards", "Casio mode X"],
+  ["Rain on the Scarecrow", "Bass", "Capo 2"],
+  ["Rain on the Scarecrow", "Guitar", "Capo 2"],
+  ["Rain on the Scarecrow", "Keyboards", "Tune up 2"],
+  ["Rebel Yell", "Bass", "Capo 1"],
+  ["Rebel Yell", "Guitar", "Capo 1"],
+  ["Rebel Yell", "Keyboards", "Tune up 1"],
+  ["Running on Empty", "Keyboards", "Casio mode X"],
+  ["Standing Still", "Bass", "capo 2"],
+  ["Standing Still", "Guitar", "capo 2"],
+  ["Standing Still", "Keyboards", "tune +2"],
+  ["Sunspot Baby", "Harmonica", "D harmonica"],
+  ["Take Me Home Country Roads", "Bass", "capo 2"],
+  ["Take Me Home Country Roads", "Guitar", "capo 2"],
+  ["Take Me Home Country Roads", "Keyboards", "tune +2"],
+  ["The Old Man Down the Road", "Harmonica", "G harmonica"],
+  ["Twilight Zone", "Bass", "Capo 2"],
+  ["Twilight Zone", "Guitar", "Capo 2"],
+  ["Twilight Zone", "Keyboards", "Tune up 2"],
+  ["Zombie", "Bass", "capo 4"],
+  ["Zombie", "Guitar", "capo 4"],
+  ["Zombie", "Keyboards", "tune +4"]
+]
 
-Preparation.create(song_id: s04.id, instrument_id: keyboards.id, instruction: "Casio mode X")
+preparation_keys = preparation_rows.map do |song_title, instrument_name, instruction|
+  song = songs.fetch(song_title)
+  instrument = instruments.fetch(instrument_name)
+  preparation = Preparation.find_or_initialize_by(song: song, instrument: instrument)
+  preparation.update!(instruction: instruction)
+  [song.id, instrument.id]
+end
 
-Preparation.create(song_id: s07.id, instrument_id: keyboards.id, instruction: "Casio mode X")
+Preparation.find_each do |preparation|
+  next if preparation_keys.include?([preparation.song_id, preparation.instrument_id])
 
-Preparation.create(song_id: s11.id, instrument_id: harmonica.id, instruction: "C harmonica")
+  preparation.destroy!
+end
 
-Preparation.create(song_id: s14.id, instrument_id: harmonica.id, instruction: "G harmonica")
+ListSong.delete_all
+List.delete_all
 
-Preparation.create(song_id: s19.id, instrument_id: harmonica.id, instruction: "D harmonica")
+admin = Player.find_or_initialize_by(email: admin_email)
+admin.assign_attributes(
+  first_name: "John",
+  last_name: "Feltz",
+  band: band,
+  admin: true
+)
+admin.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password") if admin.new_record? || admin.encrypted_password.blank?
+admin.save!
 
-Preparation.create(song_id: s20.id, instrument_id: harmonica.id, instruction: "C harmonica")
-Preparation.create(song_id: s20.id, instrument_id: bass.id, instruction: "Capo 3")
-Preparation.create(song_id: s20.id, instrument_id: guitar.id, instruction: "Capo 3")
-Preparation.create(song_id: s20.id, instrument_id: keyboards.id, instruction: "Tune up 3")
-
-Preparation.create(song_id: s21.id, instrument_id: harmonica.id, instruction: "G harmonica")
-
-Preparation.create(song_id: s23.id, instrument_id: bass.id, instruction: "Capo 2")
-Preparation.create(song_id: s23.id, instrument_id: guitar.id, instruction: "Capo 2")
-Preparation.create(song_id: s23.id, instrument_id: keyboards.id, instruction: "Tune up 2")
-
-Preparation.create(song_id: s24.id, instrument_id: bass.id, instruction: "Capo 2")
-Preparation.create(song_id: s24.id, instrument_id: guitar.id, instruction: "Capo 2")
-Preparation.create(song_id: s24.id, instrument_id: keyboards.id, instruction: "Tune up 2")
-
-Preparation.create(song_id: s25.id, instrument_id: bass.id, instruction: "Capo 1")
-Preparation.create(song_id: s25.id, instrument_id: guitar.id, instruction: "Capo 1")
-Preparation.create(song_id: s25.id, instrument_id: keyboards.id, instruction: "Tune up 1")
-
-Preparation.create(song_id: s26.id, instrument_id: bass.id, instruction: "Capo 2")
-Preparation.create(song_id: s26.id, instrument_id: guitar.id, instruction: "Capo 2")
-Preparation.create(song_id: s26.id, instrument_id: keyboards.id, instruction: "Tune up 2")
-
-Preparation.create(song_id: s27.id, instrument_id: keyboards.id, instruction: "Casio mode X")
-
-ls01 = ListSong.create(list_id: l1.id, song_id: s01.id, position: 1)
-ls02 = ListSong.create(list_id: l1.id, song_id: s02.id, position: 2)
-ls03 = ListSong.create(list_id: l1.id, song_id: s03.id, position: 3)
-ls04 = ListSong.create(list_id: l1.id, song_id: s04.id, position: 4)
-ls05 = ListSong.create(list_id: l1.id, song_id: s05.id, position: 5)
-ls06 = ListSong.create(list_id: l1.id, song_id: s06.id, position: 6)
-ls07 = ListSong.create(list_id: l1.id, song_id: s07.id, position: 7)
-ls08 = ListSong.create(list_id: l1.id, song_id: s08.id, position: 8)
-ls09 = ListSong.create(list_id: l1.id, song_id: s09.id, position: 9)
-ls10 = ListSong.create(list_id: l1.id, song_id: s10.id, position: 10)
-ls11 = ListSong.create(list_id: l1.id, song_id: s11.id, position: 11)
-ls12 = ListSong.create(list_id: l1.id, song_id: s12.id, position: 12)
-ls13 = ListSong.create(list_id: l1.id, song_id: s13.id, position: 13)
-ls14 = ListSong.create(list_id: l1.id, song_id: s14.id, position: 14)
-ls15 = ListSong.create(list_id: l1.id, song_id: s15.id, position: 15)
-ls16 = ListSong.create(list_id: l1.id, song_id: s26.id, position: 16)
-ls17 = ListSong.create(list_id: l2.id, song_id: s27.id, position: 1)
-ls18 = ListSong.create(list_id: l2.id, song_id: s17.id, position: 2)
-ls19 = ListSong.create(list_id: l2.id, song_id: s18.id, position: 3)
-ls20 = ListSong.create(list_id: l2.id, song_id: s19.id, position: 4)
-ls21 = ListSong.create(list_id: l2.id, song_id: s28.id, position: 5)
-ls22 = ListSong.create(list_id: l2.id, song_id: s21.id, position: 6)
-ls23 = ListSong.create(list_id: l2.id, song_id: s22.id, position: 7)
-ls24 = ListSong.create(list_id: l2.id, song_id: s23.id, position: 8)
-ls25 = ListSong.create(list_id: l2.id, song_id: s24.id, position: 9)
-ls26 = ListSong.create(list_id: l2.id, song_id: s25.id, position: 10)
-ls27 = ListSong.create(list_id: l2.id, song_id: s16.id, position: 11)
-
-Player.create(first_name: "John", last_name: "Feltz", band_id: b.id, email: "johncfeltz@gmail.com", password: "password", admin: true)
-Player.create(first_name: "Chip", last_name: "DeLong", band_id: b.id, email: "chipdelongmusic@gmail.com", password: "password")
-Player.create(first_name: "Leo", last_name: "Kaske", band_id: b.id, email: "leokaske@gmail.com", password: "password")
-Player.create(first_name: "Char", last_name: "Genger", band_id: b.id, email: "genglerc@aaps.k12.mi.us", password: "password")
-Player.create(first_name: "John", last_name: "Machowicz", band_id: b.id, email: "john.machoqwicz@charter.net", password: "password")
-Player.create(first_name: "Brian", last_name: "Mahnken", band_id: b.id, email: "mahnkenmi@hotmail.com", password: "password")
+Player.where.not(email: admin_email).find_each(&:destroy!)
