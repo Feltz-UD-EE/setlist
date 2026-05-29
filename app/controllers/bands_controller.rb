@@ -14,29 +14,33 @@ class BandsController < ApplicationController
     @songs = @band.songs.alpha
   end
 
+  # Band creation is disabled during closed beta.
+  # Restore this action when public band signup is ready.
   # GET /bands/new
-  def new
-    @band = Band.new
-  end
+  # def new
+  #   @band = Band.new
+  # end
 
   # GET /bands/1/edit
   def edit
   end
 
+  # Band creation is disabled during closed beta.
+  # Restore this action when public band signup is ready.
   # POST /bands or /bands.json
-  def create
-    @band = Band.new(band_params)
-
-    respond_to do |format|
-      if @band.save
-        format.html { redirect_to @band, notice: "Band was successfully created." }
-        format.json { render :show, status: :created, location: @band }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @band.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def create
+  #   @band = Band.new(band_params)
+  #
+  #   respond_to do |format|
+  #     if @band.save
+  #       format.html { redirect_to @band, notice: "Band was successfully created." }
+  #       format.json { render :show, status: :created, location: @band }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @band.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PATCH/PUT /bands/1 or /bands/1.json
   def update

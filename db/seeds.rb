@@ -188,6 +188,32 @@ setlists = [
       "Wagon Wheel",
       "Twilight Zone"
     ]
+  },
+  {
+    name: "Standard 2",
+    notes: "Second standard Silver Lake Band set list.",
+    songs: [
+      "Monday Morning",
+      "You May be Right",
+      "Take it Easy",
+      "It's So Easy",
+      "Don't Stop",
+      "No Time",
+      "Long Train Runnin'",
+      "Standing Still",
+      "Rain on the Scarecrow",
+      "Take Me Home Country Roads",
+      "Drops of Jupiter",
+      "Baba O'Reilly",
+      "December",
+      "Hold my Hand",
+      "Little Black Submarines",
+      "Zombie",
+      "Rebel Yell",
+      "The Funeral",
+      "It's a Good Life if You Don't Weaken",
+      "Keep on Rocking in the Free World"
+    ]
   }
 ]
 

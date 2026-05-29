@@ -2,6 +2,11 @@ class RegistrationsController < ApplicationController
   def new
     @invite_token = params[:invite]
     @invitation = BandInvitation.find_available(@invite_token) if @invite_token.present?
+    unless @invitation.present?
+      redirect_to public_home_path, alert: "Account creation is currently by invitation only."
+      return
+    end
+
     @player = Player.new
   end
 
@@ -10,9 +15,7 @@ class RegistrationsController < ApplicationController
     @invitation = BandInvitation.find_available(@invite_token)
 
     if @invitation.blank?
-      @player = Player.new(registration_params.except(:password))
-      @player.errors.add(:base, "A valid invitation is required to create an account.")
-      render :new, status: :unprocessable_entity
+      redirect_to public_home_path, alert: "Account creation is currently by invitation only."
       return
     end
 

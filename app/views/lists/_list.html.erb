@@ -1,7 +1,16 @@
 <div id="<%= dom_id list %>">
   <h1><%= @list.band.name %>: <%= @list.name %></h1>
-  <p>Songs: <%= @songs.length %></p>
-  <p>Run Time: <%= @list.runtime_pretty %></p>
+  <% if @list.notes.present? %>
+    <p class="setlist-notes"><%= @list.notes %></p>
+  <% end %>
+  <div class="setlist-summary">
+    <p><strong>Songs:</strong> <%= @songs.length %></p>
+    <p><strong>Total run time:</strong> <%= @list.runtime_pretty %></p>
+  </div>
+  <div class="setlist-summary setlist-summary--dates">
+    <p><strong>Created:</strong> <%= @list.created_at.strftime("%b %-d, %Y") %></p>
+    <p><strong>Updated:</strong> <%= @list.updated_at.strftime("%b %-d, %Y") %></p>
+  </div>
   <h2>Songs</h2>
   <table>
     <thead>

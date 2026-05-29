@@ -23,7 +23,10 @@ Rails.application.routes.draw do
   get 'play/play_all', to: 'play#play_all'
   get 'play/download', to: 'play#download'
 
-  resources :bands do
+  # Band creation is disabled during closed beta.
+  # Restore :new and :create when public band signup is ready.
+  # resources :bands do
+  resources :bands, except: [:new, :create] do
     resource :invitation, only: [:new], controller: "band_invitations"
   end
   resources :players
