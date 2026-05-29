@@ -1,0 +1,23 @@
+<% if sheet_groups.any? && sheet_groups.any? { |group| group[:sheets].any? } %>
+  <div class="song-sheets">
+    <% sheet_groups.each do |group| %>
+      <% next if group[:sheets].blank? %>
+      <% if group[:alternate] %>
+        <p class="alternate-image-label"><span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span> <%= group[:instrument].name %></p>
+      <% end %>
+      <% group[:sheets].each do |sheet| %>
+        <% if local_assigns[:embedded_sheet_images].present? %>
+          <% if embedded_sheet_images[sheet].present? %>
+            <img src="<%= embedded_sheet_images[sheet] %>" class="song-sheet-image" alt="">
+          <% else %>
+            <p class="song-media-placeholder">Sheet unavailable offline</p>
+          <% end %>
+        <% else %>
+          <%= image_tag sheet.img.url, class: "song-sheet-image" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <p class="song-media-placeholder">No sheets uploaded</p>
+<% end %>

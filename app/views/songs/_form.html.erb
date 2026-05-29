@@ -45,74 +45,60 @@
         <td>Finish</td>
         <td><%= form.text_field :finish %></td>
       </tr>
-      <tr>
-        <td>Main sheet</td>
-        <td>
-          <%= form.file_field :sheet_img, accept: "image/*" %>
-          <div class="inline-form-grid inline-form-grid--compact">
-            <label>
-              Order
-              <%= form.number_field :sheet_sort_order, min: 1, value: @song.main_sheets.maximum(:sort_order).to_i + 1 %>
-            </label>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>Alternate sheet</td>
-        <td>
-          <%= form.file_field :alternate_sheet_img, accept: "image/*" %>
-          <div class="inline-form-grid">
-            <label>
-              Order
-              <%= form.number_field :alternate_sheet_sort_order, min: 1, value: @song.main_sheets.maximum(:sort_order).to_i + 1 %>
-            </label>
-            <label>
-              Instruments
-              <%= form.collection_select :alternate_sheet_instrument_ids, @instruments, :id, :name, {}, multiple: true, class: "multi-select" %>
-            </label>
-          </div>
-        </td>
-      </tr>
     </table>
 
-    <% if @sheets.present? %>
-      <h2>Uploaded sheets</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Preview</th>
-            <th>Order</th>
-            <th>Instruments</th>
-            <th>Replace</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @sheets.each do |sheet| %>
-            <tr>
-              <td>
-                <% if sheet.alternate? %>
-                  <span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span>
-                <% end %>
-                <%= image_tag sheet.img.url, class: "song-sheet-thumb" if sheet.img.present? %>
-              </td>
-              <td><%= number_field_tag "sheets[#{sheet.id}][sort_order]", sheet.sort_order, min: 1, class: "compact-input" %></td>
-              <td>
-                <%= collection_select "sheets[#{sheet.id}]", :instrument_ids, @instruments, :id, :name, { selected: sheet.instrument_ids }, multiple: true, class: "multi-select" %>
-              </td>
-              <td><%= file_field_tag "sheets[#{sheet.id}][img]", accept: "image/*" %></td>
-              <td>
-                <label class="checkbox-row">
-                  <%= check_box_tag "sheets[#{sheet.id}][delete]", "1" %>
-                  <span>Delete</span>
-                </label>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+    <section class="sheet-editor" data-controller="sheet-editor">
+      <div class="sheet-editor__header">
+        <h2>Sheets</h2>
+        <div class="sheet-editor__actions">
+          <button type="button" class="button button--small" data-action="sheet-editor#chooseMainSheet">Upload main sheet</button>
+          <button type="button" class="button button--small" data-action="sheet-editor#openAlternateDialog">Upload alternate sheet</button>
+        </div>
+      </div>
 
-    <%= form.submit %>
+      <%= form.file_field :sheet_imgs, accept: "image/*", multiple: true, class: "visually-hidden", data: { sheet_editor_target: "mainInput", action: "change->sheet-editor#mainSheetSelected" } %>
+
+      <dialog class="confirm-dialog" data-sheet-editor-target="dialog">
+        <div class="confirm-dialog__content">
+          <h2>Alternate sheet</h2>
+          <label class="sheet-editor__dialog-field">
+            Instrument
+            <%= form.collection_select :alternate_sheet_instrument_ids, @instruments, :id, :name, { prompt: "Choose an instrument" }, class: "compact-select" %>
+          </label>
+          <div class="confirm-dialog__actions">
+            <button type="button" class="button" data-action="sheet-editor#closeAlternateDialog">Cancel</button>
+            <button type="button" class="button button--primary" data-action="sheet-editor#chooseAlternateSheet">Choose file</button>
+          </div>
+        </div>
+      </dialog>
+      <%= form.file_field :alternate_sheet_imgs, accept: "image/*", multiple: true, class: "visually-hidden", data: { sheet_editor_target: "alternateInput", action: "change->sheet-editor#alternateSheetSelected" } %>
+
+      <div class="sheet-lane">
+        <h3>Main sheets</h3>
+        <div class="sheet-lane__items" data-sheet-editor-target="lane mainPreview" data-sheet-lane="main">
+          <% @main_sheets.each do |sheet| %>
+            <%= render "songs/sheet_card", sheet: sheet, lane: "main" %>
+          <% end %>
+        </div>
+      </div>
+
+      <% @alternate_sheet_groups.each do |instrument, sheets| %>
+        <div class="sheet-lane">
+          <h3><%= instrument.name %></h3>
+          <div class="sheet-lane__items" data-sheet-editor-target="lane" data-sheet-lane="instrument-<%= instrument.id %>">
+            <% sheets.each do |sheet| %>
+              <%= render "songs/sheet_card", sheet: sheet, lane: "instrument-#{instrument.id}" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="sheet-lane sheet-lane--pending-alternate" data-sheet-editor-target="alternateLane" hidden>
+        <h3 data-sheet-editor-target="alternateHeading">Alternate Sheets</h3>
+        <div class="sheet-lane__items" data-sheet-editor-target="lane alternatePreview" data-sheet-lane="pending-alternate-new"></div>
+      </div>
+    </section>
+
+    <%= form.submit song.persisted? ? "Save Song" : nil %>
   </div>
 <% end %>

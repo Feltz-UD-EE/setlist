@@ -91,6 +91,6 @@
       </div>
     </section>
 
-    <%= form.submit %>
+    <%= form.submit list.persisted? ? "Save Setlist" : nil %>
   </div>
 <% end %>

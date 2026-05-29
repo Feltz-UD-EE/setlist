@@ -14,7 +14,7 @@
 ##
 
 class Song < ApplicationRecord
-  attr_accessor :sheet_img, :sheet_sort_order, :alternate_sheet_img, :alternate_sheet_sort_order, :alternate_sheet_instrument_ids
+  attr_accessor :sheet_imgs, :alternate_sheet_imgs, :alternate_sheet_instrument_ids
 
   # Statics & enums
 
@@ -68,12 +68,31 @@ class Song < ApplicationRecord
   end
 
   def sheets_for_instruments(instrument_ids)
-    selected_ids = Array(instrument_ids).reject(&:blank?).map(&:to_i)
-    return main_sheets if selected_ids.blank?
+    sheet_groups_for_instruments(instrument_ids).flat_map { |group| group[:sheets] }
+  end
 
-    matching_alternates = sheets.joins(:instruments).where(instruments: { id: selected_ids }).distinct.by_sort_order
-    replaced_sort_orders = matching_alternates.pluck(:sort_order)
-    (main_sheets.where.not(sort_order: replaced_sort_orders).to_a + matching_alternates.to_a).sort_by { |sheet| [sheet.sort_order, sheet.id] }
+  def sheet_groups_for_instruments(instrument_ids)
+    selected_ids = Array(instrument_ids).reject(&:blank?).map(&:to_i)
+    return main_sheet_group if selected_ids.blank?
+
+    alternate_groups = Instrument.where(id: selected_ids).alpha.filter_map do |instrument|
+      matching_sheets = sheets
+        .joins(:sheet_instruments)
+        .where(sheet_instruments: { instrument_id: instrument.id })
+        .by_sort_order
+        .distinct
+        .to_a
+
+      next if matching_sheets.blank?
+
+      { instrument: instrument, sheets: matching_sheets, alternate: true }
+    end
+
+    alternate_groups.presence || main_sheet_group
+  end
+
+  def main_sheet_group
+    [{ instrument: nil, sheets: main_sheets.to_a, alternate: false }]
   end
   # Callbacks
 end

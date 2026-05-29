@@ -11,18 +11,7 @@
     <% end %>
     <p class="song-note song-note--intro"><strong>Intro:</strong> <%= song.intro %></p>
 
-    <% if @sheets[i].any? %>
-      <div class="song-sheets">
-        <% @sheets[i].each do |sheet| %>
-          <% if sheet.alternate? %>
-            <p class="alternate-image-label"><span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span> Alternate sheet for <%= sheet.instrument_names %></p>
-          <% end %>
-          <%= image_tag sheet.img.url, class: "song-sheet-image" %>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="song-media-placeholder">No sheets uploaded</p>
-    <% end %>
+    <%= render "play/sheet_groups", sheet_groups: @sheet_groups[i] %>
 
     <p class="song-note song-note--finish"><strong>Finish:</strong> <%= song.finish %></p>
   </section>
