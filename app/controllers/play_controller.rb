@@ -13,7 +13,7 @@ class PlayController < ApplicationController
       @lists =  List.where(band_id: accessible_bands.select(:id)).alpha
     end
     @instruments = Instrument.all.alpha
-    @display_types = [["Song by Song"], ["One Screen"]]
+    @display_types = [["One Screen"], ["Song by Song"]]
   end
 
   # POST from non-model form in #start
@@ -69,7 +69,7 @@ class PlayController < ApplicationController
       @preps = @song.preparations.where(instrument_id: @instrument_ids)
       @next_preps = @next_song.preparations.where(instrument_id: @instrument_ids) if @next_song.present?
     end
-    @sheets = @song.sheets_for_instruments(@instrument_ids)
+    @sheet_groups = @song.sheet_groups_for_instruments(@instrument_ids)
   end
 
 # Shows entire setlist on one page, suggested by Chip.
@@ -99,7 +99,7 @@ class PlayController < ApplicationController
     @instrument_ids = selected_instrument_ids
     @songs = @list.songs
     @preps = []
-    @sheets = []
+    @sheet_groups = []
     if @instrument_ids.present?
       @instrument_list = Instrument.where(id: @instrument_ids).pluck(:name).join(', ')
       @songs.each do |song|
@@ -109,12 +109,12 @@ class PlayController < ApplicationController
     else
       @songs.each { @preps << [] }
     end
-    @songs.each { |song| @sheets << song.sheets_for_instruments(@instrument_ids) }
+    @songs.each { |song| @sheet_groups << song.sheet_groups_for_instruments(@instrument_ids) }
     @embedded_sheet_images = embed_sheets ? embedded_sheet_images : {}
   end
 
   def embedded_sheet_images
-    @sheets.flatten.index_with { |sheet| data_uri_for(sheet) }
+    @sheet_groups.flat_map { |groups| groups.flat_map { |group| group[:sheets] } }.index_with { |sheet| data_uri_for(sheet) }
   end
 
   def data_uri_for(sheet)

@@ -101,8 +101,8 @@ class SongsController < ApplicationController
       Song.transaction do
         @song.save!
         update_existing_sheets
-        attach_main_sheet
-        attach_alternate_sheet
+        attach_main_sheets
+        attach_alternate_sheets
       end
       true
     rescue ActiveRecord::RecordInvalid => error
@@ -110,32 +110,33 @@ class SongsController < ApplicationController
       false
     end
 
-    def attach_main_sheet
-      sheet_upload = params.dig(:song, :sheet_img)
-      return if sheet_upload.blank?
-
-      @song.sheets.create!(
-        img: sheet_upload,
-        sort_order: params.dig(:song, :sheet_sort_order).presence || next_sheet_sort_order,
-        instrument_ids: []
-      )
+    def attach_main_sheets
+      main_sheet_uploads.each_with_index do |sheet_upload, index|
+        @song.sheets.create!(
+          img: sheet_upload,
+          sort_order: main_sheet_sort_orders[index].presence || next_main_sheet_sort_order,
+          instrument_ids: []
+        )
+      end
     end
 
-    def attach_alternate_sheet
-      sheet_upload = params.dig(:song, :alternate_sheet_img)
+    def attach_alternate_sheets
+      sheet_uploads = alternate_sheet_uploads
       instrument_ids = sheet_instrument_ids(params.dig(:song, :alternate_sheet_instrument_ids))
-      return if sheet_upload.blank?
+      return if sheet_uploads.blank?
 
       if instrument_ids.blank?
         @song.errors.add(:base, "Choose at least one instrument for an alternate sheet.")
         raise ActiveRecord::RecordInvalid.new(@song)
       end
 
-      @song.sheets.create!(
-        img: sheet_upload,
-        sort_order: params.dig(:song, :alternate_sheet_sort_order).presence || next_sheet_sort_order,
-        instrument_ids: instrument_ids
-      )
+      sheet_uploads.each_with_index do |sheet_upload, index|
+        @song.sheets.create!(
+          img: sheet_upload,
+          sort_order: alternate_sheet_sort_orders[index].presence || next_alternate_sheet_sort_order(instrument_ids),
+          instrument_ids: instrument_ids
+        )
+      end
     end
 
     def update_existing_sheets
@@ -148,7 +149,7 @@ class SongsController < ApplicationController
 
         update_attributes = { sort_order: sheet_params[:sort_order].presence || sheet.sort_order }
         update_attributes[:img] = sheet_params[:img] if sheet_params[:img].present?
-        update_attributes[:instrument_ids] = sheet_instrument_ids(sheet_params[:instrument_ids])
+        update_attributes[:instrument_ids] = sheet_instrument_ids(sheet_params[:instrument_ids]) if sheet_params.key?(:instrument_ids)
         sheet.update!(update_attributes)
       end
     end
@@ -157,16 +158,42 @@ class SongsController < ApplicationController
       params[:sheets].present? ? params.require(:sheets).permit! : {}
     end
 
+    def main_sheet_uploads
+      uploaded_sheets(params.dig(:song, :sheet_imgs), params.dig(:song, :sheet_img))
+    end
+
+    def alternate_sheet_uploads
+      uploaded_sheets(params.dig(:song, :alternate_sheet_imgs), params.dig(:song, :alternate_sheet_img))
+    end
+
+    def uploaded_sheets(*raw_uploads)
+      raw_uploads.flatten.compact_blank
+    end
+
+    def main_sheet_sort_orders
+      Array(params.dig(:song, :sheet_sort_orders)).map(&:presence)
+    end
+
+    def alternate_sheet_sort_orders
+      Array(params.dig(:song, :alternate_sheet_sort_orders)).map(&:presence)
+    end
+
     def sheet_instrument_ids(raw_ids)
       Array(raw_ids).reject(&:blank?).map(&:to_i)
     end
 
-    def next_sheet_sort_order
+    def next_main_sheet_sort_order
       @song.main_sheets.maximum(:sort_order).to_i + 1
+    end
+
+    def next_alternate_sheet_sort_order(instrument_ids)
+      @song.sheets.joins(:sheet_instruments).where(sheet_instruments: { instrument_id: instrument_ids }).maximum(:sort_order).to_i + 1
     end
 
     def prepare_song_form
       @sheets = @song.persisted? ? @song.sheets.includes(:instruments).by_sort_order : Sheet.none
+      @main_sheets = @song.persisted? ? @song.main_sheets : Sheet.none
+      @alternate_sheet_groups = @song.persisted? ? @song.alternate_sheet_groups : {}
       @instruments = Instrument.alpha
       @title ||= @song.band.present? ? "New song for #{@song.band.name}" : "New song"
     end

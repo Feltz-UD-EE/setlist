@@ -43,41 +43,27 @@
     </tbody>
   </table>
   <h2>Sheets</h2>
-  <table class="song-sheets-table">
-    <thead>
-    <tr>
-      <th>Instrument</th>
-      <th>Sheet</th>
-    </tr>
-    </thead>
-    <tbody>
+  <div class="song-sheet-groups">
     <% if @main_sheets.any? %>
-      <tr class="sheet-group-separator">
-        <th colspan="2">Main sheets</th>
-      </tr>
-    <% end %>
-    <% @main_sheets.each do |sheet| %>
-      <tr>
-        <td>Main</td>
-        <td>
-          <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
-        </td>
-      </tr>
-    <% end %>
-    <% @alternate_sheet_groups.each do |instrument, sheets| %>
-      <tr class="sheet-group-separator">
-        <th colspan="2"><%= instrument.name %></th>
-      </tr>
-      <% sheets.each do |sheet| %>
-        <tr>
-          <td><%= instrument.name %></td>
-          <td>
-            <span class="alternate-image-icon" title="Alternate instrument sheet">ALT</span>
+      <section class="song-sheet-group">
+        <h3>Main sheets</h3>
+        <div class="song-sheet-row">
+          <% @main_sheets.each do |sheet| %>
             <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
-          </td>
-        </tr>
-      <% end %>
+          <% end %>
+        </div>
+      </section>
     <% end %>
-    </tbody>
-  </table>
+
+    <% @alternate_sheet_groups.each do |instrument, sheets| %>
+      <section class="song-sheet-group">
+        <h3><%= instrument.name %></h3>
+        <div class="song-sheet-row">
+          <% sheets.each do |sheet| %>
+            <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  </div>
 </div>

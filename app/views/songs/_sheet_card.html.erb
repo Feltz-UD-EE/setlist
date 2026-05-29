@@ -1,0 +1,13 @@
+<article class="sheet-card" draggable="true" data-sheet-editor-target="item" data-sheet-lane="<%= lane %>">
+  <button type="button" class="sheet-remove-button" aria-label="Remove sheet" data-action="sheet-editor#removeExistingSheet">X</button>
+  <span class="drag-handle sheet-card__handle" aria-hidden="true">::</span>
+  <div class="sheet-card__preview-frame">
+    <% if sheet.img.present? %>
+      <%= image_tag sheet.img.url, class: "sheet-card__preview" %>
+    <% else %>
+      <span>No preview</span>
+    <% end %>
+  </div>
+  <%= hidden_field_tag "sheets[#{sheet.id}][sort_order]", sheet.sort_order, data: { sheet_order_input: true } %>
+  <%= check_box_tag "sheets[#{sheet.id}][delete]", "1", false, class: "visually-hidden", data: { sheet_delete_input: true } %>
+</article>

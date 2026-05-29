@@ -1,16 +1,18 @@
 <p style="color: green"><%= notice %></p>
 
-<div class="setlist-actions setlist-actions--primary">
+<div class="setlist-actions setlist-actions--primary print-hidden" data-controller="print">
   <%= link_to "Play this list", play_choose_path(list_id: @list.id), class: "button button--play" %>
   <%= link_to "All Set Lists", band_path(@list.band), class: "button" %>
+  <button type="button" class="button button--print" data-action="click->print#print">Print</button>
 </div>
 
 <%= render @list %>
 
 <div class="setlist-footer-actions">
-  <div class="setlist-actions setlist-actions--primary">
+  <div class="setlist-actions setlist-actions--primary print-hidden" data-controller="print">
     <%= link_to "Play this list", play_choose_path(list_id: @list.id), class: "button button--play" %>
     <%= link_to "All Set Lists", band_path(@list.band), class: "button" %>
+    <button type="button" class="button button--print" data-action="click->print#print">Print</button>
   </div>
 
   <div class="setlist-actions setlist-actions--secondary">
