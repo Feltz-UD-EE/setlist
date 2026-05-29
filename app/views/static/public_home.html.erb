@@ -1,11 +1,11 @@
 <div>
   <h1>Setlist</h1>
-  <p class="landing-copy">A private workspace for bands to manage songs, set lists, performance notes, and practice-ready sheets.</p>
+  <p class="landing-copy">A private workspace for bands to manage songs, set lists, performance notes, and practice-ready arrangements.</p>
+  <p>Setlist is currently in closed beta; public beta will launch in August 2026.</p>
 
   <% if signed_out? %>
     <p class="action-row">
       <%= link_to "Log in", sign_in_path, class: "button button--play" %>
-      <%= link_to "Create an account", sign_up_path, class: "button" %>
     </p>
   <% else %>
     <h2>Your Bands</h2>
