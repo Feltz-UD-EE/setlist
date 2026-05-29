@@ -3,12 +3,12 @@ class PlayersController < ApplicationController
 
   # GET /players or /players.json
   def index
-    @players = Player.where(band_id: accessible_bands.select(:id))
+    @players = Player.joins(:bands).where(bands: { id: accessible_bands.select(:id) }).distinct.alpha
   end
 
   # GET /players/1 or /players/1.json
   def show
-    authorize_band!(@player.band)
+    authorize_player!
   end
 
   # GET /players/new
@@ -18,13 +18,15 @@ class PlayersController < ApplicationController
 
   # GET /players/1/edit
   def edit
-    authorize_band!(@player.band)
+    authorize_player!
   end
 
   # POST /players or /players.json
   def create
     @player = Player.new(player_params)
-    authorize_band!(@player.band)
+    assign_player_bands
+    @player.band ||= @player.bands.first
+    authorize_player!
 
     respond_to do |format|
       if @player.save
@@ -39,7 +41,9 @@ class PlayersController < ApplicationController
 
   # PATCH/PUT /players/1 or /players/1.json
   def update
-    authorize_band!(@player.band)
+    authorize_player!
+    assign_player_bands
+    @player.band ||= @player.bands.first
     respond_to do |format|
       if @player.update(player_params)
         format.html { redirect_to @player, notice: "Player was successfully updated." }
@@ -53,7 +57,7 @@ class PlayersController < ApplicationController
 
   # DELETE /players/1 or /players/1.json
   def destroy
-    authorize_band!(@player.band)
+    authorize_player!
     @player.destroy!
 
     respond_to do |format|
@@ -70,7 +74,26 @@ class PlayersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_params
-      params.require(:player).permit(:first_name, :last_name, :email, :password, :band_id)
+      params.require(:player).permit(:first_name, :last_name, :email, :password)
       # params.fetch(:player, {})
+    end
+
+    def player_band_ids
+      Array(params.dig(:player, :band_ids)).reject(&:blank?).map(&:to_i)
+    end
+
+    def assign_player_bands
+      return if player_band_ids.blank?
+
+      bands = Band.where(id: player_band_ids)
+      bands.each { |band| authorize_band!(band) }
+      @player.bands = bands
+    end
+
+    def authorize_player!
+      return if admin?
+      return if (@player.bands & accessible_bands).any?
+
+      deny_access("You do not have access to that player.")
     end
 end

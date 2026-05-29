@@ -19,7 +19,9 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    @player = @invitation.band.players.build(registration_params)
+    @player = Player.new(registration_params)
+    @player.band = @invitation.band
+    @player.bands << @invitation.band
     @player.invitation_accepted_at = Time.current
 
     Player.transaction do
@@ -28,7 +30,7 @@ class RegistrationsController < ApplicationController
     end
 
     sign_in @player
-    redirect_to @player.band, notice: "Welcome to Setlist."
+    redirect_to @invitation.band, notice: "Welcome to Setlist."
   rescue ActiveRecord::RecordInvalid
     render :new, status: :unprocessable_entity
   end

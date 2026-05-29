@@ -14,7 +14,8 @@ class Player < ApplicationRecord
 
   # Relations
   # has_many :preparations...  complicated join
-  belongs_to :band
+  belongs_to :band, optional: true
+  has_and_belongs_to_many :bands, -> { alpha }
   has_and_belongs_to_many :instruments
 
   # Validations
@@ -33,6 +34,14 @@ class Player < ApplicationRecord
 
   def formatted_name
     return "#{first_name} #{last_name}"
+  end
+
+  def home_band
+    band || bands.alpha.first
+  end
+
+  def member_of?(band)
+    bands.exists?(band.id) || self.band == band
   end
 
   # Callbacks

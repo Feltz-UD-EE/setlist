@@ -25,7 +25,8 @@ instruments = instrument_names.index_with do |name|
 end
 
 band = Band.find_or_create_by!(name: "Silver Lake Band")
-Band.where.not(id: band.id).find_each(&:destroy!)
+bruce_bielawa_band = Band.find_or_create_by!(name: "Bruce Bielawa")
+Band.where.not(id: [band.id, bruce_bielawa_band.id]).find_each(&:destroy!)
 
 song_rows = [
   ["867-5309 Jenny", "Tommy Twotone", 200, "", ""],
@@ -162,6 +163,8 @@ end
 
 ListSong.delete_all
 List.delete_all
+Preparation.where(song_id: bruce_bielawa_band.songs.select(:id)).find_each(&:destroy!)
+bruce_bielawa_band.songs.find_each(&:destroy!)
 
 setlists = [
   {
@@ -240,5 +243,6 @@ admin.assign_attributes(
 )
 admin.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password") if admin.new_record? || admin.encrypted_password.blank?
 admin.save!
+admin.bands = [band, bruce_bielawa_band]
 
 Player.where.not(email: admin_email).find_each(&:destroy!)
