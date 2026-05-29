@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
-  helper_method :current_band
+  helper_method :current_band, :accessible_bands
 
   private
 
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_band
-    current_user&.band
+    current_user&.home_band
   end
 
   def admin?
@@ -23,11 +23,11 @@ class ApplicationController < ActionController::Base
   end
 
   def accessible_bands
-    admin? ? Band.all : Band.where(id: current_user.band_id)
+    admin? ? Band.all : current_user.bands
   end
 
   def authorize_band!(band)
-    return if admin? || band == current_user.band
+    return if admin? || current_user.member_of?(band)
 
     deny_access("You do not have access to that band.")
   end

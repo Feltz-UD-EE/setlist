@@ -5,7 +5,7 @@
 #
 class StaticController < ApplicationController
     def public_home
-        @bands = signed_in? ? accessible_bands.alpha : Band.none
+        @bands = signed_in? ? current_user.bands.alpha : Band.none
     end
 
     def about

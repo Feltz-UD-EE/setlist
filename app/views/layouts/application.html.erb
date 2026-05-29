@@ -29,9 +29,7 @@
         <div class="session-links">
           <% if signed_in? %>
             <span><%= current_user.email %></span>
-            <% if current_band.present? %>
-              <%= link_to "My Band", band_path(current_band) %>
-            <% end %>
+            <%= link_to "My Bands", public_home_path %>
             <%= button_to "Sign out", sign_out_path, method: :delete, class: "button button--small" %>
           <% else %>
             <%= link_to "Log in", sign_in_path, class: "button button--small button--play" %>

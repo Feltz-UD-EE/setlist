@@ -8,11 +8,11 @@
       <%= link_to "Log in", sign_in_path, class: "button button--play" %>
     </p>
   <% else %>
-    <h2>Your Bands</h2>
+    <h2>My Bands</h2>
     <div class="link-list">
-    <% @bands.each do |band| %>
-      <p><%= link_to band.name, band_path(band) %></p>
-    <% end %>
+      <% @bands.each do |band| %>
+        <p><%= link_to band.name, band_path(band) %></p>
+      <% end %>
     </div>
   <% end %>
 </div>
