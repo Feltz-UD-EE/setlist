@@ -44,5 +44,9 @@ class Player < ApplicationRecord
     bands.exists?(band.id) || self.band == band
   end
 
+  def send_password_reset_email
+    Clearance::PasswordMailer.change_password(self).deliver_now
+  end
+
   # Callbacks
 end
