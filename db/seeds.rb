@@ -241,7 +241,8 @@ admin.assign_attributes(
   band: band,
   admin: true
 )
-admin.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password") if admin.new_record? || admin.encrypted_password.blank?
+# admin.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password") if admin.new_record? || admin.encrypted_password.blank?
+admin.password = ENV.fetch("SEED_ADMIN_PASSWORD", "password")
 admin.save!
 admin.bands = [band, bruce_bielawa_band]
 
