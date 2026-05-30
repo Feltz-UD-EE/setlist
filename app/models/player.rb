@@ -45,4 +45,13 @@ class Player < ApplicationRecord
   end
 
   # Callbacks
+
+  # Override Clearance's default email dispatch to guarantee synchronous
+  # delivery. Clearance::User#send_password_reset_email calls deliver_later,
+  # but Solid Queue is not running in this deployment. Calling deliver_now
+  # here hands the message directly to the configured SMTP adapter (SendGrid)
+  # within the request cycle, so the email is never silently dropped.
+  def send_password_reset_email
+    ClearanceMailer.change_password(self).deliver_now
+  end
 end
