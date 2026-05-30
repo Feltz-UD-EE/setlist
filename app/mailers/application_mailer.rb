@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: -> { ENV.fetch("MAILER_SENDER", "reply@setlist.local") }
+  default from: -> { ENV.fetch("MAILER_SENDER") { ENV.fetch("MAIL_FROM", "reply@setlist.local") } }
   layout "mailer"
 
   after_action :log_mail_delivery

@@ -54,18 +54,31 @@ Rails.application.configure do
   # no queue process is required.
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.delivery_method = :smtp
+  app_host = ENV.fetch("APP_HOST") { ENV.fetch("RAILWAY_PUBLIC_DOMAIN", "example.com") }
+  config.action_mailer.default_url_options = {
+    host: app_host,
+    protocol: "https"
+  }
+
+  config.action_mailer.default_options = {
+    from: ENV.fetch("MAILER_SENDER") { ENV.fetch("MAIL_FROM", "reply@setlist.local") }
+  }
+
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.smtp_settings = {
-    address: ENV['SMTP_ADDRESS'],
-    port: ENV['SMTP_PORT'].to_i,
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: ENV['SMTP_AUTHENTICATION'],
-    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] == 'true'
-  }
-  config.action_mailer.default_params = { from: ENV['MAIL_FROM'] }
+
+  if ENV["SMTP_ADDRESS"].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch("SMTP_ADDRESS"),
+      port: ENV.fetch("SMTP_PORT", 587).to_i,
+      domain: ENV.fetch("SMTP_DOMAIN", app_host),
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
+      authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
+      enable_starttls_auto: !%w[false 0 no].include?(ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", "true").downcase)
+    }.compact
+  end
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
