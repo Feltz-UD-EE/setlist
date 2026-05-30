@@ -45,7 +45,9 @@ class Player < ApplicationRecord
   end
 
   def send_password_reset_email
+    Rails.logger.info("DEBUG: send_password_reset_email called for #{email}")
     Clearance::PasswordMailer.change_password(self).deliver_now
+    Rails.logger.info("DEBUG: email delivered for #{email}")
   end
 
   # Callbacks

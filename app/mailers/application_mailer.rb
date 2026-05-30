@@ -3,6 +3,7 @@ class ApplicationMailer < ActionMailer::Base
   layout "mailer"
 
   after_action :log_mail_delivery
+  after_delivery :log_mail_delivery
 
   private
 
