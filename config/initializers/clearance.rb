@@ -8,7 +8,7 @@ end
 
 # Force synchronous mail delivery for password resets
 module Clearance
-  class PasswordMailer < ActionMailer::Base
+  class PasswordMailer
     def change_password(user)
       @user = user
       mail(to: user.email, subject: "Change your password").deliver_now
