@@ -50,5 +50,10 @@ class Player < ApplicationRecord
     Rails.logger.info("DEBUG: email delivered for #{email}")
   end
 
+  def send_password_reset_on_change
+    send_password_reset_email
+  end
+
   # Callbacks
+  before_save :send_password_reset_on_change, if: :encrypted_password_changed?
 end
