@@ -49,9 +49,9 @@ Rails.application.configure do
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :solid_cache_store
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  # Solid Queue is disabled; mail is delivered synchronously via the
+  # synchronous_mail_delivery initializer. Use the default :async adapter so
+  # no queue process is required.
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.delivery_method = :smtp
