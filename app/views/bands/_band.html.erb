@@ -6,6 +6,7 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -13,6 +14,14 @@
       <tr>
         <td><%= player.first_name + " " + player.last_name %></td>
         <td><%= mail_to player.email %></td>
+        <td></td>
+      </tr>
+    <% end %>
+    <% @pending_invitations.each do |invitation| %>
+      <tr>
+        <td><em><%= invitation.invitee_name %></em></td>
+        <td><em><%= mail_to invitation.invitee_email %></em></td>
+        <td><span class="invitation-status">invitation sent on <%= invitation.created_at.strftime("%B %-d") %></span></td>
       </tr>
     <% end %>
     </tbody>

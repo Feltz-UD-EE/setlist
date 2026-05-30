@@ -806,10 +806,148 @@ input[type="submit"].offline-download__button {
   width: min(100%, 18rem);
 }
 
+.invitation-layout {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.75fr) minmax(22rem, 1.25fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.invite-form,
+.email-preview {
+  display: grid;
+  gap: 1rem;
+}
+
+.invite-form label {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.invite-form input {
+  width: 100%;
+}
+
+.invite-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.invite-send-panel {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.email-preview {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+}
+
+.email-preview h2 {
+  margin: 0;
+}
+
+.email-preview__meta {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.email-preview__body {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.email-preview__body p {
+  margin: 0;
+}
+
+.invitation-status {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.preparation-editor {
+  display: grid;
+  gap: 1rem;
+  margin: 1.6rem 0;
+  padding-top: 1rem;
+  border-top: 2px solid var(--line);
+}
+
+.preparation-editor__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.preparation-editor__header h2 {
+  margin: 0;
+}
+
+.preparation-editor__rows {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.preparation-row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(18rem, 1fr) auto;
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.preparation-row label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.preparation-row select,
+.preparation-row input[type="text"] {
+  width: 100%;
+}
+
+.preparation-remove-button {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #d63b35;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.preparation-remove-button:hover {
+  background: #a72b27;
+}
+
 .sheet-editor {
   display: grid;
   gap: 1.25rem;
   margin: 1.6rem 0;
+  padding-top: 1rem;
+  border-top: 2px solid var(--line);
 }
 
 .sheet-editor__header {
@@ -843,6 +981,11 @@ input[type="submit"].offline-download__button {
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 2px solid var(--line);
+}
+
+.sheet-lane--main {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .sheet-lane h3 {
@@ -1164,8 +1307,14 @@ input[type="submit"].offline-download__button {
 
   .play-setup-grid,
   .inline-form-grid,
+  .invitation-layout,
+  .preparation-row,
   .instrument-grid {
     grid-template-columns: 1fr;
+  }
+
+  .preparation-remove-button {
+    justify-self: start;
   }
 }
 

@@ -19,7 +19,7 @@ class Song < ApplicationRecord
   # Statics & enums
 
   # Relations
-  has_many :preparations
+  has_many :preparations, dependent: :destroy
   belongs_to :band
   has_many :list_songs
   has_many :lists, through: :list_songs
