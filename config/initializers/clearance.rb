@@ -4,5 +4,14 @@ Clearance.configure do |config|
   config.allow_sign_up = false
   config.routes = false
   config.cookie_expiration = ->(_cookies) { 30.days.from_now.utc }
-  config.rotate_csrf_on_sign_in = true
+end
+
+# Force synchronous mail delivery for password resets
+module Clearance
+  class PasswordMailer < ActionMailer::Base
+    def change_password(user)
+      @user = user
+      mail(to: user.email, subject: "Change your password").deliver_now
+    end
+  end
 end
