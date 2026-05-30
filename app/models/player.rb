@@ -51,4 +51,5 @@ class Player < ApplicationRecord
   end
 
   # Callbacks
+  after_password_reset :send_password_reset_email
 end
