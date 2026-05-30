@@ -67,7 +67,7 @@ Rails.application.configure do
     authentication: ENV['SMTP_AUTHENTICATION'],
     enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] == 'true'
   }
-  config.action_mailer.default_from = ENV['MAIL_FROM']
+  config.action_mailer.default_params = { from: ENV['MAIL_FROM'] }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
