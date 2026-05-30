@@ -18,7 +18,7 @@
     <% else %>
         <tr>
           <td>Band</td>
-          <td><%= form.select :band_id, (["-- Please select a band --"] + Band.all.collect {|t| [ t.name, t.id ] }) %></td>
+          <td><%= form.collection_select :band_id, @song_form_bands, :id, :name, { include_blank: "-- Please select a band --" } %></td>
         </tr>
       <% end %>
       <tr>
@@ -47,6 +47,54 @@
       </tr>
     </table>
 
+    <section class="preparation-editor" data-controller="preparation-editor">
+      <div class="preparation-editor__header">
+        <h2>Preparations</h2>
+        <button type="button" class="button button--small" data-action="preparation-editor#add">Add more</button>
+      </div>
+
+      <div class="preparation-editor__rows" data-preparation-editor-target="list">
+        <% @preparations_for_form.each do |preparation| %>
+          <div class="preparation-row" data-preparation-row data-persisted="true">
+            <%= hidden_field_tag "preparations[#{preparation.id}][id]", preparation.id %>
+            <%= hidden_field_tag "preparations[#{preparation.id}][_destroy]", "0", data: { preparation_destroy_input: true } %>
+
+            <label>
+              Instrument
+              <%= select_tag "preparations[#{preparation.id}][instrument_id]", options_from_collection_for_select(@instruments, :id, :name, preparation.instrument_id), prompt: "Choose an instrument" %>
+            </label>
+
+            <label>
+              Instructions
+              <%= text_field_tag "preparations[#{preparation.id}][instruction]", preparation.instruction %>
+            </label>
+
+            <button type="button" class="preparation-remove-button" aria-label="Remove preparation" data-action="preparation-editor#remove">X</button>
+          </div>
+        <% end %>
+      </div>
+
+      <div hidden data-preparation-editor-target="destroyList"></div>
+
+      <template data-preparation-editor-target="template">
+        <div class="preparation-row" data-preparation-row>
+          <%= hidden_field_tag "preparations[NEW_PREPARATION][_destroy]", "0", data: { preparation_destroy_input: true } %>
+
+          <label>
+            Instrument
+            <%= select_tag "preparations[NEW_PREPARATION][instrument_id]", options_from_collection_for_select(@instruments, :id, :name), prompt: "Choose an instrument" %>
+          </label>
+
+          <label>
+            Instructions
+            <%= text_field_tag "preparations[NEW_PREPARATION][instruction]", nil %>
+          </label>
+
+          <button type="button" class="preparation-remove-button" aria-label="Remove preparation" data-action="preparation-editor#remove">X</button>
+        </div>
+      </template>
+    </section>
+
     <section class="sheet-editor" data-controller="sheet-editor">
       <div class="sheet-editor__header">
         <h2>Sheets</h2>
@@ -73,7 +121,7 @@
       </dialog>
       <%= form.file_field :alternate_sheet_imgs, accept: "image/*", multiple: true, class: "visually-hidden", data: { sheet_editor_target: "alternateInput", action: "change->sheet-editor#alternateSheetSelected" } %>
 
-      <div class="sheet-lane">
+      <div class="sheet-lane sheet-lane--main">
         <h3>Main sheets</h3>
         <div class="sheet-lane__items" data-sheet-editor-target="lane mainPreview" data-sheet-lane="main">
           <% @main_sheets.each do |sheet| %>

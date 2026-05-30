@@ -10,7 +10,8 @@ class BandsController < ApplicationController
   def show
     authorize_band!(@band)
     @lists = @band.lists.alpha
-    @players = @band.players
+    @players = @band.players.reorder(created_at: :asc)
+    @pending_invitations = @band.band_invitations.available.with_invitee_details.oldest_first
     @songs = @band.songs.alpha
   end
 

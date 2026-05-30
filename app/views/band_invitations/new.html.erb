@@ -3,19 +3,51 @@
 <h1>Invite a new member</h1>
 <p class="meta-line">Band: <%= @band.name %></p>
 
-<p>
-  <%= link_to "Open email invitation", @mailto_href, class: "button button--play" %>
-</p>
+<div class="invitation-layout" data-controller="invitation-preview">
+  <section>
+    <%= form_with url: band_invitation_path(@band), scope: :invitation, class: "invite-form" do |form| %>
+      <label>
+        Name
+        <%= form.text_field :name, value: @invitee_name, required: true, data: { invitation_preview_target: "name", action: "input->invitation-preview#update" } %>
+      </label>
 
-<dl class="song-detail-list">
-  <div>
-    <dt>Invite link</dt>
-    <dd><%= @invite_url %></dd>
-  </div>
-  <div>
-    <dt>Expires</dt>
-    <dd><%= @invitation.expires_at.strftime("%B %-d, %Y") %></dd>
-  </div>
-</dl>
+      <label>
+        Email
+        <%= form.email_field :email, value: @invitee_email, required: true, data: { invitation_preview_target: "email", action: "input->invitation-preview#update" } %>
+      </label>
 
-<p class="action-row"><%= link_to "Back to #{@band.name}", band_path(@band), class: "button" %></p>
+      <div class="invite-form__actions">
+        <%= form.submit "Send Invitation", class: "button button--play", disabled: @invitee_name.blank? || @invitee_email.blank?, data: { invitation_preview_target: "submit" } %>
+        <%= link_to "Back to #{@band.name}", band_path(@band), class: "button" %>
+      </div>
+    <% end %>
+
+    <% if @invitation.present? %>
+      <div class="invite-send-panel">
+        <p><strong>Invitation sent.</strong></p>
+        <p class="meta-line">This invitation expires on <%= @invitation.expires_at.strftime("%B %-d, %Y") %>.</p>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="email-preview">
+    <h2>Email preview</h2>
+    <div class="email-preview__meta">
+      <strong>To:</strong>
+      <span data-invitation-preview-target="to"><%= @invitee_email.presence || "recipient@example.com" %></span>
+    </div>
+    <div class="email-preview__meta">
+      <strong>Subject:</strong>
+      <span>Join <%= @band.name %> on Setlist</span>
+    </div>
+
+    <div class="email-preview__body">
+      <p>Hello <span data-invitation-preview-target="previewName"><%= @invitee_name.presence || "&lt;name&gt;".html_safe %></span>!</p>
+      <p>You've been invited to join Setlist, a service for managing your performance and rehearsal music.  The band that invited you is <%= @band.name %>.</p>
+      <p>Please click on the link below to create your account - this invitation expires in 14 days.</p>
+      <p><%= @invite_url %></p>
+      <p>Setlist is currently in closed beta - please submit any bugs or feature requests to <%= mail_to "john.feltz+setlist@gmail.com", "the site creators" %>.</p>
+      <p>Welcome and enjoy!</p>
+    </div>
+  </section>
+</div>

@@ -8,12 +8,17 @@ class BandInvitation < ApplicationRecord
 
   validates :token_digest, presence: true, uniqueness: true
   validates :expires_at, presence: true
+  validates :invitee_name, presence: true, on: :create
+  validates :invitee_email, presence: true, on: :create
 
   attr_accessor :token
 
   before_validation :ensure_token, on: :create
 
   scope :available, -> { where(used_at: nil).where("expires_at > ?", Time.current) }
+  scope :with_invitee_details, -> { where.not(invitee_name: [nil, ""]).where.not(invitee_email: [nil, ""]) }
+  scope :oldest_first, -> { order(created_at: :asc) }
+  scope :recent_first, -> { order(created_at: :desc) }
 
   def self.digest(token)
     Digest::SHA256.hexdigest(token.to_s)

@@ -100,6 +100,7 @@ class SongsController < ApplicationController
     def save_song_with_sheets
       Song.transaction do
         @song.save!
+        update_preparations
         update_existing_sheets
         attach_main_sheets
         attach_alternate_sheets
@@ -154,6 +155,38 @@ class SongsController < ApplicationController
       end
     end
 
+    def update_preparations
+      preparation_update_params.each do |key, raw_preparation_params|
+        preparation_params = raw_preparation_params.to_h
+        preparation_id = preparation_params["id"].presence || (key.to_s if key.to_s.match?(/\A\d+\z/))
+
+        if ActiveModel::Type::Boolean.new.cast(preparation_params["_destroy"])
+          @song.preparations.find(preparation_id).destroy! if preparation_id.present?
+          next
+        end
+
+        instrument_id = preparation_params["instrument_id"].presence
+        instruction = preparation_params["instruction"].to_s.strip
+        next if instrument_id.blank? && instruction.blank?
+
+        if preparation_id.present?
+          @song.preparations.find(preparation_id).update!(
+            instrument_id: instrument_id,
+            instruction: instruction
+          )
+        else
+          @song.preparations.create!(
+            instrument_id: instrument_id,
+            instruction: instruction
+          )
+        end
+      end
+    end
+
+    def preparation_update_params
+      params[:preparations].present? ? params.require(:preparations).permit! : {}
+    end
+
     def sheet_update_params
       params[:sheets].present? ? params.require(:sheets).permit! : {}
     end
@@ -195,6 +228,14 @@ class SongsController < ApplicationController
       @main_sheets = @song.persisted? ? @song.main_sheets : Sheet.none
       @alternate_sheet_groups = @song.persisted? ? @song.alternate_sheet_groups : {}
       @instruments = Instrument.alpha
+      @preparations_for_form = preparations_for_form
+      @song_form_bands = current_user.bands.alpha
       @title ||= @song.band.present? ? "New song for #{@song.band.name}" : "New song"
+    end
+
+    def preparations_for_form
+      return [] unless @song.persisted?
+
+      @song.preparations.includes(:instrument).to_a.sort_by { |preparation| preparation.instrument&.name.to_s.downcase }
     end
 end

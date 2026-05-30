@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   # Restore :new and :create when public band signup is ready.
   # resources :bands do
   resources :bands, except: [:new, :create] do
-    resource :invitation, only: [:new], controller: "band_invitations"
+    resource :invitation, only: [:new, :create], controller: "band_invitations"
   end
   resources :players
   resources :lists
