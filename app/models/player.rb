@@ -55,5 +55,5 @@ class Player < ApplicationRecord
   end
 
   # Callbacks
-  before_save :send_password_reset_on_change, if: :encrypted_password_changed?
+  after_update :send_password_reset_on_update, if: :saved_change_to_encrypted_password?
 end
