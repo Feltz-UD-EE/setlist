@@ -30,7 +30,9 @@ Rails.application.routes.draw do
     resource :invitation, only: [:new, :create], controller: "band_invitations"
   end
   resources :players
-  resources :lists
+  resources :lists do
+    post :copy, on: :member
+  end
   resources :songs
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

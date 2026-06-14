@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-  before_action :set_list, only: %i[ show edit update destroy ]
+  before_action :set_list, only: %i[ show edit update destroy copy ]
 
   # GET /lists or /lists.json
   def index
@@ -71,6 +71,26 @@ class ListsController < ApplicationController
       format.html { redirect_to lists_path, status: :see_other, notice: "List was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def copy
+    authorize_band!(@list.band)
+    copied_list = nil
+
+    List.transaction do
+      copied_list = @list.dup
+      copied_list.name = "Copy of #{@list.name}"
+      copied_list.save!
+
+      @list.list_songs.order(:position, :id).each do |list_song|
+        copied_list.list_songs.create!(
+          song: list_song.song,
+          position: list_song.position
+        )
+      end
+    end
+
+    redirect_to edit_list_path(copied_list), notice: "List was successfully copied."
   end
 
   private
