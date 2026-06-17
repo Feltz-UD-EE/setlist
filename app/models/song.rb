@@ -27,6 +27,7 @@ class Song < ApplicationRecord
 
   # Validations
   validates :title, presence: true
+  validate :duration_entry_must_be_seconds_or_minutes_and_seconds
 
   # Scopes
   scope :alpha, -> { order(title: :asc) }
@@ -35,7 +36,30 @@ class Song < ApplicationRecord
   # Class methods
 
   # Instance methods
+  def duration=(value)
+    self.invalid_duration_entry = nil
+
+    if value.is_a?(String)
+      normalized_value = value.strip
+
+      if normalized_value.blank?
+        super(nil)
+      elsif normalized_value.match?(/\A\d+\z/)
+        super(normalized_value)
+      elsif (duration_parts = normalized_value.match(/\A(\d+):([0-5]?\d)\z/))
+        super((duration_parts[1].to_i * 60) + duration_parts[2].to_i)
+      else
+        self.invalid_duration_entry = value
+        super(nil)
+      end
+    else
+      super
+    end
+  end
+
   def duration_pretty
+    return "" if duration.nil?
+
     seconds = duration % 60
     minutes = (duration/60)
     return format("%2d:%02d", minutes, seconds)
@@ -95,4 +119,14 @@ class Song < ApplicationRecord
     [{ instrument: nil, sheets: main_sheets.to_a, alternate: false }]
   end
   # Callbacks
+
+  private
+
+  attr_accessor :invalid_duration_entry
+
+  def duration_entry_must_be_seconds_or_minutes_and_seconds
+    return if invalid_duration_entry.blank?
+
+    errors.add(:duration, "must be entered as seconds or mm:ss")
+  end
 end
