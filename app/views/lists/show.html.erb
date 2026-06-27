@@ -17,7 +17,7 @@
 
   <div class="setlist-actions setlist-actions--secondary">
     <%= link_to "Edit setlist", edit_list_path(@list), class: "button button--small" %>
-    <%= button_to "Make a Copy", copy_list_path(@list), method: :post, class: "button button--small" %>
+    <%= button_to "Copy", copy_list_path(@list), method: :post, class: "button button--small" %>
     <%= button_to "Delete setlist", @list, method: :delete, class: "button button--small button--danger" %>
   </div>
 </div>
