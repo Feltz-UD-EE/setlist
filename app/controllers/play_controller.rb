@@ -1,5 +1,6 @@
 require "base64"
 require "marcel"
+require "stringio"
 
 class PlayController < ApplicationController
   # Select a list to play through (w/ 0-n instruments): renders the #play action after submitting fo
@@ -118,9 +119,44 @@ class PlayController < ApplicationController
   end
 
   def data_uri_for(sheet)
-    return if sheet.img.blank? || sheet.img.path.blank? || !File.exist?(sheet.img.path)
+    uploader = sheet.img
+    return if uploader.blank?
 
-    mime_type = Marcel::MimeType.for(Pathname.new(sheet.img.path))
-    "data:#{mime_type};base64,#{Base64.strict_encode64(File.binread(sheet.img.path))}"
+    content = carrierwave_file_contents(uploader)
+    return if content.blank?
+
+    mime_type = carrierwave_mime_type(uploader, content)
+    "data:#{mime_type};base64,#{Base64.strict_encode64(content)}"
+  rescue StandardError => error
+    Rails.logger.warn("Unable to embed sheet #{sheet.id} for offline download: #{error.class}: #{error.message}")
+    nil
+  end
+
+  def carrierwave_file_contents(uploader)
+    carrierwave_file = uploader.file
+    if carrierwave_file.respond_to?(:read)
+      content = carrierwave_file.read
+      carrierwave_file.rewind if carrierwave_file.respond_to?(:rewind)
+      return content
+    end
+
+    return uploader.read if uploader.respond_to?(:read)
+
+    path = uploader.path if uploader.respond_to?(:path)
+    return File.binread(path) if path.present? && File.exist?(path)
+
+    nil
+  end
+
+  def carrierwave_mime_type(uploader, content)
+    path = uploader.path if uploader.respond_to?(:path)
+    return Marcel::MimeType.for(Pathname.new(path)) if path.present? && File.exist?(path)
+
+    name = if uploader.respond_to?(:identifier)
+      uploader.identifier
+    elsif uploader.respond_to?(:filename)
+      uploader.filename
+    end
+    Marcel::MimeType.for(StringIO.new(content), name: name.to_s)
   end
 end

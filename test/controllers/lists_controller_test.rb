@@ -37,14 +37,14 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "show has make a copy button" do
+  test "show has copy button" do
     list = List.create!(name: "Rocking 1", band: @band)
 
     get list_url(list)
 
     assert_response :success
     assert_select "form[action=?][method='post']", copy_list_path(list) do
-      assert_select "button", "Make a Copy"
+      assert_select "button", "Copy"
     end
   end
 
