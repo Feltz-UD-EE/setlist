@@ -22,39 +22,39 @@
   </div>
   <div>
     <dt>Phone</dt>
-    <dd><%= gig.phone.presence || "Not specified" %></dd>
+    <dd><%= gig.phone.presence %></dd>
   </div>
   <div>
     <dt>Venue</dt>
-    <dd><%= gig.venue.presence || "Not specified" %></dd>
+    <dd><%= gig.venue.presence %></dd>
   </div>
   <div>
     <dt>Address</dt>
-    <dd><%= gig.address.presence || "Not specified" %></dd>
+    <dd><%= gig.address.present? ? simple_format(gig.address) : "" %></dd>
   </div>
   <div>
     <dt>Fee</dt>
-    <dd><%= gig.fee.present? ? number_to_currency(gig.fee) : "Not specified" %></dd>
+    <dd><%= gig.fee.present? ? number_to_currency(gig.fee) : "" %></dd>
   </div>
   <div>
     <dt>Load-in</dt>
-    <dd><%= gig.loadin&.strftime("%-I:%M %p") || "Not specified" %></dd>
+    <dd><%= gig.loadin&.strftime("%-I:%M %p") %></dd>
   </div>
   <div>
     <dt>Soundcheck</dt>
-    <dd><%= gig.soundcheck&.strftime("%-I:%M %p") || "Not specified" %></dd>
+    <dd><%= gig.soundcheck&.strftime("%-I:%M %p") %></dd>
   </div>
   <div>
     <dt>Start</dt>
-    <dd><%= gig.start&.strftime("%-I:%M %p") || "Not specified" %></dd>
+    <dd><%= gig.start&.strftime("%-I:%M %p") %></dd>
   </div>
   <div>
-    <dt>End</dt>
-    <dd><%= gig.end&.strftime("%-I:%M %p") || "Not specified" %></dd>
+    <dt>Finish</dt>
+    <dd><%= gig.end&.strftime("%-I:%M %p") %></dd>
   </div>
   <div>
     <dt>Notes</dt>
-    <dd><%= gig.notes.present? ? simple_format(gig.notes) : "None" %></dd>
+    <dd><%= gig.notes.present? ? simple_format(gig.notes) : "" %></dd>
   </div>
 </dl>
 

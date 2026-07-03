@@ -66,10 +66,11 @@ class ListsController < ApplicationController
   # DELETE /lists/1 or /lists/1.json
   def destroy
     authorize_band!(@list.band)
+    band = @list.band
     @list.destroy!
 
     respond_to do |format|
-      format.html { redirect_to lists_path, status: :see_other, notice: "List was successfully destroyed." }
+      format.html { redirect_to band_path(band), status: :see_other, notice: "List was successfully deleted." }
       format.json { head :no_content }
     end
   end

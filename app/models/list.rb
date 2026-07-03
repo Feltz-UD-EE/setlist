@@ -14,9 +14,9 @@ class List < ApplicationRecord
 
   # Relations
   belongs_to :band
-  has_many :gig_lists
+  has_many :gig_lists, dependent: :destroy
   has_many :gigs, -> { order("gigs.date DESC") }, through: :gig_lists
-  has_many :list_songs
+  has_many :list_songs, dependent: :destroy
   has_many :songs, -> { order('list_songs.position') }, through: :list_songs
 
   # Validations

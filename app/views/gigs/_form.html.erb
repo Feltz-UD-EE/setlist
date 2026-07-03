@@ -52,36 +52,36 @@
     </label>
 
     <label>
-      Address
-      <%= form.text_field :address %>
-    </label>
-
-    <label>
       Fee
       <%= form.number_field :fee, step: "0.01" %>
     </label>
 
     <label>
       Load-in
-      <%= form.time_field :loadin %>
+      <%= form.time_field :loadin, value: gig_time_field_value(gig, :loadin) %>
     </label>
 
     <label>
       Soundcheck
-      <%= form.time_field :soundcheck %>
+      <%= form.time_field :soundcheck, value: gig_time_field_value(gig, :soundcheck) %>
     </label>
 
     <label>
       Start
-      <%= form.time_field :start %>
+      <%= form.time_field :start, value: gig_time_field_value(gig, :start) %>
     </label>
 
     <label>
-      End
-      <%= form.time_field :end %>
+      Finish
+      <%= form.time_field :end, value: gig_time_field_value(gig, :end) %>
     </label>
 
-    <label class="gig-form-grid__wide">
+    <label>
+      Address
+      <%= form.text_area :address, rows: 5 %>
+    </label>
+
+    <label>
       Notes
       <%= form.text_area :notes, rows: 5 %>
     </label>
