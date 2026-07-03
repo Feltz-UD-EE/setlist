@@ -63,7 +63,26 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
       delete list_url(@list)
     end
 
-    assert_redirected_to lists_url
+    assert_redirected_to band_url(@band)
+  end
+
+  test "destroy removes gig assignments and redirects to band" do
+    gig = Gig.create!(
+      band: @band,
+      booked_by: @player,
+      date: Date.current + 1.day,
+      client: "Wedding",
+      contact: "Client"
+    )
+    gig.gig_lists.create!(list: @list, position: 1)
+
+    assert_difference("GigList.count", -1) do
+      assert_difference("List.count", -1) do
+        delete list_url(@list)
+      end
+    end
+
+    assert_redirected_to band_url(@band)
   end
 
   test "copy creates editable duplicate with same songs in order" do
