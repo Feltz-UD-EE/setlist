@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= @gig.client %></h1>
+
+<%= render "details", gig: @gig, show_retrospective: true %>
+
+<div class="setlist-footer-actions">
+  <div class="setlist-actions setlist-actions--primary">
+    <%= link_to "All Upcoming Gigs", upcoming_gigs_path(band_id: @gig.band_id), class: "button" %>
+    <%= link_to "All Past Gigs", past_gigs_path(band_id: @gig.band_id), class: "button" %>
+  </div>
+
+  <div class="setlist-actions setlist-actions--secondary">
+    <%= link_to "Edit", edit_gig_path(@gig), class: "button button--small" %>
+    <%= button_to "Rebook", rebook_gig_path(@gig), method: :post, class: "button button--small" %>
+    <% if @gig.past? %>
+      <%= link_to "Add Retrospective", retrospective_gig_path(@gig), class: "button button--small button--primary" %>
+    <% end %>
+  </div>
+</div>

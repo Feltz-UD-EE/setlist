@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Upcoming Gigs</h1>
+
+<%= render "index_table", gigs: @gigs, past: false %>
+
+<p class="action-row">
+  <% if @band.present? %>
+    <%= link_to "Book a Gig", new_gig_path(band_id: @band.id), class: "button button--play" %>
+    <%= link_to "Back to #{@band.name}", band_path(@band), class: "button" %>
+  <% else %>
+    <%= link_to "My Bands", bands_path, class: "button" %>
+  <% end %>
+</p>

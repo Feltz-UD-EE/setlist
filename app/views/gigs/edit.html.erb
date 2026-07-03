@@ -1,0 +1,9 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Edit Gig</h1>
+
+<p class="meta-line">
+  Created: <%= @gig.created_at.strftime("%b %-d, %Y") %> | Updated: <%= @gig.updated_at.strftime("%b %-d, %Y") %>
+</p>
+
+<%= render "form", gig: @gig %>

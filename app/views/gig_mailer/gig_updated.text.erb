@@ -1,0 +1,28 @@
+Updated gig info - <%= @gig.date.strftime("%b %-d, %Y") %>
+
+Band: <%= @gig.band.name %>
+Booked by: <%= @gig.booked_by.formatted_name %>
+Created: <%= @gig.created_at.strftime("%b %-d, %Y") %>
+Updated: <%= @gig.updated_at.strftime("%b %-d, %Y") %>
+
+Date: <%= @gig.date.strftime("%b %-d, %Y") %>
+Client: <%= @gig.client %>
+Contact: <%= @gig.contact %>
+Phone: <%= @gig.phone.presence || "Not specified" %>
+Venue: <%= @gig.venue.presence || "Not specified" %>
+Address: <%= @gig.address.presence || "Not specified" %>
+Fee: <%= @gig.fee.present? ? number_to_currency(@gig.fee) : "Not specified" %>
+Load-in: <%= @gig.loadin&.strftime("%-I:%M %p") || "Not specified" %>
+Soundcheck: <%= @gig.soundcheck&.strftime("%-I:%M %p") || "Not specified" %>
+Start: <%= @gig.start&.strftime("%-I:%M %p") || "Not specified" %>
+End: <%= @gig.end&.strftime("%-I:%M %p") || "Not specified" %>
+Notes: <%= @gig.notes.presence || "None" %>
+
+Set Lists:
+<% if @gig.lists.any? %>
+<% @gig.lists.each do |list| %>
+- <%= list.name %>
+<% end %>
+<% else %>
+No set lists assigned.
+<% end %>

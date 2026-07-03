@@ -1,0 +1,85 @@
+<div class="gig-meta">
+  <p><strong>Band:</strong> <%= gig.band.name %></p>
+  <p><strong>Booked by:</strong> <%= gig.booked_by.formatted_name %></p>
+</div>
+
+<p class="meta-line">
+  Created: <%= gig.created_at.strftime("%b %-d, %Y") %> | Updated: <%= gig.updated_at.strftime("%b %-d, %Y") %>
+</p>
+
+<dl class="song-detail-list gig-detail-list">
+  <div>
+    <dt>Date</dt>
+    <dd><%= gig.date.strftime("%b %-d, %Y") %></dd>
+  </div>
+  <div>
+    <dt>Client</dt>
+    <dd><%= gig.client %></dd>
+  </div>
+  <div>
+    <dt>Contact</dt>
+    <dd><%= gig.contact %></dd>
+  </div>
+  <div>
+    <dt>Phone</dt>
+    <dd><%= gig.phone.presence || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Venue</dt>
+    <dd><%= gig.venue.presence || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Address</dt>
+    <dd><%= gig.address.presence || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Fee</dt>
+    <dd><%= gig.fee.present? ? number_to_currency(gig.fee) : "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Load-in</dt>
+    <dd><%= gig.loadin&.strftime("%-I:%M %p") || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Soundcheck</dt>
+    <dd><%= gig.soundcheck&.strftime("%-I:%M %p") || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Start</dt>
+    <dd><%= gig.start&.strftime("%-I:%M %p") || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>End</dt>
+    <dd><%= gig.end&.strftime("%-I:%M %p") || "Not specified" %></dd>
+  </div>
+  <div>
+    <dt>Notes</dt>
+    <dd><%= gig.notes.present? ? simple_format(gig.notes) : "None" %></dd>
+  </div>
+</dl>
+
+<h2>Set Lists</h2>
+<% if gig.lists.any? %>
+  <ul class="link-list">
+    <% gig.lists.each do |list| %>
+      <li>
+        <% if local_assigns.fetch(:link_setlists, true) %>
+          <%= link_to list.name, list_path(list) %>
+        <% else %>
+          <%= list.name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No set lists assigned.</p>
+<% end %>
+
+<% if local_assigns.fetch(:show_retrospective, false) && gig.past? %>
+  <h2>Retrospective</h2>
+  <% if gig.retrospective.present? %>
+    <%= simple_format(gig.retrospective) %>
+  <% else %>
+    <p>No retrospective has been added yet.</p>
+  <% end %>
+<% end %>

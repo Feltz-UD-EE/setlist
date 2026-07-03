@@ -34,4 +34,15 @@
     <% end %>
     </tbody>
   </table>
+
+  <h2>Gigs</h2>
+  <% if @gigs&.any? %>
+    <ul class="link-list">
+      <% @gigs.each do |gig| %>
+        <li><%= link_to "#{gig.date.strftime("%b %-d, %Y")} - #{gig.client}", gig_path(gig) %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>This setlist is not assigned to any gigs yet.</p>
+  <% end %>
 </div>

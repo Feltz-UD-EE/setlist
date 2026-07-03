@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_17_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_03_083431) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -38,6 +38,41 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_17_120000) do
     t.bigint "player_id", null: false
     t.index ["band_id", "player_id"], name: "index_bands_players_on_band_id_and_player_id", unique: true
     t.index ["player_id", "band_id"], name: "index_bands_players_on_player_id_and_band_id"
+  end
+
+  create_table "gig_lists", force: :cascade do |t|
+    t.bigint "gig_id", null: false
+    t.bigint "list_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gig_id", "list_id"], name: "index_gig_lists_on_gig_id_and_list_id", unique: true
+    t.index ["gig_id", "position"], name: "index_gig_lists_on_gig_id_and_position"
+    t.index ["gig_id"], name: "index_gig_lists_on_gig_id"
+    t.index ["list_id"], name: "index_gig_lists_on_list_id"
+  end
+
+  create_table "gigs", force: :cascade do |t|
+    t.date "date", null: false
+    t.bigint "band_id", null: false
+    t.string "client", null: false
+    t.string "contact", null: false
+    t.string "phone"
+    t.string "address"
+    t.bigint "booked_by_id", null: false
+    t.decimal "fee", precision: 10, scale: 2
+    t.string "venue"
+    t.time "soundcheck"
+    t.time "start"
+    t.time "end"
+    t.text "notes"
+    t.text "retrospective"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.time "loadin"
+    t.index ["band_id", "date"], name: "index_gigs_on_band_id_and_date"
+    t.index ["band_id"], name: "index_gigs_on_band_id"
+    t.index ["booked_by_id"], name: "index_gigs_on_booked_by_id"
   end
 
   create_table "instruments", force: :cascade do |t|
@@ -134,6 +169,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_17_120000) do
   end
 
   add_foreign_key "band_invitations", "bands"
+  add_foreign_key "gig_lists", "gigs"
+  add_foreign_key "gig_lists", "lists"
+  add_foreign_key "gigs", "bands"
+  add_foreign_key "gigs", "players", column: "booked_by_id"
   add_foreign_key "sheet_instruments", "instruments"
   add_foreign_key "sheet_instruments", "sheets"
 end

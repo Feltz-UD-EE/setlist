@@ -15,6 +15,7 @@ class Player < ApplicationRecord
   # Relations
   # has_many :preparations...  complicated join
   belongs_to :band, optional: true
+  has_many :booked_gigs, class_name: "Gig", foreign_key: :booked_by_id
   has_and_belongs_to_many :bands, -> { alpha }
   has_and_belongs_to_many :instruments
 
