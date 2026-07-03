@@ -13,6 +13,8 @@ class BandsController < ApplicationController
     @players = @band.players.reorder(created_at: :asc)
     @pending_invitations = @band.band_invitations.available.with_invitee_details.oldest_first
     @songs = @band.songs.alpha
+    @past_gigs = @band.gigs.past.limit(5)
+    @upcoming_gigs = @band.gigs.upcoming.limit(5)
   end
 
   # Band creation is disabled during closed beta.

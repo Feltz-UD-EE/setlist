@@ -33,6 +33,18 @@ Rails.application.routes.draw do
   resources :lists do
     post :copy, on: :member
   end
+  resources :gigs, except: [ :index, :destroy ] do
+    collection do
+      get :past
+      get :upcoming
+    end
+
+    member do
+      post :rebook
+      get :retrospective
+      patch :retrospective, action: :update_retrospective
+    end
+  end
   resources :songs
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

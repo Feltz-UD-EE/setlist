@@ -13,6 +13,7 @@ class Band < ApplicationRecord
   # has_many :preparations...  complicated join
   has_and_belongs_to_many :players, -> { alpha }
   has_many :band_invitations
+  has_many :gigs
   has_many :lists
   has_many :songs
 

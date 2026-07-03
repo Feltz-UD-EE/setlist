@@ -1,0 +1,140 @@
+<%= form_with(model: gig) do |form| %>
+  <% if gig.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(gig.errors.count, "error") %> prohibited this gig from being saved:</h2>
+
+      <ul>
+        <% gig.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :band_id %>
+
+  <div class="gig-meta">
+    <p><strong>Band:</strong> <%= gig.band.name %></p>
+    <p><strong>Booked by:</strong> <%= gig.booked_by.formatted_name %></p>
+  </div>
+
+  <% if @source_gig&.retrospective.present? %>
+    <section class="gig-retrospective-note">
+      <h2>Prior Retrospective</h2>
+      <%= simple_format(@source_gig.retrospective) %>
+    </section>
+  <% end %>
+
+  <div class="gig-form-grid">
+    <label>
+      Date
+      <%= form.date_field :date %>
+    </label>
+
+    <label>
+      Client
+      <%= form.text_field :client %>
+    </label>
+
+    <label>
+      Contact
+      <%= form.text_field :contact %>
+    </label>
+
+    <label>
+      Phone
+      <%= form.telephone_field :phone %>
+    </label>
+
+    <label>
+      Venue
+      <%= form.text_field :venue %>
+    </label>
+
+    <label>
+      Address
+      <%= form.text_field :address %>
+    </label>
+
+    <label>
+      Fee
+      <%= form.number_field :fee, step: "0.01" %>
+    </label>
+
+    <label>
+      Load-in
+      <%= form.time_field :loadin %>
+    </label>
+
+    <label>
+      Soundcheck
+      <%= form.time_field :soundcheck %>
+    </label>
+
+    <label>
+      Start
+      <%= form.time_field :start %>
+    </label>
+
+    <label>
+      End
+      <%= form.time_field :end %>
+    </label>
+
+    <label class="gig-form-grid__wide">
+      Notes
+      <%= form.text_area :notes, rows: 5 %>
+    </label>
+  </div>
+
+  <section class="setlist-builder" data-controller="gig-setlist-builder">
+    <div class="setlist-panel setlist-panel--selected">
+      <div class="setlist-panel__header">
+        <h2>Gig set lists</h2>
+        <p><span data-gig-setlist-builder-target="count"><%= @selected_list_ids.length %></span> set lists</p>
+      </div>
+
+      <ol class="selected-song-list" data-gig-setlist-builder-target="selectedList">
+        <% @selected_list_ids.each do |list_id| %>
+          <% list = @band_list_by_id[list_id.to_i] %>
+          <% next if list.blank? %>
+          <li class="selected-song" draggable="true" data-setlist-id="<%= list.id %>" data-gig-setlist-builder-target="selectedSetlist">
+            <span class="drag-handle" aria-hidden="true">::</span>
+            <span class="selected-song__title"><%= list.name %></span>
+            <span class="selected-song__meta"><%= pluralize(list.songs.length, "song") %></span>
+            <button type="button" class="remove-song-button" aria-label="Remove <%= list.name %>" data-action="gig-setlist-builder#remove">X</button>
+            <input type="hidden" name="gig_list_ids[]" value="<%= list.id %>">
+          </li>
+        <% end %>
+      </ol>
+    </div>
+
+    <div class="setlist-panel setlist-panel--library">
+      <div class="setlist-panel__header">
+        <h2>Band set lists</h2>
+        <p><span data-gig-setlist-builder-target="libraryCount"><%= @band_lists.length %></span> available</p>
+      </div>
+
+      <div class="song-library">
+        <% @band_lists.each do |list| %>
+          <button
+            type="button"
+            class="library-song"
+            data-gig-setlist-builder-target="librarySetlist"
+            data-action="gig-setlist-builder#add"
+            data-setlist-id="<%= list.id %>"
+            data-setlist-name="<%= list.name %>"
+            data-setlist-notes="<%= pluralize(list.songs.length, "song") %>">
+            <span><%= list.name %></span>
+            <small><%= pluralize(list.songs.length, "song") %></small>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <p class="action-row">
+    <%= form.submit gig.persisted? ? "Save Gig" : "Book Gig", class: "button--play" %>
+    <%= link_to "Cancel", gig.persisted? ? gig_path(gig) : band_path(gig.band), class: "button" %>
+  </p>
+<% end %>

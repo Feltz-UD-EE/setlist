@@ -10,6 +10,7 @@ class ListsController < ApplicationController
   def show
     authorize_band!(@list.band)
     @songs = @list.songs
+    @gigs = @list.gigs
   end
 
   # GET /lists/new

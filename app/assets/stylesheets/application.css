@@ -540,6 +540,18 @@ input[type="submit"].offline-download__button {
   margin: 0;
 }
 
+.band-gig-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+  margin: 1.5rem 0;
+}
+
+.band-gig-summary h2 {
+  margin-top: 0;
+}
+
 .meta-line {
   color: var(--muted);
   font-weight: 700;
@@ -876,6 +888,63 @@ input[type="submit"].offline-download__button {
   font-size: 0.95rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.gig-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  margin: 0 0 1rem;
+}
+
+.gig-meta p {
+  margin: 0;
+}
+
+.gig-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.gig-form-grid label,
+.gig-retrospective-form {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.gig-form-grid input,
+.gig-form-grid textarea,
+.gig-retrospective-form textarea {
+  width: 100%;
+}
+
+.gig-form-grid__wide {
+  grid-column: 1 / -1;
+}
+
+.gig-retrospective-note {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-left: 8px solid var(--note-intro-border);
+  border-radius: 8px;
+  background: var(--note-intro-bg);
+}
+
+.gig-retrospective-note h2 {
+  margin-top: 0;
+  font-size: 1.35rem;
+}
+
+.gig-retrospective-note p {
+  margin-bottom: 0;
+}
+
+.gig-detail-list {
+  max-width: 58rem;
 }
 
 .preparation-editor {
@@ -1228,6 +1297,12 @@ input[type="submit"].offline-download__button {
   display: none;
 }
 
+.library-song.is-selected,
+.library-song:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .library-song span {
   font-weight: 900;
 }
@@ -1309,7 +1384,9 @@ input[type="submit"].offline-download__button {
   .inline-form-grid,
   .invitation-layout,
   .preparation-row,
-  .instrument-grid {
+  .instrument-grid,
+  .band-gig-summary,
+  .gig-form-grid {
     grid-template-columns: 1fr;
   }
 

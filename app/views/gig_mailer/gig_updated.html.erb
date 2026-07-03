@@ -1,0 +1,3 @@
+<h1>Updated gig info - <%= @gig.date.strftime("%b %-d, %Y") %></h1>
+
+<%= render "gigs/details", gig: @gig, show_retrospective: false, link_setlists: false %>

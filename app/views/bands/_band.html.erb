@@ -1,5 +1,62 @@
 <div id="<%= dom_id band %>">
 <h1><%= @band.name %></h1>
+<section class="band-gig-summary">
+  <div>
+    <h2>Past Gigs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @past_gigs.each do |gig| %>
+          <tr>
+            <td><%= link_to gig.client, gig_path(gig) %></td>
+            <td><%= gig.fee.present? ? number_to_currency(gig.fee) : "" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @past_gigs.empty? %>
+      <p>No past gigs yet.</p>
+    <% end %>
+    <p><%= link_to "All Past Gigs", past_gigs_path(band_id: @band.id), class: "button button--small" %></p>
+  </div>
+
+  <div>
+    <h2>Upcoming Gigs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Fee</th>
+          <th>Load-in</th>
+          <th>Start</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @upcoming_gigs.each do |gig| %>
+          <tr>
+            <td><%= link_to gig.client, gig_path(gig) %></td>
+            <td><%= gig.fee.present? ? number_to_currency(gig.fee) : "" %></td>
+            <td><%= gig.loadin&.strftime("%-I:%M %p") %></td>
+            <td><%= gig.start&.strftime("%-I:%M %p") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @upcoming_gigs.empty? %>
+      <p>No upcoming gigs booked.</p>
+    <% end %>
+    <p class="action-row">
+      <%= link_to "All Upcoming Gigs", upcoming_gigs_path(band_id: @band.id), class: "button button--small" %>
+      <%= link_to "Book a Gig", new_gig_path(band_id: @band.id), class: "button button--play" %>
+    </p>
+  </div>
+</section>
+
 <h2>Players</h2>
   <table>
     <thead>

@@ -1,0 +1,29 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Add Retrospective</h1>
+
+<%= render "details", gig: @gig, show_retrospective: false %>
+
+<%= form_with(model: @gig, url: retrospective_gig_path(@gig), method: :patch) do |form| %>
+  <% if @gig.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@gig.errors.count, "error") %> prohibited this retrospective from being saved:</h2>
+
+      <ul>
+        <% @gig.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <label class="gig-retrospective-form">
+    Retrospective
+    <%= form.text_area :retrospective, rows: 8 %>
+  </label>
+
+  <p class="action-row">
+    <%= form.submit "Save Retrospective", class: "button--play" %>
+    <%= link_to "Cancel", gig_path(@gig), class: "button" %>
+  </p>
+<% end %>
