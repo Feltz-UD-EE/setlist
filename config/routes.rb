@@ -45,7 +45,9 @@ Rails.application.routes.draw do
       patch :retrospective, action: :update_retrospective
     end
   end
-  resources :songs
+  resources :songs do
+    get :sheets, on: :member
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

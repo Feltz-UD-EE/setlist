@@ -762,6 +762,16 @@ input[type="submit"].offline-download__button {
   object-fit: contain;
 }
 
+.song-sheet-thumb-link {
+  display: block;
+  flex: 0 0 11rem;
+  width: 11rem;
+}
+
+.song-sheet-thumb-link .song-sheet-thumb {
+  width: 100%;
+}
+
 .alternate-image-icon {
   display: inline-flex;
   align-items: center;
