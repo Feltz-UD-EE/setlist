@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   resources :players
   resources :lists do
     post :copy, on: :member
+    post :randomize, on: :member
   end
   resources :gigs, except: [ :index, :destroy ] do
     collection do
