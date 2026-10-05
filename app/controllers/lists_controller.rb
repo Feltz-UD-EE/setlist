@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-  before_action :set_list, only: %i[ show edit update destroy copy ]
+  before_action :set_list, only: %i[ show edit update destroy copy randomize ]
 
   # GET /lists or /lists.json
   def index
@@ -93,6 +93,28 @@ class ListsController < ApplicationController
     end
 
     redirect_to edit_list_path(copied_list), notice: "List was successfully copied."
+  end
+
+  def randomize
+    authorize_band!(@list.band)
+    randomized_list = nil
+
+    List.transaction do
+      randomized_list = List.find_or_create_by!(
+        band: @list.band,
+        name: "#{@list.name} random"
+      )
+
+      randomized_list.list_songs.destroy_all
+      @list.list_songs.order(:position, :id).to_a.shuffle.each_with_index do |list_song, index|
+        randomized_list.list_songs.create!(
+          song: list_song.song,
+          position: index + 1
+        )
+      end
+    end
+
+    redirect_to randomized_list, notice: "List was successfully randomized."
   end
 
   private
