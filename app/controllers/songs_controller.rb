@@ -26,6 +26,7 @@ class SongsController < ApplicationController
     authorize_band!(@song.band)
     @instrument = Instrument.find(params[:instrument_id]) if params[:instrument_id].present?
     @sheet_groups = sheet_groups_for_display
+    @preparations = preparations_for_sheet_display
   end
 
   # GET /songs/new
@@ -113,6 +114,12 @@ class SongsController < ApplicationController
       else
         @song.main_sheet_group
       end
+    end
+
+    def preparations_for_sheet_display
+      preparations = @song.preparations.includes(:instrument)
+      preparations = preparations.where(instrument: @instrument) if @instrument.present?
+      preparations.to_a.sort_by { |preparation| preparation.instrument.name.downcase }
     end
 
     # Only allow a list of trusted parameters through.
