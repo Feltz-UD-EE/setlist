@@ -6,10 +6,10 @@ class SongsController < ApplicationController
     if params['band_id'].present?
       @band = Band.find(params['band_id'])
       authorize_band!(@band)
-      @songs = @band.songs.alpha
+      @songs = @band.songs.alpha.includes(list_songs: :list)
       @title = @band.name + " Songs"
     else
-      @songs = Song.where(band_id: accessible_bands.select(:id)).alpha
+      @songs = Song.where(band_id: accessible_bands.select(:id)).alpha.includes(list_songs: :list)
       @title = "All Songs"
     end
   end

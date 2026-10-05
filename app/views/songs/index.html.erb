@@ -29,7 +29,18 @@
             <span class="alternate-image-icon" title="Alternate instrument sheets">ALT</span>
           <% end %>
         </td>
-        <td><%= song.lists.any? ? song.lists.pluck(:name).join(', ') : "None" %></td>
+        <td>
+          <% if song.list_songs.any? %>
+            <% song.list_songs.each do |list_song| %>
+              <div>
+                <%= link_to truncate(list_song.list.name, length: 20), list_path(list_song.list) %>
+                - #<%= list_song.position %>
+              </div>
+            <% end %>
+          <% else %>
+            None
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

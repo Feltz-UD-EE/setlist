@@ -20,6 +20,19 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index truncates setlist names and displays song position outside the link" do
+    list = List.create!(name: "A Very Long Setlist Name", band: @band)
+    ListSong.create!(list: list, song: @song, position: 4)
+
+    get songs_url
+
+    assert_response :success
+    assert_select "td", text: /A Very Long Setli\...\s+- #4/
+    assert_select "a[href=?]", list_path(list), text: "A Very Long Setli..."
+    assert_select "a[href=?]", list_path(list), text: "A Very Long Setli... - #4", count: 0
+    assert_select "a[href=?]", list_path(list), text: "A Very Long Setlist Name", count: 0
+  end
+
   test "should get band-scoped index when a song has no duration" do
     Song.create!(title: "No Duration Yet", band: @band, duration: nil)
 
