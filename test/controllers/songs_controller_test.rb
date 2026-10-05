@@ -33,6 +33,15 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", list_path(list), text: "A Very Long Setlist Name", count: 0
   end
 
+  test "index ignores setlist song rows without a setlist" do
+    @song.list_songs.build(position: 1).save!(validate: false)
+
+    get songs_url
+
+    assert_response :success
+    assert_select "td", text: "None"
+  end
+
   test "should get band-scoped index when a song has no duration" do
     Song.create!(title: "No Duration Yet", band: @band, duration: nil)
 
@@ -127,6 +136,14 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", text: /Acoustic 1\s+- #4/
     assert_select "a[href=?]", list_path(list), text: "Acoustic 1"
     assert_select "a[href=?]", list_path(list), text: "Acoustic 1 - #4", count: 0
+  end
+
+  test "show ignores setlist song rows without a setlist" do
+    @song.list_songs.build(position: 1).save!(validate: false)
+
+    get song_url(@song)
+
+    assert_response :success
   end
 
   test "should get edit" do

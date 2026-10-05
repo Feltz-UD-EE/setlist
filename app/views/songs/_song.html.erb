@@ -22,7 +22,7 @@
   <p class="song-note song-note--intro"><strong>Intro:</strong> <span><%= @song.intro %></span></p>
   <p class="song-note song-note--finish"><strong>Finish:</strong> <span><%= @song.finish %></span></p>
   <h2>Set Lists</h2>
-  <% @song.list_songs.includes(:list).each do |list_song| %>
+  <% @song.list_songs.includes(:list).select(&:list).each do |list_song| %>
     <p>
       <%= link_to truncate(list_song.list.name, length: 20), list_path(list_song.list) %>
       - #<%= list_song.position %>
