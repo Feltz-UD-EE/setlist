@@ -1,5 +1,5 @@
 class SongsController < ApplicationController
-  before_action :set_song, only: %i[ show edit update destroy ]
+  before_action :set_song, only: %i[ show sheets edit update destroy ]
 
   # GET /songs or /songs.json
   def index
@@ -20,6 +20,12 @@ class SongsController < ApplicationController
     authorize_band!(@song.band)
     @main_sheets = @song.main_sheets
     @alternate_sheet_groups = @song.alternate_sheet_groups
+  end
+
+  def sheets
+    authorize_band!(@song.band)
+    @instrument = Instrument.find(params[:instrument_id]) if params[:instrument_id].present?
+    @sheet_groups = sheet_groups_for_display
   end
 
   # GET /songs/new
@@ -90,6 +96,23 @@ class SongsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_song
       @song = Song.find(params.expect(:id))
+    end
+
+    def sheet_groups_for_display
+      if @instrument.present?
+        [{
+          instrument: @instrument,
+          sheets: @song.sheets
+            .joins(:sheet_instruments)
+            .where(sheet_instruments: { instrument_id: @instrument.id })
+            .by_sort_order
+            .distinct
+            .to_a,
+          alternate: true
+        }]
+      else
+        @song.main_sheet_group
+      end
     end
 
     # Only allow a list of trusted parameters through.

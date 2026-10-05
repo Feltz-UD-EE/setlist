@@ -22,8 +22,11 @@
   <p class="song-note song-note--intro"><strong>Intro:</strong> <span><%= @song.intro %></span></p>
   <p class="song-note song-note--finish"><strong>Finish:</strong> <span><%= @song.finish %></span></p>
   <h2>Set Lists</h2>
-  <% @song.lists.each do |list| %>
-    <p><%= link_to list.name, list_path(list) %></p>
+  <% @song.list_songs.includes(:list).each do |list_song| %>
+    <p>
+      <%= link_to truncate(list_song.list.name, length: 20), list_path(list_song.list) %>
+      - #<%= list_song.position %>
+    </p>
   <% end %>
   <h2>Preparations</h2>
   <table>
@@ -49,7 +52,9 @@
         <h3>Main sheets</h3>
         <div class="song-sheet-row">
           <% @main_sheets.each do |sheet| %>
-            <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+            <%= link_to sheets_song_path(@song), class: "song-sheet-thumb-link" do %>
+              <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+            <% end %>
           <% end %>
         </div>
       </section>
@@ -60,7 +65,9 @@
         <h3><%= instrument.name %></h3>
         <div class="song-sheet-row">
           <% sheets.each do |sheet| %>
-            <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+            <%= link_to sheets_song_path(@song, instrument_id: instrument.id), class: "song-sheet-thumb-link" do %>
+              <%= image_tag sheet.img.url, class: "song-sheet-thumb" %>
+            <% end %>
           <% end %>
         </div>
       </section>
