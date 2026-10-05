@@ -1,4 +1,15 @@
 <h1><%= @song.title %></h1>
 
+<% @preparations.each do |prep| %>
+  <p class="song-note song-note--prep"><strong><%= prep.instrument.name %>:</strong> <%= prep.instruction %></p>
+<% end %>
+
+<% if @song.intro.present? %>
+  <p class="song-note song-note--intro"><strong>Intro:</strong> <%= @song.intro %></p>
+<% end %>
+
 <%= render "play/sheet_groups", sheet_groups: @sheet_groups %>
 
+<% if @song.finish.present? %>
+  <p class="song-note song-note--finish"><strong>Outro:</strong> <%= @song.finish %></p>
+<% end %>

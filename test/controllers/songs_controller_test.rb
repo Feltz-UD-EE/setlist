@@ -83,16 +83,22 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "sheets displays song name and main sheets stacked vertically" do
+    @song.update!(intro: "Count off", finish: "Big ending")
     create_sheet!("first-main-sheet.png", sort_order: 1)
     create_sheet!("second-main-sheet.png", sort_order: 2)
+    guitar = Instrument.create!(name: "Guitar")
+    Preparation.create!(song: @song, instrument: guitar, instruction: "Capo 2")
 
     get sheets_song_url(@song)
 
     assert_response :success
     assert_select "h1", text: @song.title
+    assert_select ".song-note--prep", text: /Guitar:\s+Capo 2/
+    assert_select ".song-note--intro", text: /Intro:\s+Count off/
     assert_select ".song-sheets img.song-sheet-image", count: 2
     assert_select ".song-sheets img.song-sheet-image[src*=?]", "first-main-sheet.png"
     assert_select ".song-sheets img.song-sheet-image[src*=?]", "second-main-sheet.png"
+    assert_select ".song-note--finish", text: /Outro:\s+Big ending/
   end
 
   test "sheets displays selected instrument sheets stacked vertically" do
@@ -103,12 +109,16 @@ class SongsControllerTest < ActionDispatch::IntegrationTest
     bass_sheet = create_sheet!("bass-sheet.png", sort_order: 1)
     SheetInstrument.create!(sheet: guitar_sheet, instrument: guitar)
     SheetInstrument.create!(sheet: bass_sheet, instrument: bass)
+    Preparation.create!(song: @song, instrument: guitar, instruction: "Use slide")
+    Preparation.create!(song: @song, instrument: bass, instruction: "Drop D")
 
     get sheets_song_url(@song, instrument_id: guitar.id)
 
     assert_response :success
     assert_select "h1", text: @song.title
     assert_select ".alternate-image-label", text: /Guitar/
+    assert_select ".song-note--prep", text: /Guitar:\s+Use slide/
+    assert_select ".song-note--prep", text: /Bass:\s+Drop D/, count: 0
     assert_select ".song-sheets img.song-sheet-image", count: 1
     assert_select ".song-sheets img.song-sheet-image[src*=?]", "guitar-sheet.png"
     assert_select ".song-sheets img.song-sheet-image[src*=?]", "main-sheet.png", count: 0
