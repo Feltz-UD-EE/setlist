@@ -30,8 +30,9 @@
           <% end %>
         </td>
         <td>
-          <% if song.list_songs.any? %>
-            <% song.list_songs.each do |list_song| %>
+          <% setlist_entries = song.list_songs.select(&:list) %>
+          <% if setlist_entries.any? %>
+            <% setlist_entries.each do |list_song| %>
               <div>
                 <%= link_to truncate(list_song.list.name, length: 20), list_path(list_song.list) %>
                 - #<%= list_song.position %>
