@@ -1,3 +1,5 @@
+require "net/smtp"
+
 module Admin
   class UserPasswordControlsController < ApplicationController
     before_action :require_admin
@@ -13,6 +15,15 @@ module Admin
 
       redirect_to admin_user_password_controls_path,
         notice: "Password reset email sent to #{player.email}.", status: :see_other
+    rescue Net::SMTPError, Timeout::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError => error
+      Rails.logger.error("[PasswordReset] Email delivery failed for player_id=#{player.id} (#{error.class})")
+      message = if error.message.include?("Maximum credits exceeded")
+        "Password reset email could not be sent because the email provider's sending credits are exhausted. Replenish the credits or change the mail service, then try again."
+      else
+        "Password reset email could not be sent. Check the email service configuration and sending limits, then try again."
+      end
+
+      redirect_to admin_user_password_controls_path, alert: message, status: :see_other
     end
 
     def suspend

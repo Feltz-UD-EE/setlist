@@ -1,5 +1,6 @@
 require "test_helper"
 require "uri"
+require "minitest/mock"
 
 class Admin::UserPasswordControlsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -187,6 +188,55 @@ class Admin::UserPasswordControlsControllerTest < ActionDispatch::IntegrationTes
       assert_not admin.reload.suspended?
       assert_equal original_token, admin.remember_token
     end
+  end
+
+  test "exhausted mail credits show an actionable error instead of a server error" do
+    sign_in_as(@admin)
+    delivery = Object.new
+    def delivery.deliver_now
+      raise Net::SMTPAuthenticationError, "451 Authentication failed: Maximum credits exceeded"
+    end
+
+    assert_no_emails do
+      ClearanceMailer.stub :change_password, delivery do
+        post reset_password_admin_user_password_control_url(@player)
+      end
+    end
+
+    assert_redirected_to admin_user_password_controls_url
+    assert_nil flash[:notice]
+    follow_redirect!
+    assert_response :success
+    assert_select "[role=alert]", text: /sending credits are exhausted/
+    assert_select "[role=alert]", text: /Replenish the credits/
+    assert_select "[role=status]", count: 0
+    assert_select "form[action=?]", reset_password_admin_user_password_control_path(@player)
+    assert @player.reload.authenticated?("password123")
+  end
+
+  test "mail connection failure shows an error and allows retrying" do
+    sign_in_as(@admin)
+    delivery = Object.new
+    def delivery.deliver_now
+      raise Net::OpenTimeout, "Connection timed out"
+    end
+
+    ClearanceMailer.stub :change_password, delivery do
+      post reset_password_admin_user_password_control_url(@player)
+    end
+
+    assert_redirected_to admin_user_password_controls_url
+    follow_redirect!
+    assert_response :success
+    assert_select "[role=alert]", text: /email service configuration and sending limits/
+    assert_select "[role=status]", count: 0
+
+    assert_emails 1 do
+      post reset_password_admin_user_password_control_url(@player)
+    end
+    follow_redirect!
+    assert_select "[role=status]", text: "Password reset email sent to #{@player.email}."
+    assert_select "[role=alert]", count: 0
   end
 
   private
