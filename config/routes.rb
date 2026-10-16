@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   get 'about', to: 'static#about'
   get 'credits', to: 'static#credits'
   get 'legal', to: 'static#legal'
-  resource :session, controller: "clearance/sessions", only: [:create]
+  resource :session, controller: "sessions", only: [:create]
+  get 'account_suspended', to: 'account_suspensions#show', as: :suspended_account
   get 'sign_in', to: 'clearance/sessions#new', as: :sign_in
   delete 'sign_out', to: 'clearance/sessions#destroy', as: :sign_out
   get 'sign_up', to: 'registrations#new'
@@ -15,6 +16,14 @@ Rails.application.routes.draw do
   resources :passwords, controller: "clearance/passwords", only: [:create, :new]
   resources :players, only: [] do
     resource :password, controller: "clearance/passwords", only: [:edit, :update]
+  end
+  namespace :admin do
+    resources :user_suspension_events, only: [:index]
+    resources :user_password_controls, only: [:index] do
+      post :reset_password, on: :member
+      post :suspend, on: :member
+      post :restore, on: :member
+    end
   end
   get 'play/choose', to: 'play#choose'
   post 'play/cue', to: 'play#cue'

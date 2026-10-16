@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
+  before_action :reject_suspended_user
   before_action :require_login, unless: :public_controller?
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -7,6 +8,13 @@ class ApplicationController < ActionController::Base
   helper_method :current_band, :accessible_bands
 
   private
+
+  def reject_suspended_user
+    if current_user&.suspended?
+      sign_out
+      redirect_to suspended_account_path, status: :see_other
+    end
+  end
 
   def public_controller?
     controller_path.start_with?("clearance/") ||

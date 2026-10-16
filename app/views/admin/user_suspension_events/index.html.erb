@@ -1,0 +1,30 @@
+<% content_for :title, "Suspension audit log" %>
+
+<h1>Suspension audit log</h1>
+
+<p><%= link_to "Back to user and password control", admin_user_password_controls_path %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Timestamp (UTC)</th>
+      <th scope="col">User id</th>
+      <th scope="col">Admin id</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td><%= event.created_at.utc.iso8601(6) %></td>
+        <td><%= event.player_id %></td>
+        <td><%= event.admin_id %></td>
+        <td><%= event.action.humanize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @events.empty? %>
+  <p>No suspension or restoration events have been recorded.</p>
+<% end %>

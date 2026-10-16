@@ -22,6 +22,12 @@ class Player < ApplicationRecord
   # Validations
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :suspended, inclusion: { in: [ false ], message: "cannot be enabled for an admin" }, if: :admin?
+  validate :suspension_requires_admin, if: :suspension_changing?
+
+  attr_accessor :suspension_admin
+
+  after_save :record_suspension_event, if: :suspension_changed?
 
   # Scopes
   scope :alpha, -> { order(last_name: :asc) }
@@ -46,15 +52,46 @@ class Player < ApplicationRecord
   end
 
   def send_password_reset_email
-    Rails.logger.info("DEBUG: send_password_reset_email called for #{email}")
-    Clearance::PasswordMailer.change_password(self).deliver_now
-    Rails.logger.info("DEBUG: email delivered for #{email}")
+    ClearanceMailer.change_password(self).deliver_now
   end
 
-  def send_password_reset_on_change
-    send_password_reset_email
+  def suspend!(by:)
+    change_suspension!(true, by: by)
   end
 
-  # Callbacks
-  after_update :send_password_reset_on_update, if: :saved_change_to_encrypted_password?
+  def restore!(by:)
+    change_suspension!(false, by: by)
+  end
+
+  private
+
+  def change_suspension!(suspended, by:)
+    with_lock do
+      self.suspension_admin = by
+      attributes = { suspended: suspended }
+      attributes[:remember_token] = Clearance::Token.new if suspended && !suspended?
+      update!(attributes)
+    end
+  ensure
+    self.suspension_admin = nil
+  end
+
+  def suspension_changing?
+    will_save_change_to_suspended? && (suspended? || suspended_in_database == true)
+  end
+
+  def suspension_changed?
+    saved_change_to_suspended? && (suspended? || suspended_before_last_save == true)
+  end
+
+  def suspension_requires_admin
+    unless suspension_admin&.persisted? && suspension_admin.admin? && !suspension_admin.suspended?
+      errors.add(:suspended, "can only be changed by an active admin")
+    end
+  end
+
+  def record_suspension_event
+    UserSuspensionEvent.create!(player_id: id, admin_id: suspension_admin.id,
+      action: suspended? ? "suspended" : "restored")
+  end
 end

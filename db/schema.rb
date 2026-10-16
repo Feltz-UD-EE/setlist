@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_03_083431) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_16_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -117,6 +117,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_03_083431) do
     t.string "remember_token", limit: 128, null: false
     t.boolean "admin", default: false, null: false
     t.datetime "invitation_accepted_at"
+    t.boolean "suspended", default: false, null: false
     t.index ["band_id"], name: "index_players_on_band_id"
     t.index ["confirmation_token"], name: "index_players_on_confirmation_token", unique: true
     t.index ["email"], name: "index_players_on_email"
@@ -166,6 +167,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_03_083431) do
     t.datetime "updated_at", null: false
     t.string "finish"
     t.index ["band_id"], name: "index_songs_on_band_id"
+  end
+
+  create_table "user_suspension_events", force: :cascade do |t|
+    t.bigint "player_id", null: false
+    t.bigint "admin_id", null: false
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.index ["admin_id"], name: "index_user_suspension_events_on_admin_id"
+    t.index ["created_at"], name: "index_user_suspension_events_on_created_at"
+    t.index ["player_id"], name: "index_user_suspension_events_on_player_id"
   end
 
   add_foreign_key "band_invitations", "bands"
