@@ -3,6 +3,7 @@ Clearance.configure do |config|
   config.mailer_sender = ENV.fetch("MAILER_SENDER") { ENV.fetch("MAIL_FROM", "reply@setlist.local") }
   config.allow_sign_up = false
   config.routes = false
+  config.sign_in_guards = [ "SuspensionGuard" ]
   config.cookie_expiration = ->(_cookies) { 30.days.from_now.utc }
 end
 

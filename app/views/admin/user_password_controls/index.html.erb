@@ -1,0 +1,42 @@
+<% content_for :title, "User and password control" %>
+
+<h1>User and password control</h1>
+
+<p><%= link_to "Suspension audit log", admin_user_suspension_events_path %></p>
+
+<% if notice.present? %>
+  <p role="status"><%= notice %></p>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">User id</th>
+      <th scope="col">User email</th>
+      <th scope="col">Bands</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @players.each do |player| %>
+      <tr class="<%= "suspended-user" if player.suspended? %>">
+        <td><%= player.id %></td>
+        <td><%= player.email %></td>
+        <td>
+          <% bands = (player.bands.to_a + [ player.band ]).compact.uniq.sort_by { |band| band.name.to_s.downcase } %>
+          <%= safe_join(bands.map { |band| link_to band.name.presence || "Band #{band.id}", band_path(band) }, ", ") %>
+        </td>
+        <td>
+          <div class="table-actions">
+            <%= button_to "Reset password", reset_password_admin_user_password_control_path(player), class: "button button--small" %>
+            <% if player.suspended? %>
+              <%= button_to "Restore user", restore_admin_user_password_control_path(player), class: "button button--small" %>
+            <% elsif !player.admin? %>
+              <%= button_to "Suspend user", suspend_admin_user_password_control_path(player), class: "button button--small" %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -47,6 +47,9 @@
         <%= link_to "About", about_path %>
         <%= link_to "Credits", credits_path %>
         <%= link_to "Legal", legal_path %>
+        <% if current_user&.admin? %>
+          <%= link_to "User and password control", admin_user_password_controls_path %>
+        <% end %>
       </nav>
     </footer>
 
