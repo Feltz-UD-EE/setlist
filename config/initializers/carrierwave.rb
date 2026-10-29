@@ -7,7 +7,7 @@ if ENV["BUCKET"].present?
       aws_secret_access_key: ENV.fetch("SECRET_ACCESS_KEY"),
       region: ENV.fetch("REGION", "auto"),
       endpoint: ENV["ENDPOINT"],
-      path_style: true
+      path_style: false
     }.compact
 
     config.fog_directory = ENV.fetch("BUCKET")
